@@ -6,8 +6,13 @@ resulting disassembly graph.
 Usage:
     python examples/extract_disassembly_graph.py
     python examples/extract_disassembly_graph.py --collapse-screws   # as the Product explorer extracts it
+    python examples/extract_disassembly_graph.py --parallel --robots 2
+
+Parallel mode assumes compatibility of individually feasible removals and reports
+synchronized-stage makespan. It cannot be combined with screw collapsing.
 """
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -22,19 +27,37 @@ from build_env import build_env
 from disassembly_pomdp.graph_extraction import (
     DisassemblyGraphAgent,
     plot_graph,
+    plot_parallel_graph,
     save_graph,
 )
 
 
 def main() -> None:
-    out_dir = ROOT / "examples" / "runs" / "disassembly_graph"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--parallel", action="store_true")
+    parser.add_argument("--robots", type=int, default=2)
+    parser.add_argument("--collapse-screws", action="store_true")
+    args = parser.parse_args()
+    if args.robots < 1:
+        parser.error("--robots must be positive")
+    if args.parallel and args.collapse_screws:
+        parser.error("parallel mode cannot be combined with --collapse-screws")
+    out_dir = (
+        ROOT
+        / "examples"
+        / "runs"
+        / ("parallel_disassembly_graph" if args.parallel else "disassembly_graph")
+    )
     out_dir.mkdir(parents=True, exist_ok=True)
 
     env = build_env()
 
     agent = DisassemblyGraphAgent(env)
     graph = agent.build_graph(
-        verbose=True, collapse_screw_groups="--collapse-screws" in sys.argv[1:]
+        verbose=True,
+        collapse_screw_groups=args.collapse_screws,
+        parallel=args.parallel,
+        n_robots=args.robots,
     )
 
     save_graph(graph, out_dir / "graph.pkl")
@@ -44,11 +67,15 @@ def main() -> None:
     )
 
     try:
-        plot_graph(graph, path=out_dir / "graph.png")
+        plotter = plot_parallel_graph if args.parallel else plot_graph
+        plotter(graph, path=out_dir / "graph.png")
         print(f"Saved plot to {out_dir / 'graph.png'}")
     except Exception as e:
         print(f"Skipping plot (matplotlib/graphviz issue): {e!r}")
 
+    print(
+        f"Parallel edges: {sum(bool(d.get('parallel')) for _, _, d in graph.edges(data=True))}"
+    )
     # Print a shortest disassembly sequence (by total action_time) to each goal state.
     root = next(n for n, d in graph.nodes(data=True) if d.get("depth") == 0)
     goal_nodes = [n for n, d in graph.nodes(data=True) if d.get("is_goal")]
@@ -60,13 +87,26 @@ def main() -> None:
             except nx.NetworkXNoPath:
                 continue
             print(f"\nShortest sequence to goal state ({len(goal)} parts remaining):")
-            for u, v in zip(path_nodes[:-1], path_nodes[1:]):
+            total = 0.0
+            for stage, (u, v) in enumerate(zip(path_nodes[:-1], path_nodes[1:]), 1):
                 # MultiDiGraph: pick the cheapest parallel edge for display
                 edges = graph.get_edge_data(u, v)
                 best = min(
                     edges.values(), key=lambda a: a.get("action_time", float("inf"))
                 )
-                print(f"  {best['label']:<40} time={best['action_time']:.2f}s")
+                total += best["action_time"]
+                print(f"Stage {stage}:")
+                for operation in best.get("operations", [best]):
+                    print(
+                        f"    Remove {operation['target_part']} [{operation.get('tool')}]"
+                    )
+                print(f"    Duration: {best['action_time']:.2f} s")
+            title = (
+                "Total makespan (synchronized stages)"
+                if args.parallel
+                else "Total sequential time"
+            )
+            print(f"{title}: {total:.2f} s")
     else:
         print(
             "\nNo goal states found (no target_part_names set on the env, or unreachable)."
