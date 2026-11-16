@@ -24,6 +24,10 @@ The result is an `nx.MultiDiGraph`:
       `toolchange_time()` below), the capability involved, and the target
       removed.
 
+Explicit parallel mode also adds synchronized stages of individually feasible
+removals, with compatibility assumed and duration equal to their maximum time.
+It performs no robot assignment or simultaneous motion feasibility checking.
+
 The agent is applied to an already-constructed env (e.g. `build_env()` in
 examples/build_env.py) and only relies on that env's public composition
 (capabilities, cell_settings, base_assembly) plus its transition-orchestration
@@ -37,6 +41,7 @@ import copy
 import json
 from collections import deque
 from contextlib import contextmanager
+from itertools import combinations
 from pathlib import Path
 from typing import Any, Callable, Optional
 
@@ -374,6 +379,69 @@ class DisassemblyGraphAgent:
                 self.collapsed_screw_groups.add(frozenset(t for t, _ in members))
         return steps
 
+    def available_parallel_steps(
+        self, assembly, n_robots=2, collapse_screw_groups=False
+    ):
+        """Reuse individually feasible steps to form synchronized stages.
+
+        Screw collapsing hides alternative screws and is therefore unsupported
+        in parallel mode. Singletons retain their original assembly and metadata.
+        """
+        self._check_parallel_options(n_robots, collapse_screw_groups)
+        steps = self.available_steps(assembly, collapse_screw_groups)
+        results = list(steps)
+        for size in range(2, min(n_robots, len(steps)) + 1):
+            for group in combinations(steps, size):
+                targets = [attrs["target_part"] for _, attrs in group]
+                if len(set(targets)) != len(targets):
+                    continue
+                result = self._try_parallel_actions(assembly, group)
+                if result is not None:
+                    results.append(result)
+        return results
+
+    @staticmethod
+    def _check_parallel_options(n_robots, collapse_screw_groups):
+        if isinstance(n_robots, bool) or not isinstance(n_robots, int) or n_robots < 1:
+            raise ValueError("n_robots must be a positive integer")
+        if collapse_screw_groups:
+            raise ValueError("parallel mode does not support collapse_screw_groups")
+
+    def _try_parallel_actions(self, assembly, group):
+        """Apply validated removals to one copy; physical compatibility is assumed.
+
+        Future simultaneous feasibility checks belong here, before mutation.
+        No planners or individual feasibility checks are rerun for a group.
+        """
+        targets = [attrs.get("target_part") for _, attrs in group]
+        if len(targets) < 2 or None in targets or len(set(targets)) != len(targets):
+            return None
+        if any(assembly.get_part_by_name(name) is None for name in targets):
+            return None
+        next_assembly = copy.deepcopy(assembly)
+        try:
+            for name in targets:
+                next_assembly.remove_part(next_assembly.get_part_by_name(name))
+            if set(_state_key(next_assembly)) != set(_state_key(assembly)) - set(
+                targets
+            ):
+                return None
+            if any(
+                next_assembly.get_connections_by_part_name(name) for name in targets
+            ):
+                return None
+        except Exception:
+            return None
+        return next_assembly, {
+            "operations": [copy.deepcopy(attrs) for _, attrs in group],
+            "target_parts": targets,
+            "action_time": max(attrs["action_time"] for _, attrs in group),
+            "parallel": True,
+            "n_operations": len(group),
+            "feasibility": "assumed",
+            "label": " + ".join(targets),
+        }
+
     @staticmethod
     def _check_screw_groups_contiguous(G: nx.MultiDiGraph, groups) -> None:
         """Raise `ScrewGroupError` if a step that is not one of a group's screws leaves a state where some but
@@ -467,6 +535,8 @@ class DisassemblyGraphAgent:
         collapse_screw_groups: bool = False,
         progress: Optional[Callable[[int, int], None]] = None,
         extraction_depth: str = DISASSEMBLED_STATES,
+        parallel: bool = False,
+        n_robots: int = 2,
     ) -> nx.MultiDiGraph:
         """
         BFS over reachable assembly states. Returns and stores `self.graph`.
@@ -475,11 +545,15 @@ class DisassemblyGraphAgent:
         part name lists) go to `graph.graph["collapsed_screw_groups"]`, where the order inside a group is free.
         Raises `ScrewGroupError` if a collapsed group's screws are not all removable at a visited state, or if
         another step comes between them (the graph's screws of a group must be one contiguous block).
+        `parallel` enables simultaneous removals in groups up to `n_robots`.
+        This assumes physical compatibility and cannot be combined with screw collapsing.
         `progress(expanded, discovered)` is called after each expanded state.
         `extraction_depth`: `DISASSEMBLED_STATES` does not expand a disassembled state (all target parts
         removed); `FULL_TEARDOWN` expands every state. Without target parts no state is marked, so both give
         the same graph.
         """
+        if parallel:
+            self._check_parallel_options(n_robots, collapse_screw_groups)
         check_extraction_depth(extraction_depth)
         self.collapsed_screw_groups = set()
         with self._deterministic():
@@ -511,9 +585,14 @@ class DisassemblyGraphAgent:
                 depth = G.nodes[key].get("depth", 0)
                 n_expanded += 1
 
-                for next_assembly, edge_attrs in self.available_steps(
-                    assembly, collapse_screw_groups
-                ):
+                steps = (
+                    self.available_parallel_steps(
+                        assembly, n_robots, collapse_screw_groups
+                    )
+                    if parallel
+                    else self.available_steps(assembly, collapse_screw_groups)
+                )
+                for next_assembly, edge_attrs in steps:
                     next_key = _state_key(next_assembly)
                     if next_key == key:
                         continue
@@ -546,6 +625,8 @@ class DisassemblyGraphAgent:
                     )
 
             G.graph["extraction_depth"] = extraction_depth
+            if parallel:
+                G.graph.update(parallel=True, n_robots=n_robots, feasibility="assumed")
             if collapse_screw_groups:
                 groups = self.collapsed_screw_groups
                 largest = [g for g in groups if not any(g < other for other in groups)]
@@ -872,4 +953,88 @@ def plot_graph(graph: nx.MultiDiGraph, path: Optional[str | Path] = None):
             bbox_inches="tight"
         )
 
+    return fig
+
+
+def plot_parallel_graph(graph: nx.MultiDiGraph, path: Optional[str | Path] = None):
+    """Draw synchronized stages top-down, with a deterministic layered fallback."""
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(20, 14))
+    if not graph:
+        ax.axis("off")
+        if path is not None:
+            fig.savefig(str(path), dpi=200, bbox_inches="tight")
+        return fig
+
+    counts = {n: d.get("n_parts_present", len(n)) for n, d in graph.nodes(data=True)}
+    max_parts = max(counts.values())
+    try:
+        from networkx.drawing.nx_agraph import graphviz_layout
+
+        pos = graphviz_layout(
+            graph, prog="dot", args="-Grankdir=TB -Gnodesep=1 -Granksep=2"
+        )
+    except (ImportError, OSError, RuntimeError, ValueError):
+        pos = {}
+        for count in sorted(set(counts.values()), reverse=True):
+            nodes = sorted((n for n in graph if counts[n] == count), key=repr)
+            for i, node in enumerate(nodes):
+                pos[node] = ((i - (len(nodes) - 1) / 2) * 3, count - max_parts)
+
+    labels, colors = {}, []
+    for node, data in graph.nodes(data=True):
+        start = counts[node] == max_parts
+        goal = data.get("is_goal", False)
+        prefix = "START\n" if start else "GOAL\n" if goal else ""
+        removed = data.get("parts_removed", [])
+        text = ", ".join(removed[:3]) + (", …" if len(removed) > 3 else "")
+        labels[node] = f"{prefix}{counts[node]} parts" + (
+            f"\nRemoved: {text}" if text else ""
+        )
+        colors.append("#8ecae6" if start else "#90be6d" if goal else "#eeeeee")
+    nx.draw_networkx_nodes(graph, pos, node_color=colors, node_size=2100, ax=ax)
+    nx.draw_networkx_labels(graph, pos, labels=labels, font_size=7, ax=ax)
+    # Draw every multiedge separately so tool alternatives keep their own labels.
+    for u, v in dict.fromkeys((u, v) for u, v in graph.edges()):
+        edges = list(graph[u][v].items())
+        for i, (key, attrs) in enumerate(edges):
+            radius = (i - (len(edges) - 1) / 2) * 0.22
+            style = f"arc3,rad={radius}"
+            parallel = attrs.get("parallel", False)
+            color = "#9b3a9e" if parallel else "#637383"
+            text = (
+                "PARALLEL\n" + " + ".join(attrs["target_parts"])
+                if parallel
+                else "Remove " + attrs.get("target_part", "")
+            )
+            text += f"\n{attrs['action_time']:.1f} s"
+            nx.draw_networkx_edges(
+                graph,
+                pos,
+                edgelist=[(u, v, key)],
+                edge_color=color,
+                node_size=2100,
+                arrowsize=14,
+                connectionstyle=style,
+                ax=ax,
+            )
+            nx.draw_networkx_edge_labels(
+                graph,
+                pos,
+                edge_labels={(u, v, key): text},
+                connectionstyle=style,
+                font_size=5,
+                rotate=False,
+                font_color=color,
+                label_pos=0.35 + 0.3 * (i + 1) / (len(edges) + 1),
+                ax=ax,
+            )
+    ax.set_title(
+        "Parallel sequence graph — synchronized stages (compatibility assumed)"
+    )
+    ax.axis("off")
+    fig.tight_layout()
+    if path is not None:
+        fig.savefig(str(path), dpi=200, bbox_inches="tight")
     return fig
