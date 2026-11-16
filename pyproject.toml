@@ -1,0 +1,61 @@
+# Dependencies for the whole repo; `uv sync` installs them from uv.lock (see README, "Setup").
+# Not a package: imports work through pytest.ini / tests/conftest.py, or `pip install -e src` (src/pyproject.toml).
+[project]
+name = "assembly-techstack"
+version = "0"
+requires-python = ">=3.10"
+dependencies = [
+    # Product explorer and MRTAMP app: core model, sequence graph, motion planning, POMDP gym.
+    "numpy",
+    "scipy",
+    "networkx",
+    "trimesh",
+    "open3d",
+    "python-fcl",
+    "gymnasium",
+    "scikit-learn",
+    "matplotlib",
+    "pillow",
+    "imageio",
+    "fastapi",
+    "uvicorn[standard]",
+    "opencv-python-headless>=4.7",  # perception: System 28 hole detection, ArUco (cv2.aruco.ArucoDetector)
+]
+
+[dependency-groups]
+# Full-stack developer: tests, CI tools, analysis and rendering tools (tools/, examples/, cases/).
+dev = [
+    "pytest",
+    "pytest-cov",
+    "hypothesis",
+    "httpx",  # FastAPI TestClient (Product explorer server tests)
+    "diff-cover",
+    "ruff",
+    "pre-commit",
+    "plotly",
+    "pandas",
+    "pyrender",
+    "pytest-xdist>=3.8.0",
+]
+# Cell user: real cell and camera. Needs the Zivid SDK installed first.
+hardware = [
+    "zivid",
+    "opcua",
+    "cryptography",  # opcua signing and encryption
+]
+
+[tool.uv]
+package = false
+
+# Lint gate (ADR-0009): runs on the files an MR changes, via pre-commit. Subtrees keep their upstream style.
+[tool.ruff]
+# pre-commit passes file paths explicitly; force-exclude keeps the subtrees excluded then too.
+force-exclude = true
+extend-exclude = [
+    "crc_diss_assembly_dataclasses",
+    "crc_disassembly_sequence_generator",
+    "crc_disassembly_sim",
+]
+
+[tool.ruff.lint]
+select = ["E9", "F", "I"]  # syntax errors, pyflakes, import order

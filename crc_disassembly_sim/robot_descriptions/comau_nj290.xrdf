@@ -1,0 +1,132 @@
+format: xrdf
+format_version: 2.0
+
+# Comau NJ290 (6-DOF industrial arm) for CRC disassembly cell.
+# URDF: comau_nj290_robotNC_sensor.urdf
+# Joints q1-q6 map to the six revolute joints; all are along the z-axis.
+# tcp_frame is the end-effector (fixed chain after link6).
+# Note: position limits and velocity limits are read from the URDF.
+# Only acceleration and jerk limits are specified here.
+
+cspace:
+  joint_names:
+    - "q1"
+    - "q2"
+    - "q3"
+    - "q4"
+    - "q5"
+    - "q6"
+  acceleration_limits: [5.0, 5.0, 5.0, 5.0, 5.0, 5.0]
+  jerk_limits: [50.0, 50.0, 50.0, 50.0, 50.0, 50.0]
+
+tool_frames: ["tcp_frame"]
+
+default_joint_positions:
+  q1: 0.0
+  q2: 0.0
+  q3: -1.5707963267948966
+  q4: 0.0
+  q5: 0.0
+  q6: 0.0
+
+self_collision:
+  geometry: "nj290_collision_spheres"
+  ignore:
+    link0_passive: ["link1", "link2", "link3", "link4"]
+    link1: ["link2", "link3", "link4"]
+    link2: ["link3", "link4"]
+    link3: ["link4", "link5"]
+    link4: ["link5", "link6"]
+    link5: ["link6", "tcp_frame"]
+    link6: ["tcp_frame"]
+
+world_collision:
+  geometry: "nj290_collision_spheres"
+
+geometry:
+  nj290_collision_spheres:
+    spheres:
+      link0_passive:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.15
+        - center: [0.0, 0.0, 0.15]
+          radius: 0.12
+      link1:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.12
+        - center: [0.0, 0.0, -0.25]
+          radius: 0.12
+        - center: [0.0, 0.0, -0.5]
+          radius: 0.12
+        - center: [0.23, 0.0, -0.57]
+          radius: 0.12
+        - center: [0.46, 0.0, -0.57]
+          radius: 0.12
+      link2:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.12
+        - center: [0.0, 0.0, -0.26]
+          radius: 0.12
+        - center: [0.0, 0.0, -0.52]
+          radius: 0.12
+        - center: [0.0, 0.0, -0.78]
+          radius: 0.12
+        - center: [0.0, 0.0, -1.05]
+          radius: 0.12
+      link3:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.10
+        - center: [-0.08, 0.0, 0.25]
+          radius: 0.10
+        - center: [-0.17, 0.0, 0.50]
+          radius: 0.10
+        - center: [-0.25, 0.0, 0.75]
+          radius: 0.10
+      link4:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.09
+        - center: [0.0, 0.0, -0.14]
+          radius: 0.09
+        - center: [0.0, 0.0, -0.28]
+          radius: 0.09
+      link5:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.09
+        - center: [0.0, 0.0, -0.09]
+          radius: 0.08
+      link6:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.07
+        - center: [-0.12, 0.0, 0.05]   # dress-pack cable bar (-x of link6, measured in the cell)
+          radius: 0.04
+        - center: [-0.21, 0.0, 0.05]   # dress-pack cable bar
+          radius: 0.04
+        - center: [-0.30, 0.0, 0.05]   # dress-pack cable bar
+          radius: 0.04
+        - center: [-0.39, 0.0, 0.05]   # dress-pack cable bar
+          radius: 0.04
+      tcp_frame:
+        - center: [0.0, 0.0, 0.0]
+          radius: 0.05
+        # Angle-head screwdriver (mesh screwdriver.stl measured in the tool base
+        # frame == tcp_frame, 2026-09-18): motor body x in [-0.09, +0.29],
+        # y +-0.108, z in [-0.147, 0]; bit from x -0.09 to the tip at (-0.212, 0, -0.086).
+        # Without these the planner swung the (unmodelled) tool through the board.
+        - center: [-0.06, 0.0, -0.055]   # screwdriver body
+          radius: 0.11
+        - center: [0.00, 0.0, -0.055]
+          radius: 0.11
+        - center: [0.06, 0.0, -0.055]
+          radius: 0.11
+        - center: [0.12, 0.0, -0.055]
+          radius: 0.11
+        - center: [0.18, 0.0, -0.055]
+          radius: 0.11
+        - center: [0.24, 0.0, -0.055]
+          radius: 0.11
+        - center: [-0.12, 0.0, -0.086]   # screwdriver bit
+          radius: 0.025
+        - center: [-0.16, 0.0, -0.086]
+          radius: 0.02
+        - center: [-0.20, 0.0, -0.086]
+          radius: 0.02

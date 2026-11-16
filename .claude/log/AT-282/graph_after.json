@@ -1,0 +1,78 @@
+{
+ "emo_sr_v2": {
+  "nodes": 6,
+  "edges": 5,
+  "goals": 0,
+  "removals": [
+   "01_upper_lid",
+   "04_screw_1",
+   "05_screw_2",
+   "06_screw_3",
+   "07_screw_4"
+  ],
+  "seconds": 5.9
+ },
+ "angle_grinder": {
+  "nodes": 6,
+  "edges": 5,
+  "goals": 1,
+  "removals": [
+   "BG_Tellerrad_V1p",
+   "Schraube_M4x16_540_Schr1",
+   "Schraube_M4x16_540_Schr2",
+   "Schraube_M4x16_540_Schr3",
+   "Schraube_M4x16_540_Schr4"
+  ],
+  "seconds": 5.7
+ },
+ "battery_replacement": {
+  "nodes": 43,
+  "edges": 42,
+  "goals": 1,
+  "removals": [
+   "lid",
+   "lid_screw_01",
+   "lid_screw_02",
+   "lid_screw_03",
+   "lid_screw_04",
+   "lid_screw_05",
+   "lid_screw_06",
+   "lid_screw_07",
+   "lid_screw_08",
+   "lid_screw_09",
+   "lid_screw_10",
+   "lid_screw_11",
+   "lid_screw_12",
+   "lid_screw_13",
+   "lid_screw_14",
+   "lid_screw_15",
+   "lid_screw_16",
+   "lid_screw_17",
+   "lid_screw_18",
+   "lid_screw_19",
+   "lid_screw_20",
+   "lid_screw_21",
+   "lid_screw_22",
+   "lid_screw_23",
+   "lid_screw_24",
+   "lid_screw_25",
+   "lid_screw_26",
+   "lid_screw_27",
+   "lid_screw_28",
+   "lid_screw_29",
+   "lid_screw_30",
+   "lid_screw_31",
+   "lid_screw_32",
+   "lid_screw_33",
+   "lid_screw_34",
+   "lid_screw_35",
+   "lid_screw_36",
+   "lid_screw_37",
+   "lid_screw_38",
+   "lid_screw_39",
+   "lid_screw_40",
+   "lid_screw_41"
+  ],
+  "seconds": 241.0
+ }
+}

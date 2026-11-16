@@ -1,0 +1,47 @@
+{
+    "milling_01_upper_lid_milled_03_rotor_short": {
+        "action_type": "milling",
+        "part_name": "01_upper_lid_milled_03_rotor_short",
+        "path_duration": 62.207
+    },
+    "milling_04_screw_1_milled_01_upper_lid": {
+        "action_type": "milling",
+        "part_name": "04_screw_1_milled_01_upper_lid",
+        "path_duration": 6.103
+    },
+    "milling_05_screw_2_milled_01_upper_lid": {
+        "action_type": "milling",
+        "part_name": "05_screw_2_milled_01_upper_lid",
+        "path_duration": 6.103
+    },
+    "milling_06_screw_3_milled_01_upper_lid": {
+        "action_type": "milling",
+        "part_name": "06_screw_3_milled_01_upper_lid",
+        "path_duration": 6.103
+    },
+    "milling_07_screw_4_milled_01_upper_lid": {
+        "action_type": "milling",
+        "part_name": "07_screw_4_milled_01_upper_lid",
+        "path_duration": 6.103
+    },
+    "milling_08_lower_lid_milled_03_rotor_short": {
+        "action_type": "milling",
+        "part_name": "08_lower_lid_milled_03_rotor_short",
+        "path_duration": 62.207
+    },
+    "gripping_01_upper_lid_milled_03_rotor_short_2": {
+        "action_type": "gripping",
+        "part_name": "01_upper_lid_milled_03_rotor_short_2",
+        "path_duration": 9.0
+    },
+    "gripping_02_stator": {
+        "action_type": "gripping",
+        "part_name": "02_stator",
+        "path_duration": 14.32
+    },
+    "gripping_03_rotor_short": {
+        "action_type": "gripping",
+        "part_name": "03_rotor_short",
+        "path_duration": 17.994
+    }
+}

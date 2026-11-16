@@ -1,0 +1,16 @@
+# Same checks locally and in CI (ADR-0009). Install once: `uv run pre-commit install`.
+# Keep `rev` equal to the ruff version in uv.lock.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.0
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: check-absolute-paths  # AT 168; CI runs it as its own job, so the lint job skips it
+        name: no absolute paths in data files
+        language: python
+        entry: python tools/ci/check_absolute_paths.py
+        files: \.(xml|urdf|sdf|xacro|json|ya?ml|ini)$

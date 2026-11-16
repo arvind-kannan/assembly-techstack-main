@@ -1,0 +1,9 @@
+{
+  "base_parts": [
+    "part_j_elbow_pipe"
+  ],
+  "target_parts": [
+    "part_l_cover_lid",
+    "part_m_cap"
+  ]
+}

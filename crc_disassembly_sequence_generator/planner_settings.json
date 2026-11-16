@@ -1,0 +1,17 @@
+{
+    "gripping": {
+        "cost": 0
+    },
+    "screwing": {
+        "cost": 0
+    },
+    "milling": {
+        "cost": 0
+    },
+    "mill_diameter": {
+        "diameter": 6.0
+    },
+    "safety_ring": {
+        "cost": -1
+    }
+}

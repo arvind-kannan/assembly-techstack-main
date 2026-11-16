@@ -1,0 +1,11 @@
+numpy
+networkx
+trimesh
+matplotlib
+opcua
+pillow
+open3d
+scipy
+pyrender
+# zivid
+python-fcl

@@ -1,0 +1,8 @@
+{
+  "base_parts": [
+    "01_base"
+  ],
+  "target_parts": [
+    "02_target"
+  ]
+}

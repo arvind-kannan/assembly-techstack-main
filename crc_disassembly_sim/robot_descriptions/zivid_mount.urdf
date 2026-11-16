@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<robot name="zivid_mount">
+  <link name="baseLink">
+  </link>
+  <link name="mount">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+			<mesh filename="zivid_mount/zivid_mount.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+       <material name="grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+		<collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+			<mesh filename="zivid_mount/zivid_mount.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </collision>
+	</link>
+  
+  <joint name="mount_basejoint" type="fixed">
+		<parent link="baseLink"/>
+		<child link="mount"/>
+		<origin rpy="0 0 0" xyz="0 0 -0.0525"/>
+  </joint>
+  
+</robot>

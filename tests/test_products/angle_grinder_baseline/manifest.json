@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "product_name": "angle_grinder",
+    "product_folder": "../../../cases/angle_grinder/model",
+    "product_model_xml": "angle_grinder.xml",
+    "product_setup": "product_setup.json",
+    "cell_file": null,
+    "path_bases": {
+      "product_folder": "export_folder",
+      "cell_file": null
+    },
+    "fingerprints": {
+      "product_model_xml": "b737f49380ef3d418d0662b122d03020d34e7d02a2de50f79eedd87b69a33d0d",
+      "product_setup": "3035e79136f4289e60eec1a35b38d6b2b6f8f9356ae502bb531f0ca31a435841",
+      "cell_file": null
+    },
+    "extraction_depth": "disassembled_states",
+    "repo_commit": "21deaf0cd997293e3412b624fbc6b1412bb2dd55",
+    "code_version": "21deaf0cd997293e3412b624fbc6b1412bb2dd55"
+  },
+  "parts": [
+    "BG_Gehauese_p",
+    "BG_Rotor_p",
+    "BG_Tellerrad_V1p",
+    "Getriebegehaeuse_400_V1_02p",
+    "Kegelrad_V1_01p",
+    "Magnet_Hall_Sensor_700_02p",
+    "Mutter_M6_780_CT",
+    "Schraube_M4x16_540_Schr1",
+    "Schraube_M4x16_540_Schr2",
+    "Schraube_M4x16_540_Schr3",
+    "Schraube_M4x16_540_Schr4"
+  ]
+}

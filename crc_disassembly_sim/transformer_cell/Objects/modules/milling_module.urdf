@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<robot name="milling_module">
+  <link concave="yes" name="baseLink">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+		<mesh filename="mesh/Fraesmodul_dec.stl"/>
+      </geometry>
+       <material name="white">
+        <color rgba="0.7 0.7 0.7 1"/>
+      </material>
+    </visual>
+    <collision concave="yes">
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+	 	<mesh filename="mesh/Fraesmodul_dec.stl"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
+
+

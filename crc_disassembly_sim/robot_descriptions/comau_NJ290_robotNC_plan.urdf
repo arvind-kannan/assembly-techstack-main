@@ -1,0 +1,296 @@
+<?xml version="1.0" ?>
+<robot name="example_robot">
+
+	<!-- * * * Link Definitions * * * -->
+
+	<link name="link0_passive">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray1">
+				<color rgba="0.2 0.2 0.2 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/base_m.stl"/>
+            </geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray1">
+				<color rgba="0.2 0.2 0.2 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/base_m.stl"/>
+            </geometry>
+		</collision>
+	</link>
+	<link name="link1">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q1_m.stl"/>
+            </geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q1_m.stl"/>
+            </geometry>
+		</collision>
+	</link>
+	<link name="link2">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q2_m.stl"/>
+            </geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q2_m.stl"/>
+            </geometry>
+		</collision>
+	</link>
+	<link name="link3">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q3_m.stl"/>
+            </geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q3_m.stl"/>
+            </geometry>
+		</collision>
+	</link>
+	<link name="link4">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q4_m.stl"/>
+            </geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q4_m.stl"/>
+            </geometry>
+		</collision>
+	</link>
+	<link name="link5">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q5_m.stl"/>
+            </geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="gray2">
+				<color rgba="0.4 0.4 0.4 1"/>
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q5_m.stl"/>
+            </geometry>
+		</collision>
+	</link>
+	<link name="link6">
+		  <visual>
+			<origin xyz="0 0 0" rpy="3.1415926535897932 0 0"/>
+			<material name="gray1">
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q6_m.stl"/>
+            </geometry>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="3.1415926535897932 0 0"/>
+			<material name="gray1">
+			</material>
+            <geometry>
+                <mesh filename="comau_meshesNC/q6_m.stl"/>
+            </geometry>
+		</collision>
+	</link>
+	<link name="side_adapter_robot">
+		  <visual>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<material name="gray1">
+            	<color rgba="0.2 0.2 0.2 1"/>
+        	</material>
+			<geometry>
+				<mesh filename="EEF-addon/robot_side_adapter_v4.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<geometry>
+				<mesh filename="EEF-addon/robot_side_adapter_v4.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="sws_robotside">
+		  <visual>
+			<origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
+			<material name="gray1">
+            	<color rgba="0.2 0.2 0.2 1"/>
+        	</material>
+			<geometry>
+				<mesh filename="EEF-addon/SWK.stl" scale="0.001 0.001 0.001"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name="q1" type="revolute">
+		<parent link="link0_passive"/>
+		<child link="link1"/>
+		<origin xyz="0 0 0" rpy="-3.1415926535897932 0 0"/>
+		<axis xyz="0 0 1"/>
+		<limit effort="204" lower="-3.14159265358" upper="3.14159265358" velocity="1.91986217719"/>
+	</joint>
+	<joint name="q2" type="revolute">
+		<parent link="link1"/>
+		<child link="link2"/>
+		<origin xyz="0.46 0 -1.14" rpy="1.5707963267948966 0 0"/>
+		<axis xyz="0 0 1"/>
+		<limit effort="204" lower="-1.308996938991" upper="1.308996938991" velocity="1.91986217719"/>
+	</joint>
+	<joint name="q3" type="revolute">
+		<parent link="link2"/>
+		<child link="link3"/>
+		<origin xyz="0 -1.05 0" rpy="-3.1415926535897932 0 0"/>
+		<axis xyz="0 0 1"/>
+		<!-- q3 (relative to the upper arm): the parallelogram linkage limits it to -156 deg (Comau drawing CR82270902, boundary poses 1 and 6). The absolute forearm angle Ax.3 = q3 - q2 is limited to [-220, 0] deg on top of that: a coupled limit, enforced by the planner and the exporter. -->
+		<limit effort="204" lower="-2.72271363" upper="0" velocity="1.91986217719"/>
+	</joint>
+
+		<joint name="q4" type="revolute">
+		<parent link="link3"/>
+		<child link="link4"/>
+		<origin xyz="-0.25 1.51 0" rpy="1.5707963267948966 0 0"/>
+		<axis xyz="0 0 1"/>
+		<limit effort="204" lower="-3.25" upper="3.25" velocity="1.91986217719"/>
+	</joint>
+	<joint name="q5" type="revolute">
+		<parent link="link4"/>
+		<child link="link5"/>
+		<origin xyz="0 0 0" rpy="1.5707963267948966 0 0"/>
+		<axis xyz="0 0 1"/>
+		<limit effort="204" lower="-2.1816615645" upper="2.1816615645" velocity="1.91986217719"/>
+	</joint>
+	<joint name="q6" type="revolute">
+		<parent link="link5"/>
+		<child link="link6"/>
+		<origin xyz="0 -0.282 0" rpy="1.5707963267948966 0 0"/>
+		<!-- axis negated 2026-09-18: the Sinumerik/Comau positive direction of axis 6 is opposite to the
+		     original URDF's (measured on robot 2 with the cable bar at A6 +27.6 / -62).  q6 == controller A6. -->
+		<axis xyz="0 0 -1"/>
+		<limit effort="204" lower="-3.25" upper="3.25" velocity="1.91986217719"/>
+	</joint>
+	<joint name="fix_side_adapter_robot" type="fixed">
+		<parent link="link6"/>
+		<child link="side_adapter_robot"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+	</joint>
+	<joint name="fix_sws_robotside" type="fixed">
+		<parent link="side_adapter_robot"/>
+		<child link="sws_robotside"/>
+		<origin xyz="0 0 0.0755" rpy="0 0 0"/>
+	</joint>
+
+	
+	<link name="tcp_frame">
+		<!-- Empty link that defines a coordinate system -->
+	</link>
+
+	<!-- robot_C tool mounting (ghost): along +x of link6, OPPOSITE the cable bar (-x) and between the
+	     cross bars (+-y) = controller record "Option A" (GL2 218, GL3 0, SOEM1 0).  robot_D (sensor URDF)
+	     has the real screwdriver along +y.  Yaw 0 -> tool at -x, -90 -> +y, 180 -> +x, +90 -> -y. -->
+	<joint name="tcp_joint" type="fixed">
+		<parent link="sws_robotside"/>
+		<child link="tcp_frame"/>
+		<origin xyz="0 0 0" rpy="3.14159265358979 0 3.14159265358979"/>
+	</joint>
+		
+
+	<!-- Dress-pack cable bar: a bracket on the flange, perpendicular to the flange axis, that
+	     keeps the end-effector cables above the arm.  ~0.40 m from the arm centre
+	     (~0.30 m beyond the wrist casing).  Points world-up when the forearm is horizontal and
+	     A4 = A6 = 0: bar = -x of link6 on BOTH robots (robot 2 measured 2026-09-17/18; robot 1 consistent once the A6 sign was fixed).
+	     Mounted 5 cm above the flange plane, 3 cm diameter.  Real geometry the planner must
+	     respect; see the link6 spheres in comau_nj290.xrdf. -->
+	<link name="cable_bar">
+		<visual>
+			<origin rpy="0 1.5707963267948966 0" xyz="-0.2400 0 0.05"/>
+			<material name="bar_red"><color rgba="0.8 0.15 0.15 1"/></material>
+			<geometry><cylinder radius="0.015" length="0.320"/></geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 1.5707963267948966 0" xyz="-0.2400 0 0.05"/>
+			<geometry><cylinder radius="0.015" length="0.320"/></geometry>
+		</collision>
+	</link>
+	<joint name="fix_cable_bar" type="fixed">
+		<parent link="link6"/>
+		<child link="cable_bar"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+	</joint>
+
+	<!-- robot_C ONLY: two rectangular bars (4x4 cm) in the flange plane, perpendicular to the
+	     cable bar, 10..30 cm out on each side of the flange (60 cm tip to tip), at the cable
+	     bar's height.  Spheres for the planner: comau_nj290_robotNC.xrdf (robot_C sidecar). -->
+	<link name="cross_bars">
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0.20 0.05"/>
+			<material name="bar_red"><color rgba="0.8 0.15 0.15 1"/></material>
+			<geometry><box size="0.04 0.20 0.04"/></geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0.20 0.05"/>
+			<geometry><box size="0.04 0.20 0.04"/></geometry>
+		</collision>
+		<visual>
+			<origin rpy="0 0 0" xyz="0 -0.20 0.05"/>
+			<material name="bar_red"><color rgba="0.8 0.15 0.15 1"/></material>
+			<geometry><box size="0.04 0.20 0.04"/></geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 -0.20 0.05"/>
+			<geometry><box size="0.04 0.20 0.04"/></geometry>
+		</collision>
+	</link>
+	<joint name="fix_cross_bars" type="fixed">
+		<parent link="link6"/>
+		<child link="cross_bars"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+	</joint>
+</robot>

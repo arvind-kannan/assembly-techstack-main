@@ -1,0 +1,26 @@
+{
+    "0": {
+        "cost": 0,
+        "cheapest_sequence_to_node": [],
+        "explored": true,
+        "layer": 0
+    },
+    "1": {
+        "cost_to_node": 0,
+        "cheapest_sequence_to_node": [
+            0
+        ],
+        "explored": false,
+        "cost": 5.0,
+        "layer": 1
+    },
+    "2": {
+        "cost_to_node": 0,
+        "cheapest_sequence_to_node": [
+            0
+        ],
+        "explored": false,
+        "cost": 8.0,
+        "layer": 1
+    }
+}

@@ -1,0 +1,91 @@
+{
+ "angle_grinder": {
+  "BG_Gehauese_p": {
+   "feasible": true,
+   "seconds": 0.85,
+   "failure": null
+  },
+  "BG_Rotor_p": {
+   "feasible": false,
+   "seconds": 0.049,
+   "failure": "no_dof"
+  },
+  "BG_Tellerrad_V1p": {
+   "feasible": true,
+   "seconds": 0.407,
+   "failure": null
+  },
+  "Getriebegehaeuse_400_V1_02p": {
+   "feasible": false,
+   "seconds": 0.049,
+   "failure": "no_dof"
+  },
+  "Kegelrad_V1_01p": {
+   "feasible": false,
+   "seconds": 0.051,
+   "failure": "no_dof"
+  },
+  "Magnet_Hall_Sensor_700_02p": {
+   "feasible": false,
+   "seconds": 0.048,
+   "failure": "no_dof"
+  },
+  "Mutter_M6_780_CT": {
+   "feasible": false,
+   "seconds": 0.244,
+   "failure": "no_feasible_dof_candidate"
+  }
+ },
+ "battery_replacement": {
+  "lid": {
+   "feasible": true,
+   "seconds": 3.003,
+   "failure": null
+  },
+  "module_1": {
+   "feasible": false,
+   "seconds": 30.976,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "module_2": {
+   "feasible": false,
+   "seconds": 31.531,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "module_3": {
+   "feasible": false,
+   "seconds": 31.87,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "module_4": {
+   "feasible": false,
+   "seconds": 33.046,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "module_5": {
+   "feasible": false,
+   "seconds": 36.746,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "module_6": {
+   "feasible": false,
+   "seconds": 33.812,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "module_7": {
+   "feasible": false,
+   "seconds": 33.864,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "module_8": {
+   "feasible": false,
+   "seconds": 31.326,
+   "failure": "no_feasible_dof_candidate"
+  },
+  "tray": {
+   "feasible": false,
+   "seconds": 2.858,
+   "failure": "no_feasible_dof_candidate"
+  }
+ }
+}

@@ -1,0 +1,24 @@
+{
+  "times": {
+    "feed_rate_milling": 1000.0,
+    "feed_rate_gripping_and_removing_approaching": 2000.0,
+    "feed_rate_gripping_and_removing_leaving": 1000.0,
+    "feed_rate_screwing_approaching": 2000.0,
+    "feed_rate_screwing_leaving": 1000.0,
+    "toolchange_time_dropoff_to_storage": 10.0,
+    "toolchange_time_assembly_to_storage": 10.0,
+    "toolchange_time_at_toolstorage": 60.0,
+    "toolchange_time_storage_to_assembly": 10.0,
+    "toolchange_time_start_to_toolstorage": 10.0,
+    "traveltime_assembly_to_dropoff": 15.0,
+    "traveltime_dropoff_to_assembly": 15.0,
+    "screwing_start_offset": 100.0,
+    "screwing_pullout_factor": 1.1,
+    "screwing_minimal_pullout_value": 5.0,
+    "gripping_start_offset": 100.0,
+    "gripping_pullout_factor": 2.1,
+    "gripping_minimal_pullout_value": 5.0,
+    "milling_penalty": 100.0,
+    "inspection_time": 10.0
+  }
+}

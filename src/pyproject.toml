@@ -1,0 +1,13 @@
+# Only for `pip install -e src` (see README, "Setup"); dependencies live in the root pyproject.toml / uv.lock.
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "disassembly_pomdp"
+version = "1.0"
+description = "Disassembly and assembly POMDP, Product explorer and MRTAMP app"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["."]   # every package under src/, like the old setup.py's find_packages()

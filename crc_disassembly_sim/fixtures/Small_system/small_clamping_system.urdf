@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<robot name="small_clamping_system">
+
+  <!-- ============ BODY ============ -->
+  <link name="base_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="1.0"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="steel_grey">
+        <color rgba="0.6 0.6 0.65 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- ============ PISTON / CYLINDER ARM ============ -->
+  <link name="piston_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="1.0"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="cyliner_arm.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="steel_grey">
+        <color rgba="0.6 0.6 0.65 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="cyliner_arm.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="piston_joint" type="prismatic">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="piston_link"/>
+    <!-- Both meshes keep their as-exported coordinates (origins left at 0 0 0),
+         so the assembly's relative pose comes entirely from the geometry.
+         Bounding boxes (mm): body X in [-160, 160], piston_link X in [-131.5, 14.5].
+         That leaves ~145.5mm of clearance toward +X but only ~28.5mm toward -X,
+         so the 95.5mm stroke must run in +X from the exported pose, which is
+         therefore the retracted (lower limit) end of travel. -->
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0.0" upper="0.0955" velocity="0.1"/>
+  </joint>
+
+</robot>

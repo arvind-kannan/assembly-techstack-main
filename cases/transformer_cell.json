@@ -1,0 +1,263 @@
+{
+  "cell": {
+    "robots": [
+      {
+        "id": "robot_1",
+        "nc_channel": 1,
+        "tools": [
+          "default_gripper",
+          "pizzagreifer"
+        ],
+        "capabilities": [
+          "gripping_and_removing",
+          "gripping",
+          "inserting",
+          "releasing",
+          "loading",
+          "unloading",
+          "reconfiguring"
+        ]
+      },
+      {
+        "id": "robot_2",
+        "nc_channel": 2,
+        "tools": [
+          "H5",
+          "zivid"
+        ],
+        "capabilities": [
+          "unscrewing",
+          "screwing_in",
+          "inspecting"
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "H5",
+        "process": "screwing_in",
+        "grips": []
+      },
+      {
+        "name": "default_gripper",
+        "process": "inserting",
+        "grips": []
+      },
+      {
+        "name": "zivid",
+        "process": "inspecting",
+        "grips": []
+      },
+      {
+        "name": "pizzagreifer",
+        "process": "loading",
+        "grips": [
+          "nsr_a"
+        ]
+      }
+    ],
+    "stations": [
+      {
+        "name": "tool_storage",
+        "kind": "tool_storage",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [
+          {
+            "name": "pizzagreifer",
+            "pose": [
+              -0.283856,
+              1.533296,
+              0.904248,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "accepts": "sws"
+          }
+        ],
+        "slots": []
+      },
+      {
+        "name": "supply",
+        "kind": "supply",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [],
+        "slots": [
+          {
+            "name": "crown_gear_slot",
+            "pose": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "part": "BG_Tellerrad_V1p",
+            "screw_type": null,
+            "robots": []
+          },
+          {
+            "name": "lid_slot",
+            "pose": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "part": "lid",
+            "screw_type": null,
+            "robots": []
+          },
+          {
+            "name": "screw_nest_plate_h5",
+            "pose": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "part": null,
+            "screw_type": "H5",
+            "robots": []
+          }
+        ]
+      },
+      {
+        "name": "dropoff",
+        "kind": "dropoff",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [],
+        "slots": []
+      },
+      {
+        "name": "fixture",
+        "kind": "fixture",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [],
+        "slots": []
+      },
+      {
+        "name": "dmg",
+        "kind": "machine",
+        "pose": [
+          -2.3784,
+          -0.1875,
+          0.0,
+          1.570796,
+          0.0,
+          1.570796
+        ],
+        "processes": [
+          "rework_milling"
+        ],
+        "coupling_places": [
+          {
+            "name": "table",
+            "pose": [
+              3.08,
+              0.9118,
+              3.085,
+              -3.1337,
+              1.4178,
+              0.0047
+            ],
+            "accepts": "zero_point_clamping"
+          }
+        ],
+        "slots": []
+      },
+      {
+        "name": "pallet_storage",
+        "kind": "tool_storage",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [
+          {
+            "name": "nsr_a",
+            "pose": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "accepts": "nsr_a"
+          }
+        ],
+        "slots": []
+      }
+    ],
+    "pallets": [
+      {
+        "name": "pallet",
+        "interfaces": [
+          "nsr_a",
+          "zero_point_clamping"
+        ]
+      }
+    ],
+    "tooling": []
+  },
+  "mounted_tools": {
+    "robot_1": "default_gripper",
+    "robot_2": "H5"
+  },
+  "descriptions": {},
+  "simulation_only": false,
+  "locations": {
+    "pallet": {
+      "station": "pallet_storage",
+      "coupling_place": "nsr_a"
+    }
+  },
+  "notes": {
+    "dmg": "DMG DMU 60 evo linear. Station pose estimated: the cell-mesh placement of the cell simulation (-2.59, -0.12, 0, rpy pi/2, 0, pi/2) shifted in x and y so that the taught set-down point lies in the middle of the table opening of the DMG mesh, at the mesh's own height; to be measured. The coupling place 'table' is the taught set-down point of the pallet TCP (NC library DMG_ABLEGEN: X706.583 Y2892.454 Z911.799 A89.810 B-8.767 C179.930, A/B/C read as intrinsic XYZ in degrees) relative to that pose.",
+    "pallet_storage": "Pallet storage next to the cell door. Station pose and coupling place pose are placeholders until taught.",
+    "pizzagreifer": "Storage place on the tool storage: position as taught in the NC library (GET_PIZZAGREIFER: X-283.856 Y1533.296 Z904.248); the orientation is not taught in the quoted findings (#215), so it is zero."
+  }
+}

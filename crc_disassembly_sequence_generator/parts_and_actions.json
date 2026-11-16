@@ -1,0 +1,6 @@
+{
+    "screw": ["screwing", "milling"],
+    "milled": ["gripping"],
+    "normal": ["gripping", "milling"],
+    "milled_screw": []
+}

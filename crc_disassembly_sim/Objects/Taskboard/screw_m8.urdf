@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<!-- DIN 912 M8x30 hexagon socket head cap screw, as used by the task board's
+     Screws and Nuts modules (head 13 mm dia x 8 mm, shank 8 mm dia x 30 mm).
+     Origin is the seating face (underside of the head), +z out of the board, so a
+     seated screw is spawned at [hole_x, hole_y, board_top_z] with no extra offset.
+     Geometry is primitive on purpose: dozens of these get spawned per run. -->
+<robot name="screw_m8">
+  <link name="baseLink">
+    <contact>
+      <lateral_friction value="0.8"/>
+      <rolling_friction value="0.001"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 -0.011"/>
+      <mass value="0.020"/>
+      <inertia ixx="1.58e-6" ixy="0" ixz="0" iyy="1.58e-6" iyz="0" izz="1.6e-7"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.004"/>
+      <geometry>
+        <cylinder radius="0.0065" length="0.008"/>
+      </geometry>
+      <material name="steel">
+        <color rgba="0.62 0.64 0.67 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.004"/>
+      <geometry>
+        <cylinder radius="0.0065" length="0.008"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 -0.015"/>
+      <geometry>
+        <cylinder radius="0.004" length="0.030"/>
+      </geometry>
+      <material name="steel"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.015"/>
+      <geometry>
+        <cylinder radius="0.004" length="0.030"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0065"/>
+      <geometry>
+        <cylinder radius="0.003" length="0.005"/>
+      </geometry>
+      <material name="socket_dark">
+        <color rgba="0.12 0.12 0.13 1"/>
+      </material>
+    </visual>
+  </link>
+</robot>

@@ -1,0 +1,9 @@
+
+src/diss_assembly_dataclasses.egg-info/
+
+# Ignore build output directory
+build/
+src/build/
+
+*.pyc
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<robot name="gripper">
+  <link name="baseLink">
+    <contact>
+      <friction_anchor/>
+      <stiffness value="3000000.0"/>
+      <damping value="0.0"/>
+      <spinning_friction value="0.1"/>
+      <lateral_friction value="0.1"/>
+      <contact_cfm value="0.2"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value="0.001"/>
+       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.0 0.0"/>
+      <geometry>
+			<mesh filename="fixture_mesh/base.obj"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.0 0.0"/>
+      <geometry>
+			<mesh filename="fixture_mesh/baseL.obj"/>
+      </geometry>
+    </collision>
+    <collision>
+      <geometry>
+			<mesh filename="fixture_mesh/baseR.obj"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

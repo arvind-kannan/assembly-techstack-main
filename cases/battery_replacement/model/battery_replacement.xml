@@ -1,0 +1,185 @@
+<assembly name="battery_replacement">
+	<part name="lid" mesh_path="battery_replacement/lid.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_01" mesh_path="battery_replacement/lid_screw_01.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_02" mesh_path="battery_replacement/lid_screw_02.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_03" mesh_path="battery_replacement/lid_screw_03.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_04" mesh_path="battery_replacement/lid_screw_04.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_05" mesh_path="battery_replacement/lid_screw_05.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_06" mesh_path="battery_replacement/lid_screw_06.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_07" mesh_path="battery_replacement/lid_screw_07.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_08" mesh_path="battery_replacement/lid_screw_08.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_09" mesh_path="battery_replacement/lid_screw_09.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_10" mesh_path="battery_replacement/lid_screw_10.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_11" mesh_path="battery_replacement/lid_screw_11.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_12" mesh_path="battery_replacement/lid_screw_12.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_13" mesh_path="battery_replacement/lid_screw_13.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_14" mesh_path="battery_replacement/lid_screw_14.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_15" mesh_path="battery_replacement/lid_screw_15.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_16" mesh_path="battery_replacement/lid_screw_16.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_17" mesh_path="battery_replacement/lid_screw_17.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_18" mesh_path="battery_replacement/lid_screw_18.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_19" mesh_path="battery_replacement/lid_screw_19.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_20" mesh_path="battery_replacement/lid_screw_20.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_21" mesh_path="battery_replacement/lid_screw_21.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_22" mesh_path="battery_replacement/lid_screw_22.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_23" mesh_path="battery_replacement/lid_screw_23.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_24" mesh_path="battery_replacement/lid_screw_24.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_25" mesh_path="battery_replacement/lid_screw_25.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_26" mesh_path="battery_replacement/lid_screw_26.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_27" mesh_path="battery_replacement/lid_screw_27.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_28" mesh_path="battery_replacement/lid_screw_28.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_29" mesh_path="battery_replacement/lid_screw_29.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_30" mesh_path="battery_replacement/lid_screw_30.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_31" mesh_path="battery_replacement/lid_screw_31.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_32" mesh_path="battery_replacement/lid_screw_32.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_33" mesh_path="battery_replacement/lid_screw_33.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_34" mesh_path="battery_replacement/lid_screw_34.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_35" mesh_path="battery_replacement/lid_screw_35.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_36" mesh_path="battery_replacement/lid_screw_36.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_37" mesh_path="battery_replacement/lid_screw_37.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_38" mesh_path="battery_replacement/lid_screw_38.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_39" mesh_path="battery_replacement/lid_screw_39.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_40" mesh_path="battery_replacement/lid_screw_40.stl" density="1400.0" material="Generic" />
+	<part name="lid_screw_41" mesh_path="battery_replacement/lid_screw_41.stl" density="1400.0" material="Generic" />
+	<part name="module_1" mesh_path="battery_replacement/module_1.stl" density="1240.0" material="Generic" />
+	<part name="module_2" mesh_path="battery_replacement/module_2.stl" density="1240.0" material="Generic" />
+	<part name="module_3" mesh_path="battery_replacement/module_3.stl" density="1240.0" material="Generic" />
+	<part name="module_4" mesh_path="battery_replacement/module_4.stl" density="1240.0" material="Generic" />
+	<part name="module_5" mesh_path="battery_replacement/module_5.stl" density="1240.0" material="Generic" />
+	<part name="module_6" mesh_path="battery_replacement/module_6.stl" density="1240.0" material="Generic" />
+	<part name="module_7" mesh_path="battery_replacement/module_7.stl" density="1240.0" material="Generic" />
+	<part name="module_8" mesh_path="battery_replacement/module_8.stl" density="1240.0" material="Generic" />
+	<part name="tray" mesh_path="battery_replacement/tray.stl" density="2700.0" material="Generic" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_01" points_filename="battery_replacement_data/lid_lid_screw_01_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_01_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_01_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_02" points_filename="battery_replacement_data/lid_lid_screw_02_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_02_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_02_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_03" points_filename="battery_replacement_data/lid_lid_screw_03_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_03_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_03_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_04" points_filename="battery_replacement_data/lid_lid_screw_04_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_04_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_04_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_05" points_filename="battery_replacement_data/lid_lid_screw_05_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_05_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_05_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_06" points_filename="battery_replacement_data/lid_lid_screw_06_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_06_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_06_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_07" points_filename="battery_replacement_data/lid_lid_screw_07_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_07_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_07_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_08" points_filename="battery_replacement_data/lid_lid_screw_08_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_08_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_08_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_09" points_filename="battery_replacement_data/lid_lid_screw_09_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_09_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_09_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_10" points_filename="battery_replacement_data/lid_lid_screw_10_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_10_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_10_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_11" points_filename="battery_replacement_data/lid_lid_screw_11_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_11_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_11_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_12" points_filename="battery_replacement_data/lid_lid_screw_12_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_12_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_12_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_13" points_filename="battery_replacement_data/lid_lid_screw_13_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_13_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_13_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_14" points_filename="battery_replacement_data/lid_lid_screw_14_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_14_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_14_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_15" points_filename="battery_replacement_data/lid_lid_screw_15_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_15_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_15_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_16" points_filename="battery_replacement_data/lid_lid_screw_16_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_16_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_16_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_17" points_filename="battery_replacement_data/lid_lid_screw_17_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_17_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_17_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_18" points_filename="battery_replacement_data/lid_lid_screw_18_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_18_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_18_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_19" points_filename="battery_replacement_data/lid_lid_screw_19_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_19_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_19_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_20" points_filename="battery_replacement_data/lid_lid_screw_20_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_20_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_20_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_21" points_filename="battery_replacement_data/lid_lid_screw_21_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_21_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_21_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_22" points_filename="battery_replacement_data/lid_lid_screw_22_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_22_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_22_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_23" points_filename="battery_replacement_data/lid_lid_screw_23_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_23_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_23_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_24" points_filename="battery_replacement_data/lid_lid_screw_24_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_24_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_24_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_25" points_filename="battery_replacement_data/lid_lid_screw_25_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_25_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_25_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_26" points_filename="battery_replacement_data/lid_lid_screw_26_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_26_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_26_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_27" points_filename="battery_replacement_data/lid_lid_screw_27_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_27_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_27_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_28" points_filename="battery_replacement_data/lid_lid_screw_28_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_28_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_28_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_29" points_filename="battery_replacement_data/lid_lid_screw_29_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_29_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_29_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_30" points_filename="battery_replacement_data/lid_lid_screw_30_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_30_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_30_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_31" points_filename="battery_replacement_data/lid_lid_screw_31_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_31_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_31_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_32" points_filename="battery_replacement_data/lid_lid_screw_32_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_32_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_32_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_33" points_filename="battery_replacement_data/lid_lid_screw_33_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_33_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_33_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_34" points_filename="battery_replacement_data/lid_lid_screw_34_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_34_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_34_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_35" points_filename="battery_replacement_data/lid_lid_screw_35_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_35_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_35_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_36" points_filename="battery_replacement_data/lid_lid_screw_36_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_36_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_36_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_37" points_filename="battery_replacement_data/lid_lid_screw_37_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_37_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_37_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_38" points_filename="battery_replacement_data/lid_lid_screw_38_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_38_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_38_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_39" points_filename="battery_replacement_data/lid_lid_screw_39_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_39_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_39_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_40" points_filename="battery_replacement_data/lid_lid_screw_40_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_40_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_40_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="lid_screw_41" points_filename="battery_replacement_data/lid_lid_screw_41_points.npy" normals_filename="battery_replacement_data/lid_lid_screw_41_normals.npy" distances_filename="battery_replacement_data/lid_lid_screw_41_distances.npy" />
+	<connection type="geometric" part_name1="lid" part_name2="tray" points_filename="battery_replacement_data/lid_tray_points.npy" normals_filename="battery_replacement_data/lid_tray_normals.npy" distances_filename="battery_replacement_data/lid_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_01" part_name2="tray" points_filename="battery_replacement_data/lid_screw_01_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_01_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_01_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_02" part_name2="tray" points_filename="battery_replacement_data/lid_screw_02_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_02_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_02_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_03" part_name2="tray" points_filename="battery_replacement_data/lid_screw_03_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_03_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_03_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_04" part_name2="tray" points_filename="battery_replacement_data/lid_screw_04_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_04_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_04_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_05" part_name2="tray" points_filename="battery_replacement_data/lid_screw_05_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_05_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_05_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_06" part_name2="tray" points_filename="battery_replacement_data/lid_screw_06_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_06_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_06_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_07" part_name2="tray" points_filename="battery_replacement_data/lid_screw_07_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_07_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_07_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_08" part_name2="tray" points_filename="battery_replacement_data/lid_screw_08_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_08_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_08_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_09" part_name2="tray" points_filename="battery_replacement_data/lid_screw_09_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_09_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_09_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_10" part_name2="tray" points_filename="battery_replacement_data/lid_screw_10_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_10_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_10_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_11" part_name2="tray" points_filename="battery_replacement_data/lid_screw_11_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_11_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_11_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_12" part_name2="tray" points_filename="battery_replacement_data/lid_screw_12_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_12_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_12_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_13" part_name2="tray" points_filename="battery_replacement_data/lid_screw_13_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_13_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_13_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_14" part_name2="tray" points_filename="battery_replacement_data/lid_screw_14_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_14_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_14_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_15" part_name2="tray" points_filename="battery_replacement_data/lid_screw_15_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_15_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_15_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_16" part_name2="tray" points_filename="battery_replacement_data/lid_screw_16_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_16_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_16_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_17" part_name2="tray" points_filename="battery_replacement_data/lid_screw_17_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_17_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_17_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_18" part_name2="tray" points_filename="battery_replacement_data/lid_screw_18_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_18_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_18_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_19" part_name2="tray" points_filename="battery_replacement_data/lid_screw_19_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_19_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_19_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_20" part_name2="tray" points_filename="battery_replacement_data/lid_screw_20_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_20_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_20_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_21" part_name2="tray" points_filename="battery_replacement_data/lid_screw_21_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_21_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_21_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_22" part_name2="tray" points_filename="battery_replacement_data/lid_screw_22_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_22_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_22_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_23" part_name2="tray" points_filename="battery_replacement_data/lid_screw_23_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_23_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_23_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_24" part_name2="tray" points_filename="battery_replacement_data/lid_screw_24_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_24_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_24_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_25" part_name2="tray" points_filename="battery_replacement_data/lid_screw_25_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_25_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_25_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_26" part_name2="tray" points_filename="battery_replacement_data/lid_screw_26_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_26_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_26_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_27" part_name2="tray" points_filename="battery_replacement_data/lid_screw_27_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_27_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_27_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_28" part_name2="tray" points_filename="battery_replacement_data/lid_screw_28_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_28_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_28_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_29" part_name2="tray" points_filename="battery_replacement_data/lid_screw_29_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_29_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_29_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_30" part_name2="tray" points_filename="battery_replacement_data/lid_screw_30_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_30_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_30_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_31" part_name2="tray" points_filename="battery_replacement_data/lid_screw_31_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_31_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_31_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_32" part_name2="tray" points_filename="battery_replacement_data/lid_screw_32_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_32_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_32_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_33" part_name2="tray" points_filename="battery_replacement_data/lid_screw_33_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_33_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_33_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_34" part_name2="tray" points_filename="battery_replacement_data/lid_screw_34_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_34_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_34_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_35" part_name2="tray" points_filename="battery_replacement_data/lid_screw_35_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_35_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_35_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_36" part_name2="tray" points_filename="battery_replacement_data/lid_screw_36_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_36_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_36_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_37" part_name2="tray" points_filename="battery_replacement_data/lid_screw_37_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_37_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_37_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_38" part_name2="tray" points_filename="battery_replacement_data/lid_screw_38_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_38_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_38_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_39" part_name2="tray" points_filename="battery_replacement_data/lid_screw_39_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_39_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_39_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_40" part_name2="tray" points_filename="battery_replacement_data/lid_screw_40_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_40_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_40_tray_distances.npy" />
+	<connection type="geometric" part_name1="lid_screw_41" part_name2="tray" points_filename="battery_replacement_data/lid_screw_41_tray_points.npy" normals_filename="battery_replacement_data/lid_screw_41_tray_normals.npy" distances_filename="battery_replacement_data/lid_screw_41_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_1" part_name2="tray" points_filename="battery_replacement_data/module_1_tray_points.npy" normals_filename="battery_replacement_data/module_1_tray_normals.npy" distances_filename="battery_replacement_data/module_1_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_2" part_name2="tray" points_filename="battery_replacement_data/module_2_tray_points.npy" normals_filename="battery_replacement_data/module_2_tray_normals.npy" distances_filename="battery_replacement_data/module_2_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_3" part_name2="tray" points_filename="battery_replacement_data/module_3_tray_points.npy" normals_filename="battery_replacement_data/module_3_tray_normals.npy" distances_filename="battery_replacement_data/module_3_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_4" part_name2="tray" points_filename="battery_replacement_data/module_4_tray_points.npy" normals_filename="battery_replacement_data/module_4_tray_normals.npy" distances_filename="battery_replacement_data/module_4_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_5" part_name2="tray" points_filename="battery_replacement_data/module_5_tray_points.npy" normals_filename="battery_replacement_data/module_5_tray_normals.npy" distances_filename="battery_replacement_data/module_5_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_6" part_name2="tray" points_filename="battery_replacement_data/module_6_tray_points.npy" normals_filename="battery_replacement_data/module_6_tray_normals.npy" distances_filename="battery_replacement_data/module_6_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_7" part_name2="tray" points_filename="battery_replacement_data/module_7_tray_points.npy" normals_filename="battery_replacement_data/module_7_tray_normals.npy" distances_filename="battery_replacement_data/module_7_tray_distances.npy" />
+	<connection type="geometric" part_name1="module_8" part_name2="tray" points_filename="battery_replacement_data/module_8_tray_points.npy" normals_filename="battery_replacement_data/module_8_tray_normals.npy" distances_filename="battery_replacement_data/module_8_tray_distances.npy" />
+	<connection type="screw" part_name1="lid_screw_01" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_02" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_03" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_04" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_05" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_06" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_07" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_08" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_09" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_10" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_11" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_12" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_13" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_14" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_15" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_16" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_17" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_18" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_19" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_20" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_21" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_22" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_23" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_24" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_25" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_26" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_27" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_28" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_29" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_30" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_31" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_32" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_33" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_34" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_35" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_36" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_37" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_38" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_39" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_40" part_name2="tray" screw_head="H5" />
+	<connection type="screw" part_name1="lid_screw_41" part_name2="tray" screw_head="H5" />
+</assembly>

@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<robot name="gripper">
+  <link name="baseLink">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <mass value="5"/>
+       <inertia ixx="1.0" ixy="1.0" ixz="1.0" iyy="1.0" iyz="1.0" izz="1.0"/>
+    </inertial>
+    <visual>
+      <origin  xyz="0 0 0" rpy="1.5707963267948966  0 1.5707963267948966 "/>
+      <geometry>
+			<mesh filename="tool_mesh/Millingtool_asm.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripping_trafo" type="fixed">
+		<parent link="baseLink"/>
+		<child link="tcp"/>
+		<origin xyz="0.3 0.0 -0.14" rpy="0 -1.5707963267948966 0"/>
+  </joint>
+
+  <link name="tcp">
+    <visual>
+        <origin xyz="0 0 0.1" rpy="0 0 0"/>
+        <geometry>
+           <cylinder length="0.2" radius="0.0025"/>
+        </geometry>
+        <material name="black">
+            <color rgba="0.1 0.1 0.1 1.0"/>
+        </material>
+    </visual>
+  </link>
+</robot>

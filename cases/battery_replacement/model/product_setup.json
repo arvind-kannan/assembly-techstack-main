@@ -1,0 +1,4 @@
+{
+  "base_parts": ["tray", "module_1", "module_2", "module_3", "module_4", "module_5", "module_6", "module_7", "module_8"],
+  "target_parts": ["lid"]
+}

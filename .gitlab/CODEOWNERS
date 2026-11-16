@@ -1,0 +1,10 @@
+# Core model: changes only via an approved `area:core-model` issue (docs/adr/0003).
+[Core model]
+/crc_diss_assembly_dataclasses/ @max.goebels @jan.baumgaertner
+
+# Decisions and glossaries shape every thesis; review by a core maintainer.
+[Architecture docs]
+/docs/adr/ @max.goebels @jan.baumgaertner
+/docs/contexts/core-model/ @max.goebels @jan.baumgaertner
+/CONTEXT-MAP.md @max.goebels @jan.baumgaertner
+/AGENTS.md @max.goebels @jan.baumgaertner

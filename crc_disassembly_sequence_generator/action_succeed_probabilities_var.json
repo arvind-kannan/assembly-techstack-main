@@ -1,0 +1,34 @@
+{
+    "01_upper_lid": {
+        "gripping": "sucprob__01_upper_lid__gripping",
+        "milling": "sucprob__01_upper_lid__milling"
+    },
+    "02_stator": {
+        "gripping": "sucprob__02_stator__gripping",
+        "milling": "sucprob__02_stator__milling"
+    },
+    "03_rotor_short": {
+        "gripping": "sucprob__03_rotor_short__gripping",
+        "milling": "sucprob__03_rotor_short__milling"
+    },
+    "04_screw_1": {
+        "screwing": "sucprob__04_screw_1__screwing",
+        "milling": "sucprob__04_screw_1__milling"
+    },
+    "05_screw_2": {
+        "screwing": "sucprob__05_screw_2__screwing",
+        "milling": "sucprob__05_screw_2__milling"
+    },
+    "06_screw_3": {
+        "screwing": "sucprob__06_screw_3__screwing",
+        "milling": "sucprob__06_screw_3__milling"
+    },
+    "07_screw_4": {
+        "screwing": "sucprob__07_screw_4__screwing",
+        "milling": "sucprob__07_screw_4__milling"
+    },
+    "08_lower_lid": {
+        "gripping": "sucprob__08_lower_lid__gripping",
+        "milling": "sucprob__08_lower_lid__milling"
+    }
+}

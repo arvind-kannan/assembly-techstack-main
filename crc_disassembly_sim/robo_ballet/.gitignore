@@ -1,0 +1,5 @@
+# local data and build artefacts, not tracked (training start states are regenerable)
+roboballet/data/start_states/
+roboballet/data/paper_test_tasksets/
+roboballet/protoc-*.zip
+__pycache__/

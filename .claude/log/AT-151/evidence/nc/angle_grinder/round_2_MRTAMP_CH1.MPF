@@ -1,0 +1,16 @@
+; CELL REHEARSAL ONLY (examples/mrtamp_demo_runs.py): placeholder slot and fixture poses, not for the cell
+; MRTAMP program for NC channel 1
+TRAORI
+G1 X0.000 Y-1499.987 Z1999.961 A-0.001 B0.000 C-0.000 F30000.0
+G1 X-1200.000 Y-2600.000 Z800.000 A0.000 B-0.000 C0.000 F30000.0
+G1 X-1200.000 Y-2600.000 Z800.000 A0.000 B-0.000 C0.000 F6000.0
+G1 X-1200.000 Y-2600.000 Z800.000 A0.000 B-0.000 C0.000 F30000.0
+G1 X-1271.732 Y-1621.431 Z890.785 A0.000 B-0.000 C0.000 F30000.0
+G1 X-1271.732 Y-1621.431 Z890.785 A0.000 B-0.000 C0.000 F6000.0
+G1 X-1252.139 Y-1604.254 Z757.285 A0.000 B-0.000 C0.000 F6000.0
+G1 X-1266.543 Y-1616.882 Z855.433 A0.000 B-0.000 C0.000 F6000.0
+; ---- op_3: releasing BG_Tellerrad_V1p
+; ---- sync 1 falls beyond the end of this segment: robot_2 waits before op_4 for op_3 (order)
+; ---- inspection_2: inspecting
+; ---- inspection_2: end of segment (inspection)
+M30

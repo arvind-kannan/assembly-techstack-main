@@ -1,0 +1,10 @@
+{
+  "name": "supply",
+  "kind": "supply",
+  "pose": [0.0, 0.5, 0.1, 0.0, 0.0, 0.0],
+  "processes": [],
+  "coupling_places": [],
+  "slots": [
+    {"name": "lid_slot", "pose": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "part": "part_l_cover_lid", "screw_type": null, "robots": []}
+  ]
+}

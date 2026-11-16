@@ -1,0 +1,11 @@
+<assembly name="tiny_test_product">
+	<part name="01_base" mesh_path="tiny_test_product/01_base.stl" density="8000.0" material="Generic" />
+	<part name="02_target" mesh_path="tiny_test_product/02_target.stl" density="8000.0" material="Generic" />
+	<part name="03_cover" mesh_path="tiny_test_product/03_cover.stl" density="8000.0" material="Generic" />
+	<part name="04_screw" mesh_path="tiny_test_product/04_screw.stl" density="8000.0" material="Generic" />
+	<connection type="geometric" part_name1="01_base" part_name2="02_target" points_filename="tiny_test_product_data/01_base_02_target_points.npy" normals_filename="tiny_test_product_data/01_base_02_target_normals.npy" distances_filename="tiny_test_product_data/01_base_02_target_distances.npy" />
+	<connection type="geometric" part_name1="01_base" part_name2="03_cover" points_filename="tiny_test_product_data/01_base_03_cover_points.npy" normals_filename="tiny_test_product_data/01_base_03_cover_normals.npy" distances_filename="tiny_test_product_data/01_base_03_cover_distances.npy" />
+	<connection type="geometric" part_name1="01_base" part_name2="04_screw" points_filename="tiny_test_product_data/01_base_04_screw_points.npy" normals_filename="tiny_test_product_data/01_base_04_screw_normals.npy" distances_filename="tiny_test_product_data/01_base_04_screw_distances.npy" />
+	<connection type="geometric" part_name1="03_cover" part_name2="04_screw" points_filename="tiny_test_product_data/03_cover_04_screw_points.npy" normals_filename="tiny_test_product_data/03_cover_04_screw_normals.npy" distances_filename="tiny_test_product_data/03_cover_04_screw_distances.npy" />
+	<connection type="screw" part_name1="04_screw" part_name2="01_base" screw_head="H5" />
+</assembly>

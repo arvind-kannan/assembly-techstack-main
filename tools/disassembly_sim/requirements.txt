@@ -1,0 +1,16 @@
+# Environment for crc_disassembly_sim/DisassemblySim.py (Python >= 3.12).
+# Versions as tested on 2026-10-02; see README.md.
+pybullet==3.2.7
+pybullet-industrial==1.0.4
+numpy==1.26.4
+scipy==1.17.1
+open3d==0.20.0
+opcua==0.98.13
+pillow==12.3.0
+python-fcl==0.7.0.11
+trimesh==5.1.0
+networkx==3.7
+matplotlib==3.11.2
+# Core model as the sim expects it (Assembly.parts is a list). The techstack's
+# crc_diss_assembly_dataclasses/ subtree is newer (parts is a dict) and breaks the sim.
+diss-assembly-dataclasses @ git+https://github.com/WBK-Robotics/crc_diss_assembly_dataclasses.git@24a0f35130c7686be0d2715ca3b4fe135498df12#subdirectory=src

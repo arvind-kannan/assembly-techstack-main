@@ -1,0 +1,120 @@
+<?xml version="1.0" ?>
+<robot name="large_clamping_system">
+
+  <!-- ============ BASE ============ -->
+  <link name="base_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="1.0"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="large_system_body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="steel_grey">
+        <color rgba="0.6 0.6 0.65 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="large_system_body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- ============ LEFT FINGER ============ -->
+  <link name="left_finger_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="1.0"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="large_system_left_finger.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="steel_grey">
+        <color rgba="0.6 0.6 0.65 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="large_system_left_finger.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_finger_joint" type="prismatic">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="left_finger_link"/>
+    <!-- left finger sits at lower X than the right finger in the shared assembly
+         frame; assumes the exported pose is closed, so +travel opens (moves -X) -->
+    <axis xyz="-1 0 0"/>
+    <limit effort="100" lower="0.0" upper="0.05" velocity="0.1"/>
+  </joint>
+
+  <!-- ============ RIGHT FINGER ============ -->
+  <link name="right_finger_link">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="1.0"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="large_system_right_finger.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="steel_grey">
+        <color rgba="0.6 0.6 0.65 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="large_system_right_finger.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="right_finger_joint" type="prismatic">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="right_finger_link"/>
+    <!-- right finger sits at higher X than the left finger; mirrors left_finger_joint
+         so +travel opens (moves +X) -->
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0.0" upper="0.05" velocity="0.1"/>
+    <!-- OPTIONAL: if the jaws must always move symmetrically off one actuator,
+         delete the <axis>/<limit> tuning above for this joint and instead drive it
+         off the left joint:
+    <mimic joint="left_finger_joint" multiplier="1.0" offset="0.0"/>
+         (multiplier -1.0 if the two joints' axes point the same way instead of
+         opposite ways) -->
+  </joint>
+
+</robot>

@@ -1,0 +1,119 @@
+{
+ "emo_sr_v2": {
+  "nodes": 7,
+  "edges": 6,
+  "goals": 1,
+  "directions": {
+   "01_upper_lid": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "03_rotor_short": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "04_screw_1": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "05_screw_2": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "06_screw_3": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "07_screw_4": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ]
+  },
+  "edge_keys": [
+   "action_time",
+   "cap_idx",
+   "capability",
+   "direction",
+   "label",
+   "process",
+   "raw_action",
+   "screw_head",
+   "target_part",
+   "tool"
+  ],
+  "seconds": 6.3
+ },
+ "angle_grinder": {
+  "nodes": 6,
+  "edges": 5,
+  "goals": 1,
+  "directions": {
+   "BG_Tellerrad_V1p": [
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "Schraube_M4x16_540_Schr1": [
+    [
+     0.008,
+     0.001,
+     1.0
+    ]
+   ],
+   "Schraube_M4x16_540_Schr2": [
+    [
+     0.008,
+     0.001,
+     1.0
+    ]
+   ],
+   "Schraube_M4x16_540_Schr3": [
+    [
+     0.008,
+     0.001,
+     1.0
+    ]
+   ],
+   "Schraube_M4x16_540_Schr4": [
+    [
+     0.008,
+     0.001,
+     1.0
+    ]
+   ]
+  },
+  "edge_keys": [
+   "action_time",
+   "cap_idx",
+   "capability",
+   "direction",
+   "label",
+   "process",
+   "raw_action",
+   "screw_head",
+   "target_part",
+   "tool"
+  ],
+  "seconds": 5.8
+ }
+}

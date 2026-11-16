@@ -1,0 +1,19 @@
+# Measured for the diff-cover gate (ADR-0009): the repo's own code under src/. Subtrees, examples, tools and figures are not measured.
+[run]
+source =
+    src
+
+omit =
+    */__init__.py
+    */tests/*
+    tests/*
+    */milling_capability.py
+    src/setup.py
+
+[report]
+show_missing = True
+skip_covered = False
+precision = 2
+
+[html]
+directory = htmlcov_core

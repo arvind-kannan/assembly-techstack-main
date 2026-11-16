@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<robot name="force_torque_sensor">
+  <link concave="yes" name="baseLink">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+		<mesh filename="mesh/MCS10-050-6C.stl"/>
+      </geometry>
+      <material name="weiss">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision concave="yes">
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+	 	<mesh filename="mesh/MCS10-050-6C.stl"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
+
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<robot name="ToolStorage">
+  <link concave="yes" name="baseLink">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+		<mesh filename="mesh/werkzeugspeicher_clean_gross.stl"/>
+      </geometry>
+      <material name="bright_grey">
+        <color rgba="0.85 0.85 0.85 1"/>
+      </material>
+    </visual>
+    <collision concave="yes">
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+	 	<mesh filename="mesh/werkzeugspeicher_clean_gross.stl"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
+
+

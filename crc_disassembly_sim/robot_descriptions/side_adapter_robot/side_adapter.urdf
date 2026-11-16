@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<robot name="side_adapter">
+  <link concave="yes" name="baseLink">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+		<mesh filename="mesh/robot_side_adapter_v4.stl"/>
+      </geometry>
+      <material name="bright_grey">
+        <color rgba="0.85 0.85 0.85 1"/>
+      </material>
+    </visual>
+    <collision concave="yes">
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+	 	<mesh filename="mesh/robot_side_adapter_v4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
+
+

@@ -1,0 +1,345 @@
+<!doctype html>
+<!-- PROTOTYPE (#78, throwaway). Three layouts, one shared state + WebGL viewport. Switch: ?variant=A|B|C, bottom bar, or arrow keys. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viewer prototype</title>
+<style>
+  :root { --bg:#f4f5fa; --card:#fff; --text:#1c1d26; --muted:#6b6f80; --border:#e1e3ec; --accent:#5b6bf0; --accent-soft:#eef0ff; --goal:#1fae66; --goal-soft:#e6f7ee; --warn:#d98a00; --warn-soft:#fff4dc; --canvas:#eef0f6; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#14151c; --card:#1c1e28; --text:#eef0f6; --muted:#9aa0b4; --border:#2b2d3a; --accent:#7b8aff; --accent-soft:#262a4a; --goal:#35d488; --goal-soft:#163629; --warn:#f0b040; --warn-soft:#3a3016; --canvas:#10111a; } }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--text); font: 13.5px/1.4 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  #app { height: 100vh; padding: 10px 10px 64px; display: flex; flex-direction: column; gap: 10px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .row { display: flex; align-items: center; gap: 8px; }
+  .col { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .grow { flex: 1; min-width: 0; min-height: 0; }
+  .pad { padding: 10px 12px; }
+  .muted { color: var(--muted); }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 6px; }
+  .btn { border: 1px solid var(--border); background: var(--card); color: var(--text); padding: 5px 11px; border-radius: 8px; cursor: pointer; font: inherit; }
+  .btn:hover:not(:disabled) { border-color: var(--accent); }
+  .btn:disabled { opacity: .4; cursor: default; }
+  .btn.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--accent-soft); color: var(--accent); }
+  .badge.goal { background: var(--goal-soft); color: var(--goal); }
+  .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.n { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+  .sw { display: inline-block; width: 11px; height: 11px; border-radius: 3px; flex: none; }
+  .scroll { overflow: auto; min-height: 0; }
+  .vp { position: relative; background: var(--canvas); width: 100%; height: 100%; min-height: 160px; }
+  .vp canvas { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+  .vp .tools { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; }
+  .action { display: flex; align-items: center; gap: 9px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; background: var(--card); }
+  .action:hover { border-color: var(--accent); }
+  .action .num { width: 20px; height: 20px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); font-size: 11px; display: flex; align-items: center; justify-content: center; color: var(--muted); flex: none; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); cursor: pointer; font: inherit; color: var(--text); }
+  .chip.cur { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .chip.sel { outline: 2px solid var(--warn); }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { padding: 4px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { font-size: 11px; color: var(--muted); text-transform: uppercase; position: sticky; top: 0; background: var(--card); }
+  tr.sel td { background: var(--warn-soft); }
+  tr.gone td { color: var(--muted); text-decoration: line-through; }
+  tr.part { cursor: pointer; }
+  select { font: inherit; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 2px 4px; }
+  pre { margin: 0; font: 12px/1.35 Consolas, monospace; white-space: pre-wrap; word-break: break-all; }
+  svg text { font: 11px sans-serif; fill: var(--text); pointer-events: none; }
+  #proto-bar { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; background: #111; color: #fff; padding: 7px 14px; border-radius: 999px; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 50; }
+  #proto-bar button { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; padding: 0 4px; }
+  kbd { background: var(--card); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 11px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="proto-bar"><button id="pv-prev">&#8249;</button><span id="pv-label"></span><button id="pv-next">&#8250;</button></div>
+
+<script>
+const DATA = __DATA_JSON__;
+
+// ============================================================ shared state (in memory only)
+const S = {
+  current: DATA.root, history: [], selected: null, hovered: null, xray: false,
+  roles: {},                 // part -> 'base' | 'target' (editing stub, never written)
+  rolesOrig: {},
+};
+for (const p of (DATA.setup.base_parts || [])) S.roles[p] = 'base';
+for (const p of (DATA.setup.target_parts || [])) S.roles[p] = 'target';
+S.rolesOrig = {...S.roles};
+let VIEW = null;             // the one live viewport of the active variant
+let REFRESH = () => {};      // active variant's redraw of its DOM
+
+const node = (id = S.current) => DATA.nodes[id];
+const actions = (id = S.current) => DATA.edgesByNode[id] || [];
+const partColor = (n) => { const c = (DATA.parts[n] || {}).color || [.6,.6,.6]; return `rgb(${c.map(v => Math.round(v*255)).join(',')})`; };
+const short = (n) => n.length > 22 ? n.slice(0, 21) + '…' : n;
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+
+function go(id) { if (id === S.current) return; S.history.push(S.current); S.current = id; S.hovered = null; REFRESH(); }
+function back() { if (VIEW && VIEW.busy()) return; if (S.history.length) { S.current = S.history.pop(); S.hovered = null; REFRESH(); } }
+function restart() { if (VIEW && VIEW.busy()) return; S.history = []; S.current = DATA.root; S.hovered = null; REFRESH(); }
+function play(edge) { if (VIEW.busy()) return; VIEW.play(edge, () => { go(edge.target); }); REFRESH(); }
+// jump to any state: history becomes the shortest action path from the root
+function jump(id) {
+  if (VIEW && VIEW.busy()) return;
+  const prev = {[DATA.root]: null}, q = [DATA.root];
+  while (q.length) { const u = q.shift(); for (const e of actions(u)) if (!(e.target in prev)) { prev[e.target] = u; q.push(e.target); } }
+  const path = []; for (let u = id; u != null; u = prev[u]) path.unshift(u);
+  S.history = path.slice(0, -1); S.current = id; S.hovered = null; REFRESH();
+}
+const pathEdges = () => { const p = [...S.history, S.current]; return p.slice(1).map((id, i) => actions(p[i]).find(e => e.target === id)); };
+const rolesChanged = () => { const a = Object.entries(S.roles).sort().join(), b = Object.entries(S.rolesOrig).sort().join(); return a !== b; };
+
+// ============================================================ mat4
+const mat4 = {
+  identity: () => new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]),
+  multiply(a, b) { const o = new Float32Array(16); for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++) o[c*4+r] = a[r]*b[c*4] + a[4+r]*b[c*4+1] + a[8+r]*b[c*4+2] + a[12+r]*b[c*4+3]; return o; },
+  translation: (x, y, z) => new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, x,y,z,1]),
+  rot(axis, a) { let [x,y,z] = axis; const l = Math.hypot(x,y,z) || 1; x/=l; y/=l; z/=l; const c = Math.cos(a), s = Math.sin(a), t = 1-c;
+    return new Float32Array([t*x*x+c, t*x*y+s*z, t*x*z-s*y, 0, t*x*y-s*z, t*y*y+c, t*y*z+s*x, 0, t*x*z+s*y, t*y*z-s*x, t*z*z+c, 0, 0,0,0,1]); },
+  perspective(fovy, asp, n, f) { const k = 1/Math.tan(fovy/2), nf = 1/(n-f); return new Float32Array([k/asp,0,0,0, 0,k,0,0, 0,0,(f+n)*nf,-1, 0,0,2*f*n*nf,0]); },
+  lookAt(e, t, up) { let zx=e[0]-t[0], zy=e[1]-t[1], zz=e[2]-t[2]; let l=Math.hypot(zx,zy,zz)||1; zx/=l; zy/=l; zz/=l;
+    let xx=up[1]*zz-up[2]*zy, xy=up[2]*zx-up[0]*zz, xz=up[0]*zy-up[1]*zx; l=Math.hypot(xx,xy,xz)||1; xx/=l; xy/=l; xz/=l;
+    const yx=zy*xz-zz*xy, yy=zz*xx-zx*xz, yz=zx*xy-zy*xx;
+    return new Float32Array([xx,yx,zx,0, xy,yy,zy,0, xz,yz,zz,0, -(xx*e[0]+xy*e[1]+xz*e[2]), -(yx*e[0]+yy*e[1]+yz*e[2]), -(zx*e[0]+zy*e[1]+zz*e[2]), 1]); },
+  m3: (m) => new Float32Array([m[0],m[1],m[2], m[4],m[5],m[6], m[8],m[9],m[10]]),
+};
+const ease = (t) => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+const b64 = (s, T) => { const b = atob(s), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return new T(u.buffer); };
+
+// ============================================================ WebGL viewport
+// Framing: target and distance come from the WHOLE product (every part, removed or not), never from the
+// parts present in the current state, so the model does not jump or rescale while parts leave. Distance is
+// fitted to the smaller of the vertical and horizontal field of view, so it holds for any canvas shape.
+const FOV = Math.PI / 4;
+function createViewport(host, { xrayTool = true } = {}) {
+  const wrap = el('div', 'vp'); const canvas = el('canvas'); wrap.appendChild(canvas);
+  const tools = el('div', 'tools');
+  const bFrame = el('button', 'btn', 'Frame'); bFrame.title = 'Re-fit the whole product';
+  tools.appendChild(bFrame);
+  let bX = null;
+  if (xrayTool) { bX = el('button', 'btn' + (S.xray ? ' on' : ''), 'X-ray'); bX.onclick = () => { S.xray = !S.xray; bX.classList.toggle('on', S.xray); }; tools.appendChild(bX); }
+  wrap.appendChild(tools); host.appendChild(wrap);
+  const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+  if (!gl) { wrap.appendChild(el('div', 'pad muted', 'WebGL not available.')); return { busy: () => false, play() {}, destroy() {} }; }
+  if (!gl.createVertexArray) gl.getExtension('OES_element_index_uint');
+  const sh = (src, t) => { const s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(`attribute vec3 aP; attribute vec3 aN; uniform mat4 uM; uniform mat4 uVP; uniform mat3 uNM; varying vec3 vN; varying vec3 vW;
+    void main(){ vec4 w = uM*vec4(aP,1.); vW = w.xyz; vN = normalize(uNM*aN); gl_Position = uVP*w; }`, gl.VERTEX_SHADER));
+  gl.attachShader(pr, sh(`precision mediump float; varying vec3 vN; varying vec3 vW; uniform vec3 uC; uniform vec3 uL; uniform vec3 uE; uniform float uA;
+    void main(){ vec3 N = normalize(vN), L = normalize(uL); float d = max(dot(N,L),0.); vec3 H = normalize(L+normalize(uE-vW));
+      float s = pow(max(dot(N,H),0.),28.)*.35*uA; gl_FragColor = vec4(uC*.5 + uC*d*.65 + vec3(s), uA); }`, gl.FRAGMENT_SHADER));
+  gl.linkProgram(pr); gl.useProgram(pr);
+  const L = (n) => gl.getUniformLocation(pr, n), uM = L('uM'), uVP = L('uVP'), uNM = L('uNM'), uC = L('uC'), uL = L('uL'), uE = L('uE'), uA = L('uA');
+  const aP = gl.getAttribLocation(pr, 'aP'), aN = gl.getAttribLocation(pr, 'aN');
+  const buf = {};
+  for (const [name, g] of Object.entries(DATA.parts)) {
+    const mk = (t, d) => { const b = gl.createBuffer(); gl.bindBuffer(t, b); gl.bufferData(t, d, gl.STATIC_DRAW); return b; };
+    buf[name] = { p: mk(gl.ARRAY_BUFFER, b64(g.positions_b64, Float32Array)), n: mk(gl.ARRAY_BUFFER, b64(g.normals_b64, Float32Array)),
+                  i: mk(gl.ELEMENT_ARRAY_BUFFER, b64(g.indices_b64, Uint32Array)), count: g.index_count, color: g.color, c: g.bbox_center, d: g.bbox_diag };
+  }
+  // camera
+  let az = .7, el_ = .55, userZoom = 1, drag = false, lx = 0, ly = 0;
+  const target = DATA.sceneCenter;
+  const fitDist = (asp) => { const half = Math.atan(Math.tan(FOV/2) * Math.min(1, asp)); return DATA.sceneRadius / Math.sin(half) * 1.05; };
+  bFrame.onclick = () => { userZoom = 1; az = .7; el_ = .55; };
+  canvas.onpointerdown = (e) => { drag = true; lx = e.clientX; ly = e.clientY; canvas.setPointerCapture(e.pointerId); };
+  canvas.onpointerup = canvas.onpointercancel = () => { drag = false; };
+  canvas.onpointermove = (e) => { if (!drag) return; az -= (e.clientX-lx)*.008; el_ = Math.max(-1.45, Math.min(1.45, el_ + (e.clientY-ly)*.008)); lx = e.clientX; ly = e.clientY; };
+  canvas.addEventListener('wheel', (e) => { e.preventDefault(); userZoom = Math.max(.15, Math.min(4, userZoom * Math.exp(e.deltaY*.0015))); }, { passive: false });
+  // animation of a removal / hover nudge
+  const anim = { on: false };
+  const axisModel = (c, d, kind, e, travel) => {
+    const T = mat4.translation(d[0]*e*travel, d[1]*e*travel, d[2]*e*travel);
+    if (kind !== 'helical') return T;
+    return mat4.multiply(T, mat4.multiply(mat4.translation(c[0],c[1],c[2]), mat4.multiply(mat4.rot(d, e*Math.PI*4), mat4.translation(-c[0],-c[1],-c[2]))));
+  };
+  let raf = 0, dead = false;
+  function frame() {
+    if (dead) return; raf = requestAnimationFrame(frame);
+    const r = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.round(r.width*dpr)), h = Math.max(1, Math.round(r.height*dpr));
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    const asp = w / h, dist = fitDist(asp) * userZoom, ce = Math.cos(el_);
+    const eye = [target[0] + dist*ce*Math.sin(az), target[1] + dist*ce*Math.cos(az), target[2] + dist*Math.sin(el_)];
+    const vp = mat4.multiply(mat4.perspective(FOV, asp, DATA.sceneRadius*.02, DATA.sceneRadius*40), mat4.lookAt(eye, target, [0,0,1]));
+    gl.viewport(0, 0, w, h); gl.enable(gl.DEPTH_TEST); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.uniformMatrix4fv(uVP, false, vp); gl.uniform3fv(uL, [.4,-.5,.9]); gl.uniform3fv(uE, eye);
+    let animM = null;
+    if (anim.on) { const t = Math.min(1, (performance.now()-anim.t0)/anim.dur); animM = axisModel(anim.c, anim.d, anim.kind, ease(t), anim.travel);
+      if (t >= 1) { anim.on = false; const cb = anim.done; anim.done = null; cb && cb(); } }
+    const nd = node(), xr = S.xray ? new Set(nd.inspectable_parts) : null;
+    const draw = (name, alpha) => {
+      const b = buf[name]; if (!b) return; let M = mat4.identity(), col = b.color;
+      if (anim.on && name === anim.part) M = animM;
+      else if (!anim.on && S.hovered && name === S.hovered.target_part) {
+        const wig = Math.sin(performance.now()/1000*3.2), d = S.hovered.direction || [0,0,1];
+        M = axisModel(b.c, d, /screw/i.test(S.hovered.capability) ? 'helical' : 'linear', wig*.1, b.d); col = DATA.highlightColor;
+      }
+      if (name === S.selected) col = [1, .65, .1];
+      gl.uniformMatrix4fv(uM, false, M); gl.uniformMatrix3fv(uNM, false, mat4.m3(M)); gl.uniform3fv(uC, col); gl.uniform1f(uA, alpha);
+      gl.bindBuffer(gl.ARRAY_BUFFER, b.p); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, b.n); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b.i); gl.drawElements(gl.TRIANGLES, b.count, gl.UNSIGNED_INT, 0);
+    };
+    const special = (n) => (anim.on && n === anim.part) || n === S.selected || (S.hovered && n === S.hovered.target_part);
+    const alphaOf = (n) => (!xr || special(n)) ? 1 : (xr.has(n) ? .15 : 1);
+    gl.depthMask(true); gl.disable(gl.BLEND);
+    for (const n of nd.parts_present) if (alphaOf(n) >= 1) draw(n, 1);
+    gl.depthMask(false); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    for (const n of nd.parts_present) { const a = alphaOf(n); if (a < 1) draw(n, a); }
+    gl.depthMask(true); gl.disable(gl.BLEND);
+  }
+  frame();
+  return {
+    busy: () => anim.on,
+    play(edge, done) {
+      const b = buf[edge.target_part], screw = /screw/i.test(edge.capability);
+      Object.assign(anim, { on: true, part: edge.target_part, kind: screw ? 'helical' : 'linear', d: edge.direction || [0,0,1], c: b ? b.c : [0,0,0],
+        travel: (b ? b.d : 50)*1.4, t0: performance.now(), dur: screw ? 1400 : 950, done });
+    },
+    destroy() { dead = true; cancelAnimationFrame(raf); wrap.remove(); },
+  };
+}
+
+// ============================================================ shared small pieces
+function stateBadges() {
+  const n = node(), box = el('div', 'row'); box.style.flexWrap = 'wrap';
+  box.append(el('span', 'badge n', `${n.n_parts_present} parts left`), el('span', 'badge n', `depth ${n.depth}`));
+  if (n.is_goal) box.append(el('span', 'badge goal', '🏁 goal'));
+  return box;
+}
+function actionRow(edge, i) {
+  const r = el('div', 'action');
+  r.append(el('span', 'num', i < 9 ? i + 1 : '•'), el('span', 'sw'), el('div', 'grow', `<b>${edge.target_part}</b><div class="muted">${edge.capability.replace('Capability', '')} · ${edge.tool}</div>`), el('span', 'badge n', edge.action_time.toFixed(1) + ' s'));
+  r.children[1].style.background = partColor(edge.target_part);
+  r.onclick = () => play(edge);
+  r.onmouseenter = () => { S.hovered = edge; }; r.onmouseleave = () => { S.hovered = null; };
+  return r;
+}
+function chips(names, onClick) {
+  const c = el('div', 'chips');
+  if (!names.length) c.append(el('span', 'muted', '—'));
+  for (const n of names) { const b = el('button', 'chip' + (n === S.selected ? ' sel' : ''), `<span class="sw" style="background:${partColor(n)}"></span>${short(n)}`); b.onclick = () => { S.selected = S.selected === n ? null : n; REFRESH(); }; c.append(b); }
+  return c;
+}
+function header(title, extra) {
+  const h = el('div', 'row card pad'); h.append(el('b', null, title), el('span', 'muted', DATA.product), el('span', 'grow'));
+  if (extra) h.append(extra);
+  const bb = el('button', 'btn', '← Back'), rb = el('button', 'btn', '↻ Restart');
+  bb.disabled = !S.history.length; bb.onclick = back; rb.onclick = restart; h.append(bb, rb); return h;
+}
+
+// ============================================================ Variant A: Stepper (3D first, actions beside, path strip below)
+function renderA(app) {
+  app.append(header('A · Stepper'));
+  const mid = el('div', 'row grow'); mid.style.alignItems = 'stretch';
+  const left = el('div', 'card grow'); const right = el('div', 'col'); right.style.cssText = 'width:340px;flex:none';
+  mid.append(left, right); app.append(mid);
+  const strip = el('div', 'card pad'); app.append(strip);
+  VIEW = createViewport(left);
+  const info = el('div', 'card pad'), list = el('div', 'col scroll'); list.style.flex = '1';
+  right.append(info, list);
+  REFRESH = () => {
+    info.innerHTML = ''; const n = node();
+    info.append(stateBadges(), el('h2', null, 'Removed so far'), chips(n.parts_removed));
+    list.innerHTML = ''; list.append(el('h2', null, 'Next action'));
+    const a = actions(); a.forEach((e, i) => list.append(actionRow(e, i)));
+    if (!a.length) list.append(el('div', 'muted', 'No further actions.'));
+    strip.innerHTML = ''; const p = [...S.history, S.current], row = el('div', 'chips');
+    p.forEach((id, i) => { const e = i ? actions(p[i-1]).find(x => x.target === id) : null;
+      const b = el('button', 'chip' + (id === S.current ? ' cur' : ''), i ? `${i}. ${short(e.target_part)}` : 'Start');
+      b.onclick = () => jump(id); row.append(b); });
+    strip.append(el('h2', null, 'Path'), row);
+  };
+  REFRESH();
+}
+
+// ============================================================ Variant B: Graph first
+function renderB(app) {
+  app.append(header('B · Graph first'));
+  const top = el('div', 'card grow scroll'), bot = el('div', 'row'); bot.style.cssText = 'height:38%;flex:none;align-items:stretch';
+  app.append(top, bot);
+  const v = el('div', 'card'); v.style.cssText = 'width:42%;flex:none'; const side = el('div', 'card pad col scroll grow');
+  bot.append(v, side); VIEW = createViewport(v);
+  // layered layout: x = depth, y = order within the layer
+  const layers = {}; for (const id of Object.keys(DATA.nodes)) (layers[node(id).depth] ||= []).push(id);
+  const pos = {}, GX = 74, GY = 34; let maxRows = 0;
+  for (const [d, ids] of Object.entries(layers)) { maxRows = Math.max(maxRows, ids.length); ids.forEach((id, i) => { pos[id] = [28 + d*GX, 24 + i*GY]; }); }
+  const W = 56 + Object.keys(layers).length*GX, H = 48 + maxRows*GY;
+  REFRESH = () => {
+    const onPath = new Set([...S.history, S.current]), pe = new Set(); const p = [...S.history, S.current]; p.slice(1).forEach((id, i) => pe.add(p[i] + '>' + id));
+    let svg = `<svg width="${W}" height="${H}">`;
+    for (const [u, es] of Object.entries(DATA.edgesByNode)) for (const e of es) { const a = pos[u], b = pos[e.target]; if (!a || !b) continue; const hot = pe.has(u + '>' + e.target);
+      svg += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${hot ? 'var(--accent)' : 'var(--border)'}" stroke-width="${hot ? 2.5 : 1}"/>`; }
+    for (const [id, [x, y]] of Object.entries(pos)) { const n = node(id), cur = id === S.current, ps = onPath.has(id);
+      svg += `<g data-id="${id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${cur ? 11 : 8}" fill="${n.is_goal ? 'var(--goal)' : cur ? 'var(--accent)' : ps ? 'var(--accent-soft)' : 'var(--card)'}" stroke="${ps || cur ? 'var(--accent)' : 'var(--muted)'}" stroke-width="1.5"/><title>${n.n_parts_present} parts left · removed: ${n.parts_removed.join(', ') || 'none'}</title></g>`; }
+    svg += '</svg>'; top.innerHTML = svg;
+    top.querySelectorAll('g[data-id]').forEach(g => { g.onclick = () => jump(g.dataset.id); });
+    side.innerHTML = ''; const n = node();
+    side.append(stateBadges(), el('h2', null, 'Removed'), chips(n.parts_removed), el('h2', null, 'Actions here'));
+    const a = actions(); a.forEach((e, i) => side.append(actionRow(e, i))); if (!a.length) side.append(el('div', 'muted', 'No further actions.'));
+  };
+  REFRESH();
+}
+
+// ============================================================ Variant C: Parts editor (roles = product_setup.json, stubbed)
+function renderC(app) {
+  const note = el('span', 'badge warn', '');
+  app.append(header('C · Parts editor', note));
+  const mid = el('div', 'row grow'); mid.style.alignItems = 'stretch'; app.append(mid);
+  const left = el('div', 'card scroll'); left.style.cssText = 'width:36%;flex:none'; const c = el('div', 'card grow'); const right = el('div', 'card pad col scroll'); right.style.cssText = 'width:300px;flex:none';
+  mid.append(left, c, right); VIEW = createViewport(c);
+  REFRESH = () => {
+    const n = node(), gone = new Set(n.parts_removed), names = Object.keys(DATA.parts).sort();
+    note.textContent = rolesChanged() ? 'roles edited — sequence graph is stale (stub)' : 'roles = product_setup.json';
+    note.className = 'badge ' + (rolesChanged() ? 'warn' : 'n');
+    const t = el('table'); t.innerHTML = '<tr><th>Part</th><th>State</th><th>Role</th></tr>';
+    for (const name of names) {
+      const r = el('tr', 'part' + (name === S.selected ? ' sel' : '') + (gone.has(name) ? ' gone' : ''));
+      r.innerHTML = `<td><span class="sw" style="background:${partColor(name)}"></span> ${short(name)}</td><td>${gone.has(name) ? 'removed' : 'present'}</td><td></td>`;
+      const sel = el('select', null, '<option value="">–</option><option value="base">base</option><option value="target">target</option>'); sel.value = S.roles[name] || '';
+      sel.onclick = (e) => e.stopPropagation(); sel.onchange = () => { if (sel.value) S.roles[name] = sel.value; else delete S.roles[name]; REFRESH(); };
+      r.lastChild.append(sel); r.onclick = () => { S.selected = S.selected === name ? null : name; REFRESH(); }; t.append(r);
+    }
+    left.innerHTML = ''; left.append(t);
+    right.innerHTML = ''; right.append(stateBadges());
+    right.append(el('h2', null, S.selected ? `Selected: ${S.selected}` : 'Select a part'));
+    if (S.selected) {
+      const here = actions().filter(e => e.target_part === S.selected);
+      right.append(el('div', 'muted', gone.has(S.selected) ? 'Already removed in this state.' : here.length ? 'Can be removed here:' : 'Not removable in this state.'));
+      here.forEach((e, i) => right.append(actionRow(e, i)));
+    }
+    right.append(el('h2', null, 'All actions here')); actions().forEach((e, i) => right.append(actionRow(e, i)));
+    right.append(el('h2', null, 'product_setup.json (preview)'));
+    const pre = el('pre'); pre.textContent = JSON.stringify({ base_parts: Object.keys(S.roles).filter(k => S.roles[k] === 'base'), target_parts: Object.keys(S.roles).filter(k => S.roles[k] === 'target') }, null, 2);
+    right.append(pre);
+  };
+  REFRESH();
+}
+
+// ============================================================ switcher
+const VARIANTS = [['A', 'Stepper', renderA], ['B', 'Graph first', renderB], ['C', 'Parts editor', renderC]];
+function show(key) {
+  const i = Math.max(0, VARIANTS.findIndex(v => v[0] === key)), v = VARIANTS[i];
+  if (VIEW) VIEW.destroy(); const app = document.getElementById('app'); app.innerHTML = ''; v[2](app);
+  document.getElementById('pv-label').textContent = `${v[0]} (${v[1]})`;
+  const u = new URL(location.href); u.searchParams.set('variant', v[0]); history.replaceState(null, '', u);
+  show.i = i;
+}
+const cycle = (d) => show(VARIANTS[(show.i + d + VARIANTS.length) % VARIANTS.length][0]);
+document.getElementById('pv-prev').onclick = () => cycle(-1);
+document.getElementById('pv-next').onclick = () => cycle(1);
+document.addEventListener('keydown', (e) => {
+  if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName) || e.target.isContentEditable) return;
+  if (e.key === 'ArrowLeft') cycle(-1); else if (e.key === 'ArrowRight') cycle(1);
+  else if (e.key === 'Backspace') back(); else if (e.key >= '1' && e.key <= '9') { const a = actions()[+e.key - 1]; if (a) play(a); }
+});
+show(new URL(location.href).searchParams.get('variant') || 'A');
+</script>
+</body>
+</html>

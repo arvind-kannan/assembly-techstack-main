@@ -1,0 +1,13 @@
+# Core simulation
+pybullet>=3.2.7
+pybullet-industrial>=1.0.4
+scipy>=1.15.0
+numpy>=1.26.0
+numpy-quaternion
+
+# PyTorch — install the CUDA variant manually (see Dockerfile or below):
+# pip install torch==2.6.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+
+# cuMotion — NVIDIA Isaac GPU motion planner (wheel in cuMotion_wheels/, not tracked)
+# pip install cuMotion_wheels/cumotion-1.1.0-cp314-cp314-linux_x86_64.whl  (match your venv's Python version)
+# pip install cuMotion_wheels/cumotion_vis-1.1.0-py3-none-any.whl

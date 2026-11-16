@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<!-- wbk Industrial Assembly Task Board — base plate on four feet.
+     Origin: centre of the footprint, z=0 at the underside of the feet, so the
+     board can be dropped straight onto a table top with loadURDF(..., [x, y, table_top_z]).
+     Plate is 300x300x10 mm on 30 mm legs -> top face at z = 0.040.
+     Mounting grid: 9x9 holes, 9 mm dia, 30 mm pitch, at x,y = -0.120 .. +0.120. -->
+<robot name="taskboard">
+  <link name="baseLink">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="1.0"/>
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.035"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.0150" ixy="0" ixz="0" iyy="0.0150" iyz="0" izz="0.0300"/>
+    </inertial>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.035"/>
+      <geometry>
+        <mesh filename="mesh/taskboard.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="board_grey">
+        <color rgba="0.55 0.57 0.60 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.035"/>
+      <geometry>
+        <box size="0.300 0.300 0.010"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.080 -0.080 0"/>
+      <geometry>
+        <mesh filename="mesh/taskboard_foot.stl" scale="0.001 0.001 0.000857"/>
+      </geometry>
+      <material name="foot_dark">
+        <color rgba="0.25 0.26 0.28 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.080 -0.080 0.015"/>
+      <geometry>
+        <box size="0.052 0.052 0.030"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0.080 -0.080 0"/>
+      <geometry>
+        <mesh filename="mesh/taskboard_foot.stl" scale="0.001 0.001 0.000857"/>
+      </geometry>
+      <material name="foot_dark"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.080 -0.080 0.015"/>
+      <geometry>
+        <box size="0.052 0.052 0.030"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.080 0.080 0"/>
+      <geometry>
+        <mesh filename="mesh/taskboard_foot.stl" scale="0.001 0.001 0.000857"/>
+      </geometry>
+      <material name="foot_dark"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.080 0.080 0.015"/>
+      <geometry>
+        <box size="0.052 0.052 0.030"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0 0 0" xyz="0.080 0.080 0"/>
+      <geometry>
+        <mesh filename="mesh/taskboard_foot.stl" scale="0.001 0.001 0.000857"/>
+      </geometry>
+      <material name="foot_dark"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.080 0.080 0.015"/>
+      <geometry>
+        <box size="0.052 0.052 0.030"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

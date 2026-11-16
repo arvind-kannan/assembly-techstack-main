@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<robot name="camera">
+  <link name="baseLink">
+  </link>
+  <link name="mount">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="zivid_mount/zivid_mount.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="camera_link">
+      <visual>
+        <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+        <geometry>
+            <mesh filename="zivid/zivid.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+          <material name="white">
+          <color rgba="0.2 0.2 0.2 1"/>
+        </material>
+      </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="zivid/zivid.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </collision>
+  </link>
+  <link name="tcp">
+	</link>
+
+
+    <joint name="camera_base" type="fixed">
+        <parent link="baseLink"/>
+        <child link="mount"/>
+        <origin xyz="0 0 0.1625" rpy="3.1415926535897932 0 2.6179939"/>
+    </joint>
+    <joint name="camera_mount" type="fixed">
+        <parent link="mount"/>
+        <child link="camera_link"/>
+        <origin xyz="0 0.0085 0" rpy="0 0 0"/>
+    </joint>
+    <joint name="camera_trafo" type="fixed">
+        <parent link="camera_link"/>
+        <child link="tcp"/>
+        <origin xyz="0.05584 0.23981 0.05552" rpy="0 0 0"/>
+    </joint>
+</robot>

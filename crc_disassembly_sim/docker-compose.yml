@@ -1,0 +1,18 @@
+services:
+  crc_sim:
+    build: .
+    image: crc_disassembly_sim
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics
+      - DISPLAY=${DISPLAY:-:0}
+    volumes:
+      # X11 socket for GUI (Linux host only — on Windows use XLaunch and set DISPLAY)
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # Mount the project as a volume for live code changes during development
+      - .:/workspace
+    network_mode: host
+    stdin_open: true
+    tty: true
+    command: python3 training/tests/test_cumotion_gui.py

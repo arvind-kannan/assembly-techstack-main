@@ -1,0 +1,164 @@
+{
+  "cell": {
+    "robots": [
+      {
+        "id": "robot_1",
+        "nc_channel": 1,
+        "tools": [
+          "default_gripper",
+          "H5"
+        ],
+        "capabilities": [
+          "gripping_and_removing",
+          "gripping",
+          "inserting",
+          "releasing",
+          "unscrewing",
+          "screwing_in"
+        ]
+      },
+      {
+        "id": "robot_2",
+        "nc_channel": 2,
+        "tools": [
+          "H5",
+          "default_gripper"
+        ],
+        "capabilities": [
+          "unscrewing",
+          "screwing_in",
+          "gripping_and_removing",
+          "gripping",
+          "inserting",
+          "releasing",
+          "inspecting"
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "H5",
+        "process": "screwing_in",
+        "grips": []
+      },
+      {
+        "name": "default_gripper",
+        "process": "inserting",
+        "grips": []
+      }
+    ],
+    "stations": [
+      {
+        "name": "tool_storage",
+        "kind": "tool_storage",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [],
+        "slots": []
+      },
+      {
+        "name": "supply",
+        "kind": "supply",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [],
+        "slots": [
+          {
+            "name": "crown_gear_slot",
+            "pose": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "part": "BG_Tellerrad_V1p",
+            "screw_type": null,
+            "robots": []
+          },
+          {
+            "name": "lid_slot",
+            "pose": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "part": "lid",
+            "screw_type": null,
+            "robots": []
+          },
+          {
+            "name": "screw_nest_plate_h5",
+            "pose": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "part": null,
+            "screw_type": "H5",
+            "robots": []
+          }
+        ]
+      },
+      {
+        "name": "dropoff",
+        "kind": "dropoff",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [],
+        "slots": []
+      },
+      {
+        "name": "fixture",
+        "kind": "fixture",
+        "pose": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "processes": [],
+        "coupling_places": [],
+        "slots": []
+      }
+    ],
+    "pallets": [],
+    "tooling": []
+  },
+  "mounted_tools": {
+    "robot_1": "default_gripper",
+    "robot_2": "H5"
+  },
+  "descriptions": {},
+  "simulation_only": false
+}

@@ -1,0 +1,8 @@
+DM2_lid01 L1
+DM2_lid02 L2
+DM2_rotor Ro
+DM2_S1 S1
+DM2_S2 S2
+DM2_S3 S3
+DM2_S4 S4
+DM2_stator St

@@ -1,0 +1,6 @@
+view_name,view_angle_deg,viewing_directions,ring_outer_radius,ring_inner_radius,ring_thickness,ring_z,depth_from_opening_plane,threshold_hole_radius,threshold_hole_diameter
+oblique_20,20,"[[0.342, 0.0, 0.9397]]",8.0,4.0,3.0,30.0,27.0,4.0,8.0
+oblique_25,25,"[[0.4226, 0.0, 0.9063]]",8.0,4.0,3.0,30.0,27.0,7.0,14.0
+oblique_30,30,"[[0.5, 0.0, 0.866]]",8.0,4.0,3.0,30.0,27.0,10.0,20.0
+oblique_35,35,"[[0.5736, 0.0, 0.8192]]",8.0,4.0,3.0,30.0,27.0,,
+oblique_40,40,"[[0.6428, 0.0, 0.766]]",8.0,4.0,3.0,30.0,27.0,,

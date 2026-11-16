@@ -1,0 +1,12 @@
+; CELL REHEARSAL ONLY (examples/mrtamp_demo_runs.py): placeholder slot and fixture poses, not for the cell
+; MRTAMP program for NC channel 2
+TRAORI
+G1 X-1992.933 Y-1997.744 Z1994.949 A1.281 B1.673 C2.330 F30000.0
+G1 X-1800.000 Y-2400.000 Z800.000 A0.000 B-0.000 C0.000 F30000.0
+G1 X-1800.000 Y-2400.000 Z800.000 A0.000 B-0.000 C0.000 F6000.0
+G1 X-518.290 Y-1846.929 Z976.108 A0.000 B-0.000 C0.000 F6000.0
+G1 X-518.984 Y-1846.998 Z885.224 A0.000 B-0.000 C0.000 F6000.0
+G1 X-518.220 Y-1846.922 Z985.221 A0.000 B-0.000 C0.000 F6000.0
+; ---- inspection_25: inspecting
+; ---- inspection_25: end of segment (inspection)
+M30

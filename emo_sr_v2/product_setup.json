@@ -1,0 +1,16 @@
+{
+  "base_parts": ["08_lower_lid", "02_stator"],
+  "target_parts": ["03_rotor_short"],
+  "stuck_part_rules": [
+    {
+      "part_prefixes": ["04_screw_", "05_screw_", "06_screw_", "07_screw_"],
+      "prior": "screw",
+      "fixed_to": ["01_upper_lid", "08_lower_lid"]
+    },
+    {
+      "parts": ["01_upper_lid"],
+      "prior": "upper",
+      "fixed_to": ["02_stator"]
+    }
+  ]
+}

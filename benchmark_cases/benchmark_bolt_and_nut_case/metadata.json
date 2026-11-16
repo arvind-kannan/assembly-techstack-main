@@ -1,0 +1,74 @@
+{
+  "case_name": "rotational_bolt_nut_lock_benchmark",
+  "output_root": ".",
+  "parameters": {
+    "case_name": "rotational_bolt_nut_lock_benchmark",
+    "pipe_outer_radius": 21.0,
+    "pipe_inner_radius": 15.0,
+    "bend_centerline_radius": 51.0,
+    "straight_len_x": 24.0,
+    "straight_len_y": 70.0,
+    "bolt_station_y_offset": 36.0,
+    "bolt_axis_clearance": 4.0,
+    "side_hole_radius": 3.2,
+    "bolt_shaft_radius": 2.0,
+    "bolt_head_radius": 5.4,
+    "bolt_head_thickness": 4.0,
+    "bolt_tail_extra": 2.0,
+    "nut_inner_radius": 2.15,
+    "nut_outer_radius": 5.4,
+    "nut_thickness": 4.0,
+    "lid_thickness": 6.0,
+    "lid_outer_radius": 21.0,
+    "contact_tollerance": 0.5,
+    "dot_product_threshold": -0.95,
+    "fn_pipe": 96,
+    "fn_part": 64
+  },
+  "derived": {
+    "pipe_outer_diameter": 42.0,
+    "pipe_inner_diameter": 30.0,
+    "pipe_wall_thickness": 6.0,
+    "bolt_station": [
+      51.0,
+      36.0,
+      0.0
+    ],
+    "shaft_start_z": -25.5,
+    "shaft_end_z": 31.0,
+    "shaft_length": 56.5,
+    "head_center_z": -27.0,
+    "nut_center_z": 27.0,
+    "lid_center_x": -27.0,
+    "lid_center_y": -51.0
+  },
+  "validation": {
+    "pipe_wall_thickness": 6.0,
+    "shaft_radius_smaller_than_side_hole": true,
+    "head_radius_larger_than_side_hole": true,
+    "nut_inner_radius_clears_shaft": true,
+    "nut_outer_radius_larger_than_side_hole": true,
+    "shaft_length": 56.5,
+    "pipe_outer_diameter": 42.0,
+    "shaft_has_margin_over_pipe_diameter": true,
+    "lid_matches_pipe_outer_radius": true,
+    "bolt_station_inside_y_straight": true,
+    "bolt_station_on_y_straight_x": true,
+    "lid_on_x_straight_y": true,
+    "lid_at_negative_x_opening": true
+  },
+  "standard_export": {
+    "xml_path": "xml/rotational_bolt_nut_lock_benchmark.xml",
+    "xml_generated_by": "Assembly.find_contacts() + Assembly.save_as_xml()",
+    "stl_dir": "stl",
+    "scad_dir": "scad"
+  },
+  "notes": [
+    "part_i_bolt is a shaft plus an enlarged cylindrical head.",
+    "part_j_elbow_pipe is a parameterized 90-degree elbow pipe with a transverse bolt hole.",
+    "part_k_nut is represented as a ring/hex nut around the bolt tail.",
+    "part_l_cover_lid is represented as a solid disk cover at the shorter -X pipe opening.",
+    "This benchmark is intended for dependency-aware secondary feasibility analysis.",
+    "The bolt thread is approximated by geometric markers; a future version may add a semantic bolt-and-nut capability."
+  ]
+}

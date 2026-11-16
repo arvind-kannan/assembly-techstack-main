@@ -1,0 +1,798 @@
+{
+ "status": "goal_reached",
+ "settings": {
+  "goal": {
+   "present": [
+    "BG_Gehauese_p",
+    "BG_Rotor_p",
+    "BG_Tellerrad_V1p",
+    "Getriebegehaeuse_400_V1_02p",
+    "Kegelrad_V1_01p",
+    "Magnet_Hall_Sensor_700_02p",
+    "Mutter_M6_780_CT",
+    "Schraube_M4x16_540_Schr1",
+    "Schraube_M4x16_540_Schr2",
+    "Schraube_M4x16_540_Schr3",
+    "Schraube_M4x16_540_Schr4"
+   ],
+   "absent": []
+  },
+  "target": "simulation",
+  "risky_processes": null,
+  "retry_limit": 1
+ },
+ "product_folder": "/home/wbk/sfb-assembly-cases/assembly-techstack/.claude/worktrees/ticket-264-b1-screw-group/cases/angle_grinder/model",
+ "provenance": {
+  "product_name": "angle_grinder",
+  "product_folder": "../../../../cases/angle_grinder/model",
+  "product_model_xml": "angle_grinder.xml",
+  "product_setup": "product_setup.json",
+  "cell_file": null,
+  "path_bases": {
+   "product_folder": "export_folder",
+   "cell_file": null
+  },
+  "fingerprints": {
+   "product_model_xml": "b737f49380ef3d418d0662b122d03020d34e7d02a2de50f79eedd87b69a33d0d",
+   "product_setup": "3035e79136f4289e60eec1a35b38d6b2b6f8f9356ae502bb531f0ca31a435841",
+   "cell_file": null
+  },
+  "repo_commit": "bbb5a3779c370230954ef24807d7f203e6feefc6",
+  "code_version": "bbb5a3779c370230954ef24807d7f203e6feefc6"
+ },
+ "warnings": [],
+ "sequence_graph": "removed (copy of the export)",
+ "entries": [
+  {
+   "feedback": [],
+   "operation_plan": {
+    "operations": [
+     {
+      "id": "op_1",
+      "process": "gripping",
+      "target": "BG_Tellerrad_V1p",
+      "shares": [
+       {
+        "robot": "robot_1",
+        "tool": "default_gripper",
+        "path": [
+         [
+          -1.2,
+          -2.6,
+          0.8
+         ]
+        ],
+        "path_duration": 10.0,
+        "skill_parameters": {
+         "supply_slot": "crown_gear_slot"
+        }
+       }
+      ],
+      "direction": null,
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT"
+      ],
+      "parameters": {
+       "supply_slot": "crown_gear_slot"
+      }
+     },
+     {
+      "id": "op_2",
+      "process": "inserting",
+      "target": "BG_Tellerrad_V1p",
+      "shares": [
+       {
+        "robot": "robot_1",
+        "tool": "default_gripper",
+        "path": [
+         [
+          -0.07173151042552894,
+          -0.02143093206927844,
+          0.19078511329089662
+         ],
+         [
+          -0.05213924523415825,
+          -0.004254375221414703,
+          0.05728458260479197
+         ],
+         [
+          -0.0665432657570213,
+          -0.016882393213827555,
+          0.15543272244636122
+         ]
+        ],
+        "path_duration": 11.161,
+        "skill_parameters": {}
+       }
+      ],
+      "direction": [
+       0.14404020522863062,
+       0.12628017992412854,
+       -0.9814813984156927
+      ],
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT"
+      ],
+      "parameters": {
+       "reference_part": "BG_Gehauese_p"
+      }
+     },
+     {
+      "id": "op_3",
+      "process": "releasing",
+      "target": "BG_Tellerrad_V1p",
+      "shares": [
+       {
+        "robot": "robot_1",
+        "tool": "default_gripper",
+        "path": [],
+        "path_duration": 0.0,
+        "skill_parameters": {}
+       }
+      ],
+      "direction": null,
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT"
+      ],
+      "parameters": {}
+     },
+     {
+      "id": "inspection_1",
+      "process": "inspecting",
+      "target": null,
+      "shares": [
+       {
+        "robot": "robot_1",
+        "tool": null,
+        "path": [],
+        "path_duration": 10.0,
+        "skill_parameters": {}
+       },
+       {
+        "robot": "robot_2",
+        "tool": null,
+        "path": [],
+        "path_duration": 10.0,
+        "skill_parameters": {}
+       }
+      ],
+      "direction": null,
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT"
+      ],
+      "parameters": {}
+     },
+     {
+      "id": "op_4",
+      "process": "screwing_in",
+      "target": "Schraube_M4x16_540_Schr4",
+      "shares": [
+       {
+        "robot": "robot_2",
+        "tool": "H5",
+        "path": [
+         [
+          -1.8,
+          -2.4,
+          0.8
+         ],
+         [
+          -0.07661086405249067,
+          -0.01855581523360132,
+          0.11610894784263567
+         ],
+         [
+          -0.07734311879154886,
+          -0.018621236411410683,
+          0.02522577083878749
+         ],
+         [
+          -0.0765374352681226,
+          -0.018549254951636264,
+          0.12522249924891865
+         ]
+        ],
+        "path_duration": 9.0,
+        "skill_parameters": {
+         "supply_slot": "screw_nest_plate_h5_robot_2"
+        }
+       }
+      ],
+      "direction": [
+       -0.008056835234262687,
+       -0.0007198145977441729,
+       -0.9999672841013114
+      ],
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "parameters": {
+       "reference_part": "BG_Gehauese_p"
+      }
+     },
+     {
+      "id": "op_5",
+      "process": "screwing_in",
+      "target": "Schraube_M4x16_540_Schr3",
+      "shares": [
+       {
+        "robot": "robot_2",
+        "tool": "H5",
+        "path": [
+         [
+          -1.8,
+          -2.4,
+          0.8
+         ],
+         [
+          -0.07658451589690407,
+          0.0187473138406329,
+          0.11610841890079056
+         ],
+         [
+          -0.07731677134046355,
+          0.018681893113373673,
+          0.02522524191419101
+         ],
+         [
+          -0.07651108704178479,
+          0.01875387407742727,
+          0.12522197031843268
+         ]
+        ],
+        "path_duration": 9.0,
+        "skill_parameters": {
+         "supply_slot": "screw_nest_plate_h5_robot_2"
+        }
+       }
+      ],
+      "direction": [
+       -0.008056842986787438,
+       -0.0007198096405359734,
+       -0.9999672840424169
+      ],
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr3",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "parameters": {
+       "reference_part": "BG_Gehauese_p"
+      }
+     },
+     {
+      "id": "op_6",
+      "process": "screwing_in",
+      "target": "Schraube_M4x16_540_Schr2",
+      "shares": [
+       {
+        "robot": "robot_2",
+        "tool": "H5",
+        "path": [
+         [
+          -1.8,
+          -2.4,
+          0.8
+         ],
+         [
+          -0.02815811640841463,
+          -0.019698863901086425,
+          0.11560796737753448
+         ],
+         [
+          -0.028890371026757455,
+          -0.019764283456036008,
+          0.02472479035872273
+         ],
+         [
+          -0.028084687636265277,
+          -0.01969230378186809,
+          0.12472151877121028
+         ]
+        ],
+        "path_duration": 9.0,
+        "skill_parameters": {
+         "supply_slot": "screw_nest_plate_h5_robot_2"
+        }
+       }
+      ],
+      "direction": [
+       -0.0080568339049218,
+       -0.0007197967416792131,
+       -0.9999672841248753
+      ],
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr2",
+       "Schraube_M4x16_540_Schr3",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "parameters": {
+       "reference_part": "BG_Gehauese_p"
+      }
+     },
+     {
+      "id": "op_7",
+      "process": "screwing_in",
+      "target": "Schraube_M4x16_540_Schr1",
+      "shares": [
+       {
+        "robot": "robot_2",
+        "tool": "H5",
+        "path": [
+         [
+          -1.8,
+          -2.4,
+          0.8
+         ],
+         [
+          -0.028158224748458933,
+          0.020077947964319488,
+          0.11560481639611193
+         ],
+         [
+          -0.02889047955078226,
+          0.020012528646080035,
+          0.024721639373768835
+         ],
+         [
+          -0.028084795957903377,
+          0.02008450805979725,
+          0.1247183677848132
+         ]
+        ],
+        "path_duration": 9.0,
+        "skill_parameters": {
+         "supply_slot": "screw_nest_plate_h5_robot_2"
+        }
+       }
+      ],
+      "direction": [
+       -0.00805683592878881,
+       -0.0007197941371721585,
+       -0.9999672841104437
+      ],
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr1",
+       "Schraube_M4x16_540_Schr2",
+       "Schraube_M4x16_540_Schr3",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "parameters": {
+       "reference_part": "BG_Gehauese_p"
+      }
+     },
+     {
+      "id": "inspection_2",
+      "process": "inspecting",
+      "target": null,
+      "shares": [
+       {
+        "robot": "robot_1",
+        "tool": null,
+        "path": [],
+        "path_duration": 10.0,
+        "skill_parameters": {}
+       },
+       {
+        "robot": "robot_2",
+        "tool": null,
+        "path": [],
+        "path_duration": 10.0,
+        "skill_parameters": {}
+       }
+      ],
+      "direction": null,
+      "expected_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr1",
+       "Schraube_M4x16_540_Schr2",
+       "Schraube_M4x16_540_Schr3",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "parameters": {}
+     }
+    ],
+    "sequences": {
+     "robot_1": [
+      "op_1",
+      "op_2",
+      "op_3",
+      "inspection_1",
+      "inspection_2"
+     ],
+     "robot_2": [
+      "inspection_1",
+      "op_4",
+      "op_5",
+      "op_6",
+      "op_7",
+      "inspection_2"
+     ]
+    },
+    "sync_points": [
+     {
+      "robot": "robot_2",
+      "before": "op_4",
+      "until": "op_3",
+      "layer": "planner",
+      "reason": "order"
+     }
+    ],
+    "metrics": {
+     "makespan": 77.161,
+     "busy_time": {
+      "robot_1": 41.161,
+      "robot_2": 56.0
+     },
+     "tool_changes": 0,
+     "inspections": 2
+    },
+    "start_snapshot": {
+     "assembly_xml": "<assembly name=\"angle_grinder\">\n\t<part name=\"Magnet_Hall_Sensor_700_02p\" mesh_path=\"angle_grinder/Magnet_Hall_Sensor_700_02p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Kegelrad_V1_01p\" mesh_path=\"angle_grinder/Kegelrad_V1_01p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Getriebegehaeuse_400_V1_02p\" mesh_path=\"angle_grinder/Getriebegehaeuse_400_V1_02p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Rotor_p\" mesh_path=\"angle_grinder/BG_Rotor_p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Mutter_M6_780_CT\" mesh_path=\"angle_grinder/Mutter_M6_780_CT.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Gehauese_p\" mesh_path=\"angle_grinder/BG_Gehauese_p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<connection type=\"geometric\" part_name1=\"Magnet_Hall_Sensor_700_02p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Magnet_Hall_Sensor_700_02p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"Getriebegehaeuse_400_V1_02p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"Mutter_M6_780_CT\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Rotor_p\" part_name2=\"Mutter_M6_780_CT\" points_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_points.npy\" normals_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_normals.npy\" distances_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Rotor_p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_distances.npy\" />\n\t</assembly>",
+     "cell_state": {
+      "holds": {},
+      "mounted_tools": {
+       "robot_1": "default_gripper",
+       "robot_2": "H5"
+      }
+     }
+    }
+   },
+   "goal_unreachable": null,
+   "simulation_report": {
+    "ok": true,
+    "feasible_operations": [
+     "op_1",
+     "op_2",
+     "op_3",
+     "inspection_1",
+     "op_4",
+     "op_5",
+     "op_6",
+     "op_7",
+     "inspection_2"
+    ],
+    "infeasible": null,
+    "metrics": {
+     "makespan": 83.12351383441812,
+     "busy_time": {
+      "robot_1": 28.375683294053598,
+      "robot_2": 74.74783054036452
+     },
+     "tool_changes": 0,
+     "inspections": 2
+    },
+    "timeline": [
+     {
+      "kind": "transit",
+      "operation_id": "op_1:transit",
+      "robot": "robot_1",
+      "start": 0.0,
+      "end": 4.044718394417133
+     },
+     {
+      "kind": "operation",
+      "operation_id": "op_1",
+      "robot": "robot_1",
+      "start": 4.044718394417133,
+      "end": 4.044718394417133
+     },
+     {
+      "kind": "transit",
+      "operation_id": "op_2:transit",
+      "robot": "robot_1",
+      "start": 4.044718394417133,
+      "end": 6.01548947187572
+     },
+     {
+      "kind": "operation",
+      "operation_id": "op_2",
+      "robot": "robot_1",
+      "start": 6.01548947187572,
+      "end": 8.375683294053598
+     },
+     {
+      "kind": "operation",
+      "operation_id": "op_3",
+      "robot": "robot_1",
+      "start": 8.375683294053598,
+      "end": 8.375683294053598
+     },
+     {
+      "kind": "operation",
+      "operation_id": "inspection_1",
+      "robot": "robot_1",
+      "start": 8.375683294053598,
+      "end": 18.375683294053598
+     },
+     {
+      "kind": "operation",
+      "operation_id": "inspection_1",
+      "robot": "robot_2",
+      "start": 8.375683294053598,
+      "end": 18.375683294053598
+     },
+     {
+      "kind": "transit",
+      "operation_id": "op_4:transit",
+      "robot": "robot_2",
+      "start": 18.375683294053598,
+      "end": 20.926711587537774
+     },
+     {
+      "kind": "operation",
+      "operation_id": "op_4",
+      "robot": "robot_2",
+      "start": 20.926711587537774,
+      "end": 32.24222407959749
+     },
+     {
+      "kind": "transit",
+      "operation_id": "op_5:transit",
+      "robot": "robot_2",
+      "start": 32.24222407959749,
+      "end": 34.12404706084469
+     },
+     {
+      "kind": "operation",
+      "operation_id": "op_5",
+      "robot": "robot_2",
+      "start": 34.12404706084469,
+      "end": 45.751809496640746
+     },
+     {
+      "kind": "transit",
+      "operation_id": "op_6:transit",
+      "robot": "robot_2",
+      "start": 45.751809496640746,
+      "end": 47.6960672634827
+     },
+     {
+      "kind": "operation",
+      "operation_id": "op_6",
+      "robot": "robot_2",
+      "start": 47.6960672634827,
+      "end": 59.28024092562774
+     },
+     {
+      "kind": "transit",
+      "operation_id": "op_7:transit",
+      "robot": "robot_2",
+      "start": 59.28024092562774,
+      "end": 61.215780488016954
+     },
+     {
+      "kind": "operation",
+      "operation_id": "op_7",
+      "robot": "robot_2",
+      "start": 61.215780488016954,
+      "end": 73.12351383441812
+     },
+     {
+      "kind": "operation",
+      "operation_id": "inspection_2",
+      "robot": "robot_1",
+      "start": 73.12351383441812,
+      "end": 83.12351383441812
+     },
+     {
+      "kind": "operation",
+      "operation_id": "inspection_2",
+      "robot": "robot_2",
+      "start": 73.12351383441812,
+      "end": 83.12351383441812
+     }
+    ],
+    "sync_points_added": [],
+    "observed_snapshots": {
+     "inspection_1": "removed",
+     "inspection_2": "removed"
+    },
+    "outcomes": [
+     {
+      "kind": "operation_outcome",
+      "operation_id": "op_1",
+      "succeeded": true,
+      "observed_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT"
+      ],
+      "reason_code": null,
+      "text": ""
+     },
+     {
+      "kind": "operation_outcome",
+      "operation_id": "op_2",
+      "succeeded": true,
+      "observed_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT"
+      ],
+      "reason_code": null,
+      "text": ""
+     },
+     {
+      "kind": "operation_outcome",
+      "operation_id": "op_3",
+      "succeeded": true,
+      "observed_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT"
+      ],
+      "reason_code": null,
+      "text": ""
+     },
+     {
+      "kind": "operation_outcome",
+      "operation_id": "op_4",
+      "succeeded": true,
+      "observed_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "reason_code": null,
+      "text": ""
+     },
+     {
+      "kind": "operation_outcome",
+      "operation_id": "op_5",
+      "succeeded": true,
+      "observed_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr3",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "reason_code": null,
+      "text": ""
+     },
+     {
+      "kind": "operation_outcome",
+      "operation_id": "op_6",
+      "succeeded": true,
+      "observed_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr2",
+       "Schraube_M4x16_540_Schr3",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "reason_code": null,
+      "text": ""
+     },
+     {
+      "kind": "operation_outcome",
+      "operation_id": "op_7",
+      "succeeded": true,
+      "observed_product_state": [
+       "BG_Gehauese_p",
+       "BG_Rotor_p",
+       "BG_Tellerrad_V1p",
+       "Getriebegehaeuse_400_V1_02p",
+       "Kegelrad_V1_01p",
+       "Magnet_Hall_Sensor_700_02p",
+       "Mutter_M6_780_CT",
+       "Schraube_M4x16_540_Schr1",
+       "Schraube_M4x16_540_Schr2",
+       "Schraube_M4x16_540_Schr3",
+       "Schraube_M4x16_540_Schr4"
+      ],
+      "reason_code": null,
+      "text": ""
+     }
+    ],
+    "anomalies": [],
+    "nc_programs": null,
+    "rejection": null
+   },
+   "inspection": {
+    "assembly_xml": "<assembly name=\"angle_grinder\">\n\t<part name=\"Schraube_M4x16_540_Schr4\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr4.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Magnet_Hall_Sensor_700_02p\" mesh_path=\"angle_grinder/Magnet_Hall_Sensor_700_02p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Kegelrad_V1_01p\" mesh_path=\"angle_grinder/Kegelrad_V1_01p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Tellerrad_V1p\" mesh_path=\"angle_grinder/BG_Tellerrad_V1p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Getriebegehaeuse_400_V1_02p\" mesh_path=\"angle_grinder/Getriebegehaeuse_400_V1_02p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Rotor_p\" mesh_path=\"angle_grinder/BG_Rotor_p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Mutter_M6_780_CT\" mesh_path=\"angle_grinder/Mutter_M6_780_CT.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Gehauese_p\" mesh_path=\"angle_grinder/BG_Gehauese_p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Schraube_M4x16_540_Schr3\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr3.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Schraube_M4x16_540_Schr2\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr2.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Schraube_M4x16_540_Schr1\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr1.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<connection type=\"geometric\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"BG_Tellerrad_V1p\" points_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_BG_Tellerrad_V1p_points.npy\" normals_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_BG_Tellerrad_V1p_normals.npy\" distances_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_BG_Tellerrad_V1p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"Getriebegehaeuse_400_V1_02p\" points_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_Getriebegehaeuse_400_V1_02p_points.npy\" normals_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_Getriebegehaeuse_400_V1_02p_normals.npy\" distances_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_Getriebegehaeuse_400_V1_02p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Magnet_Hall_Sensor_700_02p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Magnet_Hall_Sensor_700_02p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"BG_Tellerrad_V1p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Tellerrad_V1p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Tellerrad_V1p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Tellerrad_V1p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"Getriebegehaeuse_400_V1_02p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"Mutter_M6_780_CT\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Getriebegehaeuse_400_V1_02p\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Getriebegehaeuse_400_V1_02p_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Getriebegehaeuse_400_V1_02p_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Getriebegehaeuse_400_V1_02p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Schraube_M4x16_540_Schr3\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr3_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr3_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr3_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Schraube_M4x16_540_Schr2\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr2_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr2_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr2_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Schraube_M4x16_540_Schr1\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr1_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr1_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr1_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"Schraube_M4x16_540_Schr3\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr3_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr3_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr3_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"Schraube_M4x16_540_Schr2\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr2_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr2_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr2_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"Schraube_M4x16_540_Schr1\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr1_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr1_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr1_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Rotor_p\" part_name2=\"Mutter_M6_780_CT\" points_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_points.npy\" normals_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_normals.npy\" distances_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Rotor_p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr1\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr2\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr3\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr1\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr2\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr3\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n</assembly>",
+    "cell_state": {
+     "holds": {},
+     "mounted_tools": {
+      "robot_1": "default_gripper",
+      "robot_2": "H5"
+     }
+    }
+   },
+   "decision": "goal_reached",
+   "produced_feedback": []
+  }
+ ],
+ "final_snapshot": {
+  "assembly_xml": "<assembly name=\"angle_grinder\">\n\t<part name=\"Schraube_M4x16_540_Schr4\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr4.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Magnet_Hall_Sensor_700_02p\" mesh_path=\"angle_grinder/Magnet_Hall_Sensor_700_02p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Kegelrad_V1_01p\" mesh_path=\"angle_grinder/Kegelrad_V1_01p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Tellerrad_V1p\" mesh_path=\"angle_grinder/BG_Tellerrad_V1p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Getriebegehaeuse_400_V1_02p\" mesh_path=\"angle_grinder/Getriebegehaeuse_400_V1_02p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Rotor_p\" mesh_path=\"angle_grinder/BG_Rotor_p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Mutter_M6_780_CT\" mesh_path=\"angle_grinder/Mutter_M6_780_CT.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"BG_Gehauese_p\" mesh_path=\"angle_grinder/BG_Gehauese_p.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Schraube_M4x16_540_Schr3\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr3.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Schraube_M4x16_540_Schr2\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr2.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<part name=\"Schraube_M4x16_540_Schr1\" mesh_path=\"angle_grinder/Schraube_M4x16_540_Schr1.stl\" density=\"8000.0\" material=\"Generic\" />\n\t<connection type=\"geometric\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"BG_Tellerrad_V1p\" points_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_BG_Tellerrad_V1p_points.npy\" normals_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_BG_Tellerrad_V1p_normals.npy\" distances_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_BG_Tellerrad_V1p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"Getriebegehaeuse_400_V1_02p\" points_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_Getriebegehaeuse_400_V1_02p_points.npy\" normals_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_Getriebegehaeuse_400_V1_02p_normals.npy\" distances_filename=\"angle_grinder_data/Schraube_M4x16_540_Schr4_Getriebegehaeuse_400_V1_02p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Magnet_Hall_Sensor_700_02p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Magnet_Hall_Sensor_700_02p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/Magnet_Hall_Sensor_700_02p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"BG_Tellerrad_V1p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Tellerrad_V1p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Tellerrad_V1p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Tellerrad_V1p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"Getriebegehaeuse_400_V1_02p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_Getriebegehaeuse_400_V1_02p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Kegelrad_V1_01p\" part_name2=\"Mutter_M6_780_CT\" points_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_points.npy\" normals_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_normals.npy\" distances_filename=\"angle_grinder_data/Kegelrad_V1_01p_Mutter_M6_780_CT_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Getriebegehaeuse_400_V1_02p\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Getriebegehaeuse_400_V1_02p_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Getriebegehaeuse_400_V1_02p_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Getriebegehaeuse_400_V1_02p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Schraube_M4x16_540_Schr3\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr3_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr3_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr3_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Schraube_M4x16_540_Schr2\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr2_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr2_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr2_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Tellerrad_V1p\" part_name2=\"Schraube_M4x16_540_Schr1\" points_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr1_points.npy\" normals_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr1_normals.npy\" distances_filename=\"angle_grinder_data/BG_Tellerrad_V1p_Schraube_M4x16_540_Schr1_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"BG_Rotor_p\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Rotor_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"Schraube_M4x16_540_Schr3\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr3_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr3_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr3_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"Schraube_M4x16_540_Schr2\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr2_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr2_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr2_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"Getriebegehaeuse_400_V1_02p\" part_name2=\"Schraube_M4x16_540_Schr1\" points_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr1_points.npy\" normals_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr1_normals.npy\" distances_filename=\"angle_grinder_data/Getriebegehaeuse_400_V1_02p_Schraube_M4x16_540_Schr1_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Rotor_p\" part_name2=\"Mutter_M6_780_CT\" points_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_points.npy\" normals_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_normals.npy\" distances_filename=\"angle_grinder_data/BG_Rotor_p_Mutter_M6_780_CT_distances.npy\" />\n\t<connection type=\"geometric\" part_name1=\"BG_Rotor_p\" part_name2=\"BG_Gehauese_p\" points_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_points.npy\" normals_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_normals.npy\" distances_filename=\"angle_grinder_data/BG_Rotor_p_BG_Gehauese_p_distances.npy\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr1\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr2\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr3\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"Getriebegehaeuse_400_V1_02p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr1\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr2\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr3\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n\t<connection type=\"screw\" part_name1=\"Schraube_M4x16_540_Schr4\" part_name2=\"BG_Tellerrad_V1p\" screw_head=\"H5\" />\n</assembly>",
+  "cell_state": {
+   "holds": {},
+   "mounted_tools": {
+    "robot_1": "default_gripper",
+    "robot_2": "H5"
+   }
+  }
+ }
+}

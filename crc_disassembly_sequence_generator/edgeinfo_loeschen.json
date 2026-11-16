@@ -1,0 +1,8 @@
+{
+    "0,1": {
+        "operation": "screwing 04_screw_1"
+    },
+    "0,2": {
+        "operation": "milling 04_screw_1_milled_01_upper_lid"
+    }
+}

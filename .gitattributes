@@ -1,0 +1,16 @@
+# Binary assets go through Git LFS.
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.stl filter=lfs diff=lfs merge=lfs -text
+*.npy filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text
+*.prt filter=lfs diff=lfs merge=lfs -text
+
+# Subtrees are pushed back to their GitHub upstreams, which do not use LFS
+# (see docs/adr/0002). Keep their files as plain git blobs.
+crc_diss_assembly_dataclasses/** !filter !diff !merge
+crc_disassembly_sequence_generator/** !filter !diff !merge
+# crc_disassembly_sim/ comes from the KIT GitLab upstream, which does use LFS.
+# This line only drops the root patterns there; the subtree's own
+# crc_disassembly_sim/.gitattributes (deeper, so it wins) decides what is LFS.
+crc_disassembly_sim/** !filter !diff !merge

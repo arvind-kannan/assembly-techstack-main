@@ -1,0 +1,10 @@
+<assembly name="bolt_and_nut_with_cap">
+	<part name="part_i_bolt" mesh_path="../stl/part_i_bolt.stl" density="8000.0" material="Generic" />
+	<part name="part_j_elbow_pipe" mesh_path="../stl/part_j_elbow_pipe.stl" density="8000.0" material="Generic" />
+	<part name="part_k_nut" mesh_path="../stl/part_k_nut.stl" density="8000.0" material="Generic" />
+	<part name="part_l_cover_lid" mesh_path="../stl/part_l_cover_lid.stl" density="8000.0" material="Generic" />
+	<part name="part_m_cap" mesh_path="../stl/part_m_cap.stl" density="8000.0" material="Generic" />
+	<connection type="geometric" part_name1="part_i_bolt" part_name2="part_k_nut" points_filename="rotational_bolt_nut_lock_benchmark_data/part_i_bolt_part_k_nut_points.npy" normals_filename="rotational_bolt_nut_lock_benchmark_data/part_i_bolt_part_k_nut_normals.npy" distances_filename="rotational_bolt_nut_lock_benchmark_data/part_i_bolt_part_k_nut_distances.npy" />
+	<connection type="geometric" part_name1="part_j_elbow_pipe" part_name2="part_l_cover_lid" points_filename="rotational_bolt_nut_lock_benchmark_data/part_j_elbow_pipe_part_l_cover_lid_points.npy" normals_filename="rotational_bolt_nut_lock_benchmark_data/part_j_elbow_pipe_part_l_cover_lid_normals.npy" distances_filename="rotational_bolt_nut_lock_benchmark_data/part_j_elbow_pipe_part_l_cover_lid_distances.npy" />
+	<connection type="geometric" part_name1="part_j_elbow_pipe" part_name2="part_m_cap" points_filename="rotational_bolt_nut_lock_benchmark_data/part_j_elbow_pipe_part_m_cap_points.npy" normals_filename="rotational_bolt_nut_lock_benchmark_data/part_j_elbow_pipe_part_m_cap_normals.npy" distances_filename="rotational_bolt_nut_lock_benchmark_data/part_j_elbow_pipe_part_m_cap_distances.npy" />
+</assembly>

@@ -1,0 +1,12 @@
+{
+    "alpha": 0.7,
+    "gamma": 0.99,
+    "episodes": 5000,
+    "epsilon_start": 0.8,
+    "epsilon_min": 0.1,
+    "decay_rate": 0.0006,
+    "target_part": [
+        "03_rotor_short"
+    ],
+    "show_optimal_path": false
+}

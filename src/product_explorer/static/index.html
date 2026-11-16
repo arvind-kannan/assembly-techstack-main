@@ -1,0 +1,19 @@
+<!doctype html>
+<!-- Product explorer (#134): half/half layout settled in #78. Product viewer left, sequence graph + next steps right.
+     Thin client: every command goes to the local server, which answers with the whole view. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product explorer</title>
+<link rel="stylesheet" href="/static/style.css">
+<script type="importmap">{ "imports": { "three": "/static/vendor/three.module.min.js" } }</script>
+</head>
+<body>
+<div id="app">
+  <section class="pane" id="left"></section>
+  <section class="pane" id="right"></section>
+</div>
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>
