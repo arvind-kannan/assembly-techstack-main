@@ -24,9 +24,9 @@ The result is an `nx.MultiDiGraph`:
       `toolchange_time()` below), the capability involved, and the target
       removed.
 
-Explicit parallel mode also adds synchronized stages of individually feasible
-removals, with compatibility assumed and duration equal to their maximum time.
-It performs no robot assignment or simultaneous motion feasibility checking.
+Explicit parallel mode screens synchronized straight-pull stages using proximity,
+finite rays and sampled mesh collisions. Duration is the maximum action time.
+It performs no robot assignment or robot motion planning.
 
 The agent is applied to an already-constructed env (e.g. `build_env()` in
 examples/build_env.py) and only relies on that env's public composition
@@ -48,6 +48,11 @@ from typing import Any, Callable, Optional
 import networkx as nx
 import numpy as np
 from diss_assembly_dataclasses.process import Process
+
+from disassembly_pomdp.parallel_geometry import (
+    ParallelGeometrySettings,
+    check_parallel_geometry,
+)
 
 # Extraction depths: stop at the disassembled states (the default), or tear the product down completely.
 DISASSEMBLED_STATES = "disassembled_states"
@@ -142,7 +147,15 @@ class DisassemblyGraphAgent:
         save_graph(graph, "disassembly_graph.pkl")
     """
 
-    def __init__(self, env, seed: int = 0):
+    def __init__(
+        self,
+        env,
+        seed: int = 0,
+        *,
+        parallel_geometry: Optional[ParallelGeometrySettings] = None,
+    ):
+        self.parallel_geometry = parallel_geometry or ParallelGeometrySettings()
+        self.last_parallel_check = {}
         self.env = env
         self.capabilities = list(env.capabilities)
         self.cell_settings = env.cell_settings
@@ -408,15 +421,22 @@ class DisassemblyGraphAgent:
             raise ValueError("parallel mode does not support collapse_screw_groups")
 
     def _try_parallel_actions(self, assembly, group):
-        """Apply validated removals to one copy; physical compatibility is assumed.
+        """Screen proximity, finite rays and sampled mesh paths before removal.
 
-        Future simultaneous feasibility checks belong here, before mutation.
-        No planners or individual feasibility checks are rerun for a group.
+        No robot planners or individual feasibility checks are rerun for a group.
+        See ParallelGeometrySettings for millimetre thresholds and sampling limits.
         """
         targets = [attrs.get("target_part") for _, attrs in group]
         if len(targets) < 2 or None in targets or len(set(targets)) != len(targets):
             return None
         if any(assembly.get_part_by_name(name) is None for name in targets):
+            return None
+        accepted, self.last_parallel_check = check_parallel_geometry(
+            assembly,
+            [attrs for _, attrs in group],
+            getattr(self, "parallel_geometry", ParallelGeometrySettings()),
+        )
+        if not accepted:
             return None
         next_assembly = copy.deepcopy(assembly)
         try:
@@ -438,7 +458,8 @@ class DisassemblyGraphAgent:
             "action_time": max(attrs["action_time"] for _, attrs in group),
             "parallel": True,
             "n_operations": len(group),
-            "feasibility": "assumed",
+            "feasibility": "geometry_screened",
+            "geometry_check": copy.deepcopy(self.last_parallel_check),
             "label": " + ".join(targets),
         }
 
@@ -546,7 +567,9 @@ class DisassemblyGraphAgent:
         Raises `ScrewGroupError` if a collapsed group's screws are not all removable at a visited state, or if
         another step comes between them (the graph's screws of a group must be one contiguous block).
         `parallel` enables simultaneous removals in groups up to `n_robots`.
-        This assumes physical compatibility and cannot be combined with screw collapsing.
+        Parallel groups pass conservative straight-pull geometry screening and cannot
+        be combined with screw collapsing. Configure thresholds via `parallel_geometry`
+        on the agent; this is not robot motion planning.
         `progress(expanded, discovered)` is called after each expanded state.
         `extraction_depth`: `DISASSEMBLED_STATES` does not expand a disassembled state (all target parts
         removed); `FULL_TEARDOWN` expands every state. Without target parts no state is marked, so both give
@@ -626,7 +649,9 @@ class DisassemblyGraphAgent:
 
             G.graph["extraction_depth"] = extraction_depth
             if parallel:
-                G.graph.update(parallel=True, n_robots=n_robots, feasibility="assumed")
+                G.graph.update(
+                    parallel=True, n_robots=n_robots, feasibility="geometry_screened"
+                )
             if collapse_screw_groups:
                 groups = self.collapsed_screw_groups
                 largest = [g for g in groups if not any(g < other for other in groups)]
@@ -1030,9 +1055,7 @@ def plot_parallel_graph(graph: nx.MultiDiGraph, path: Optional[str | Path] = Non
                 label_pos=0.35 + 0.3 * (i + 1) / (len(edges) + 1),
                 ax=ax,
             )
-    ax.set_title(
-        "Parallel sequence graph — synchronized stages (compatibility assumed)"
-    )
+    ax.set_title("Parallel sequence graph — synchronized stages (geometry screened)")
     ax.axis("off")
     fig.tight_layout()
     if path is not None:

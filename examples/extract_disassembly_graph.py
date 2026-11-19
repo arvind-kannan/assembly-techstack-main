@@ -7,9 +7,10 @@ Usage:
     python examples/extract_disassembly_graph.py
     python examples/extract_disassembly_graph.py --collapse-screws   # as the Product explorer extracts it
     python examples/extract_disassembly_graph.py --parallel --robots 2
+    python examples/extract_disassembly_graph.py --product cases/angle_grinder/model --parallel --robots 2 --output examples/runs/angle_grinder_parallel
 
-Parallel mode assumes compatibility of individually feasible removals and reports
-synchronized-stage makespan. It cannot be combined with screw collapsing.
+Parallel mode screens proximity, finite centre rays and sampled mesh collisions,
+and reports synchronized-stage makespan. It cannot be combined with screw collapsing.
 """
 
 import argparse
@@ -24,6 +25,7 @@ sys.path.insert(0, str(ROOT / "examples"))
 import networkx as nx
 from build_env import build_env
 
+from disassembly_pomdp.env_builder import build_env as build_product_env
 from disassembly_pomdp.graph_extraction import (
     DisassemblyGraphAgent,
     plot_graph,
@@ -34,6 +36,16 @@ from disassembly_pomdp.graph_extraction import (
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--product",
+        type=Path,
+        help="Product folder containing assembly XML and product_setup.json",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Output folder for graph.png, graph.json and graph.pkl",
+    )
     parser.add_argument("--parallel", action="store_true")
     parser.add_argument("--robots", type=int, default=2)
     parser.add_argument("--collapse-screws", action="store_true")
@@ -42,7 +54,7 @@ def main() -> None:
         parser.error("--robots must be positive")
     if args.parallel and args.collapse_screws:
         parser.error("parallel mode cannot be combined with --collapse-screws")
-    out_dir = (
+    out_dir = args.output or (
         ROOT
         / "examples"
         / "runs"
@@ -50,7 +62,7 @@ def main() -> None:
     )
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    env = build_env()
+    env = build_product_env(args.product) if args.product is not None else build_env()
 
     agent = DisassemblyGraphAgent(env)
     graph = agent.build_graph(

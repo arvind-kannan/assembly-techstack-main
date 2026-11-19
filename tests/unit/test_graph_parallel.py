@@ -22,6 +22,16 @@ from tests.unit.test_graph_extraction import _three_part_agent
 matplotlib.use("Agg")
 
 
+@pytest.fixture(autouse=True)
+def geometry_screen(monkeypatch):
+    # Architecture tests use FakePart without meshes; real geometry is tested
+    # separately in test_parallel_geometry.py.
+    monkeypatch.setattr(
+        "disassembly_pomdp.graph_extraction.check_parallel_geometry",
+        lambda *args: (True, {"reason": None}),
+    )
+
+
 def agent_for(names):
     agent = DisassemblyGraphAgent.__new__(DisassemblyGraphAgent)
     assembly = Assembly("parallel")
@@ -69,7 +79,7 @@ def test_two_parts_direct_stage_and_connections():
     assert edge["parallel"] and edge["n_operations"] == 2
     assert edge["action_time"] == 12
     assert edge["operations"][0]["raw_action"] == [0, 0, 0]
-    assert edge["feasibility"] == "assumed"
+    assert edge["feasibility"] == "geometry_screened"
     assert not agent.assemblies[("Base",)].connections
     assert len(agent.base_assembly.connections) == 2
     assert graph.out_degree(("Base",)) == 0
