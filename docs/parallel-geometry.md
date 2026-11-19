@@ -54,3 +54,17 @@ The original assembly and its mesh/collision caches are untouched. Single-remova
 steps and sequential extraction retain their existing behavior. No robot, tool,
 assignment, rotation or alternate-path planning is performed. Screw collapsing
 remains unsupported together with parallel extraction.
+
+## Shortest-sequence plot
+
+The extraction CLI also writes `shortest_path.png`, `shortest_path.json` and
+`shortest_path.pkl` into the chosen output folder. The separate plot contains
+only the fastest synchronized-stage sequence to any reachable goal, selected
+with Dijkstra using `action_time`. Each stage lists all its operations and its
+duration; the title gives the total. Tool-change times are excluded.
+
+The exact cheapest multiedge is retained at each stage. No reachable goal or
+invalid edge durations produce an explanatory message instead of a misleading
+plot. The full `graph.*` exports remain available alongside the path exports.
+For an already-exported graph, use `plot_shortest_path(load_graph(path), output)`
+from `disassembly_pomdp.shortest_path` and `disassembly_pomdp.graph_extraction`.

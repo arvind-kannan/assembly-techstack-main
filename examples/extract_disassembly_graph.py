@@ -32,6 +32,7 @@ from disassembly_pomdp.graph_extraction import (
     plot_parallel_graph,
     save_graph,
 )
+from disassembly_pomdp.shortest_path import plot_shortest_path, shortest_path_graph
 
 
 def main() -> None:
@@ -84,6 +85,20 @@ def main() -> None:
         print(f"Saved plot to {out_dir / 'graph.png'}")
     except Exception as e:
         print(f"Skipping plot (matplotlib/graphviz issue): {e!r}")
+
+    try:
+        best_path = shortest_path_graph(graph)
+    except (nx.NetworkXNoPath, ValueError) as error:
+        print(f"No shortest-path plot generated: {error}")
+    else:
+        save_graph(best_path, out_dir / "shortest_path.pkl")
+        save_graph(best_path, out_dir / "shortest_path.json")
+        print(f"Shortest completion time: {best_path.graph['total_action_time']:.2f} s")
+        try:
+            plot_shortest_path(best_path, path=out_dir / "shortest_path.png")
+            print(f"Saved shortest-path plot to {out_dir / 'shortest_path.png'}")
+        except (ImportError, RuntimeError, OSError) as error:
+            print(f"Could not render shortest-path plot: {error}")
 
     print(
         f"Parallel edges: {sum(bool(d.get('parallel')) for _, _, d in graph.edges(data=True))}"
