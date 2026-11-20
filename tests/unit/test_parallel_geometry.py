@@ -34,7 +34,7 @@ def test_separated_pulls_pass_without_mutating_meshes():
     assembly = scene({"A": (0, 0, 0), "B": (20, 0, 0)})
     before = np.asarray(assembly.parts["A"].mesh.vertices).copy()
     accepted, details = check_parallel_geometry(
-        assembly, ops(), ParallelGeometrySettings()
+        assembly, ops(), ParallelGeometrySettings(min_separation=5)
     )
     assert accepted and details["samples"] > 1
     np.testing.assert_array_equal(before, np.asarray(assembly.parts["A"].mesh.vertices))
@@ -43,9 +43,9 @@ def test_separated_pulls_pass_without_mutating_meshes():
 def test_surface_gap_proximity_is_configurable():
     assembly = scene({"A": (0, 0, 0), "B": (6, 0, 0)})
     assert (
-        check_parallel_geometry(assembly, ops(), ParallelGeometrySettings())[1][
-            "reason"
-        ]
+        check_parallel_geometry(
+            assembly, ops(), ParallelGeometrySettings(min_separation=5)
+        )[1]["reason"]
         == "parts_too_close"
     )
     assert check_parallel_geometry(
@@ -62,7 +62,9 @@ def test_crossing_rays_reject_before_mesh_path(monkeypatch):
     monkeypatch.setattr("disassembly_pomdp.parallel_geometry._collision", unexpected)
     assert (
         check_parallel_geometry(
-            assembly, ops((1, 0, 0), (0, 1, 0)), ParallelGeometrySettings()
+            assembly,
+            ops((1, 0, 0), (0, 1, 0)),
+            ParallelGeometrySettings(min_separation=5),
         )[1]["reason"]
         == "removal_rays_intersect"
     )
@@ -71,7 +73,9 @@ def test_crossing_rays_reject_before_mesh_path(monkeypatch):
 def test_mesh_volume_collision_with_nonintersecting_centre_rays():
     assembly = scene({"A": (-10, 0, 0), "B": (0, -10, 1.5)})
     accepted, details = check_parallel_geometry(
-        assembly, ops((1, 0, 0), (0, 1, 0)), ParallelGeometrySettings(ray_clearance=0.1)
+        assembly,
+        ops((1, 0, 0), (0, 1, 0)),
+        ParallelGeometrySettings(min_separation=5, ray_clearance=0.1),
     )
     assert not accepted and details["reason"] == "moving_parts_collision"
 
@@ -79,7 +83,9 @@ def test_mesh_volume_collision_with_nonintersecting_centre_rays():
 def test_obstacle_further_along_path_rejected():
     assembly = scene({"A": (0, 0, 0), "B": (20, 0, 0), "Wall": (0, 10, 0)})
     accepted, details = check_parallel_geometry(
-        assembly, ops(), ParallelGeometrySettings(stationary_penetration=0)
+        assembly,
+        ops(),
+        ParallelGeometrySettings(min_separation=5, stationary_penetration=0),
     )
     assert not accepted and details["reason"] == "stationary_part_collision"
 
@@ -89,17 +95,19 @@ def test_missing_direction_and_bad_geometry_fail_closed():
     operations = ops()
     del operations[0]["direction"]
     assert not check_parallel_geometry(
-        assembly, operations, ParallelGeometrySettings()
+        assembly, operations, ParallelGeometrySettings(min_separation=5)
     )[0]
     assembly.parts["A"].mesh = None
-    assert not check_parallel_geometry(assembly, ops(), ParallelGeometrySettings())[0]
+    assert not check_parallel_geometry(
+        assembly, ops(), ParallelGeometrySettings(min_separation=5)
+    )[0]
 
 
 def test_sample_limit_rejects_without_coarsening():
     assembly = scene({"A": (0, 0, 0), "B": (20, 0, 0)})
     assert (
         check_parallel_geometry(
-            assembly, ops(), ParallelGeometrySettings(max_samples=2)
+            assembly, ops(), ParallelGeometrySettings(min_separation=5, max_samples=2)
         )[1]["reason"]
         == "parallel_sample_limit"
     )
@@ -139,7 +147,9 @@ def test_three_parts_and_different_completion_times():
     assembly = scene({"A": (0, 0, 0), "B": (20, 0, 0), "C": (40, 0, 0)})
     operations = ops(duration_b=2)
     operations.append(dict(target_part="C", direction=[0, 1, 0], action_time=3))
-    assert check_parallel_geometry(assembly, operations, ParallelGeometrySettings())[0]
+    assert check_parallel_geometry(
+        assembly, operations, ParallelGeometrySettings(min_separation=5)
+    )[0]
 
 
 @pytest.mark.parametrize(
@@ -150,7 +160,7 @@ def test_invalid_direction_or_duration(direction, duration):
     operations = ops()
     operations[0].update(direction=direction, action_time=duration)
     assert not check_parallel_geometry(
-        assembly, operations, ParallelGeometrySettings()
+        assembly, operations, ParallelGeometrySettings(min_separation=5)
     )[0]
 
 
@@ -171,3 +181,16 @@ def test_agent_accepts_clear_group_and_records_screening():
     assert attrs["geometry_check"]["samples"] > 1
     assert attrs["action_time"] == 12
     assert set(agent.base_assembly.parts) == {"A", "B", "Base"}
+
+
+@pytest.mark.parametrize("gap,expected", [(49, False), (50, False), (51, True)])
+def test_default_surface_separation_is_five_centimetres(gap, expected):
+    # Two-mm cubes: centre distance is the surface gap plus two mm.
+    assembly = scene({"A": (0, 0, 0), "B": (gap + 2, 0, 0)})
+    settings = ParallelGeometrySettings()
+    assert settings.min_separation == 50.0
+    accepted, details = check_parallel_geometry(assembly, ops(), settings)
+    assert accepted is expected
+    if not expected:
+        assert details["reason"] == "parts_too_close"
+        assert details["distance"] == pytest.approx(gap)

@@ -15,7 +15,7 @@ from scipy.optimize import lsq_linear
 
 @dataclass(frozen=True)
 class ParallelGeometrySettings:
-    min_separation: float = 5.0
+    min_separation: float = 50.0
     ray_clearance: float = 1.0
     step_size: float = 2.0
     stationary_penetration: float = 2.5

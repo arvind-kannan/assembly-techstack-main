@@ -3,7 +3,7 @@
 `DisassemblyGraphAgent._try_parallel_actions()` now rejects a group before mutating
 its assembly unless it passes three checks:
 
-1. Pairwise surface separation using FCL mesh distance. A gap of 5 mm or less
+1. Pairwise surface separation using FCL mesh distance. A gap of 50 mm (5 cm) or less
    rejects the group by default. This is a conservative access heuristic, not a
    physical law or a gripper-clearance guarantee.
 2. Finite centre rays along each removal direction. Segments passing within
@@ -31,7 +31,7 @@ from disassembly_pomdp.parallel_geometry import ParallelGeometrySettings
 agent = DisassemblyGraphAgent(
     env,
     parallel_geometry=ParallelGeometrySettings(
-        min_separation=5.0,
+        min_separation=50.0,
         ray_clearance=1.0,
         step_size=2.0,
         stationary_penetration=2.5,

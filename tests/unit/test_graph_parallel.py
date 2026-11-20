@@ -16,6 +16,7 @@ from disassembly_pomdp.graph_extraction import (
     plot_parallel_graph,
     save_graph,
 )
+from disassembly_pomdp.parallel_geometry import ParallelGeometrySettings
 from tests.conftest import FakePart
 from tests.unit.test_graph_extraction import _three_part_agent
 
@@ -37,6 +38,8 @@ def agent_for(names):
     assembly = Assembly("parallel")
     assembly.parts = {n: FakePart(n) for n in [*names, "Base"]}
     assembly.connections = [Screw_Connection(n, "Base", screw_head="H5") for n in names]
+    # Small synthetic fixtures explicitly retain their 5-mm screening scale.
+    agent.parallel_geometry = ParallelGeometrySettings(min_separation=5)
     agent.base_assembly = assembly
     agent._all_part_names = list(assembly.parts)
     agent.target_part_names = list(names)
