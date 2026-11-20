@@ -75,6 +75,7 @@ def main() -> None:
 
     agent = DisassemblyGraphAgent(env)
     graph = agent.build_graph(
+        extraction_depth="full_teardown",
         verbose=True,
         collapse_screw_groups=args.collapse_screws,
         parallel=args.parallel,
