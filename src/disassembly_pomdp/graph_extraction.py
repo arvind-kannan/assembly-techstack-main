@@ -41,7 +41,7 @@ import copy
 import json
 from collections import deque
 from contextlib import contextmanager
-from itertools import combinations
+from itertools import combinations, product
 from pathlib import Path
 from typing import Any, Callable, Optional
 
@@ -49,6 +49,7 @@ import networkx as nx
 import numpy as np
 from diss_assembly_dataclasses.process import Process
 
+from disassembly_pomdp.parallel_diagnostics import record_rejection
 from disassembly_pomdp.parallel_geometry import (
     ParallelGeometrySettings,
     check_parallel_geometry,
@@ -156,6 +157,7 @@ class DisassemblyGraphAgent:
     ):
         self.parallel_geometry = parallel_geometry or ParallelGeometrySettings()
         self.last_parallel_check = {}
+        self.rejected_parallel_graph = nx.MultiDiGraph()
         self.env = env
         self.capabilities = list(env.capabilities)
         self.cell_settings = env.cell_settings
@@ -393,15 +395,36 @@ class DisassemblyGraphAgent:
         return steps
 
     def available_parallel_steps(
-        self, assembly, n_robots=2, collapse_screw_groups=False
+        self,
+        assembly,
+        n_robots=2,
+        collapse_screw_groups=False,
+        collapse_parallel_screws=True,
     ):
         """Reuse individually feasible steps to form synchronized stages.
 
-        Screw collapsing hides alternative screws and is therefore unsupported
-        in parallel mode. Singletons retain their original assembly and metadata.
+        A complete geometry-compatible screw set becomes a staged macro-edge
+        by default. Failed certification leaves ordinary combinations unchanged.
+        The older sequential screw-collapse option remains unsupported here.
         """
         self._check_parallel_options(n_robots, collapse_screw_groups)
         steps = self.available_steps(assembly, collapse_screw_groups)
+        if collapse_parallel_screws:
+            macro = self._parallel_screw_macro(assembly, steps, n_robots)
+            if macro is not None:
+                screw_names = set(macro[1]["target_parts"])
+                # Keep non-screw alternatives, but do not enumerate permutations
+                # or mixed partial-screw stages of this certified full set.
+                other = [
+                    step for step in steps if step[1]["target_part"] not in screw_names
+                ]
+                results = list(other) + [macro]
+                for size in range(2, min(n_robots, len(other)) + 1):
+                    for group in combinations(other, size):
+                        result = self._try_parallel_actions(assembly, group)
+                        if result is not None:
+                            results.append(result)
+                return results
         results = list(steps)
         for size in range(2, min(n_robots, len(steps)) + 1):
             for group in combinations(steps, size):
@@ -412,6 +435,115 @@ class DisassemblyGraphAgent:
                 if result is not None:
                     results.append(result)
         return results
+
+    def _parallel_screw_macro(self, assembly, steps, n_robots):
+        """Collapse only a complete currently removable screw set that passes screening.
+
+        Full-set compatibility is certified first, independently of robot count.
+        Each deterministic stage is then checked against its current assembly.
+        An unsuccessful macro leaves the ordinary search completely available.
+        """
+        choices = {}
+        for step in steps:
+            attrs = step[1]
+            name = attrs["target_part"]
+            if attrs.get("process") != Process.UNSCREWING.value:
+                continue
+            if not any(
+                getattr(c, "connection_type", None) == "screw" and c.part_name1 == name
+                for c in assembly.get_connections_by_part_name(name)
+            ):
+                continue
+            choices.setdefault(name, []).append(step)
+        if len(choices) < 2:
+            return None
+        for group in product(*(choices[name] for name in sorted(choices))):
+            full = self._try_parallel_actions(assembly, group)
+            if full is None:
+                continue
+            group = tuple(
+                sorted(
+                    group,
+                    key=lambda step: (-step[1]["action_time"], step[1]["target_part"]),
+                )
+            )
+            current = assembly
+            stages = []
+            for start in range(0, len(group), n_robots):
+                stage = group[start : start + n_robots]
+                if len(stage) == len(group):
+                    result = full
+                elif len(stage) == 1:
+                    # Validate singleton stages too; another screw may still
+                    # obstruct its path when the group is split across robots.
+                    accepted, details = check_parallel_geometry(
+                        current,
+                        [stage[0][1]],
+                        getattr(self, "parallel_geometry", ParallelGeometrySettings()),
+                    )
+                    if not accepted:
+                        self._reject_parallel_group(
+                            current,
+                            stage,
+                            details.get("reason", "geometry_rejected"),
+                            details,
+                        )
+                        result = None
+                    else:
+                        try:
+                            successor = copy.deepcopy(current)
+                            name = stage[0][1]["target_part"]
+                            successor.remove_part(successor.get_part_by_name(name))
+                            if set(_state_key(successor)) != set(
+                                _state_key(current)
+                            ) - {name} or successor.get_connections_by_part_name(name):
+                                raise ValueError("inconsistent singleton screw stage")
+                            result = successor, copy.deepcopy(stage[0][1])
+                        except Exception as error:
+                            self._reject_parallel_group(
+                                current, stage, "mutation_failed", {"error": str(error)}
+                            )
+                            result = None
+                else:
+                    result = self._try_parallel_actions(current, stage)
+                if result is None:
+                    break
+                current, attrs = result
+                stages.append(attrs)
+                goals = getattr(self, "target_part_names", [])
+                if (
+                    goals
+                    and all(current.get_part_by_name(name) is None for name in goals)
+                    and start + n_robots < len(group)
+                ):
+                    # Preserve stop-at-goal semantics instead of hiding needless
+                    # screw removals inside a macro that has already finished.
+                    break
+            else:
+                attrs = copy.deepcopy(full[1])
+                attrs.update(
+                    screw_macro=True,
+                    n_stages=len(stages),
+                    n_robots=n_robots,
+                    stages=stages,
+                    action_time=sum(s["action_time"] for s in stages),
+                    label="Unscrew " + " + ".join(sorted(choices)),
+                )
+                return current, attrs
+        return None
+
+    def _reject_parallel_group(self, assembly, group, reason, details=None):
+        self.last_parallel_check = {**(details or {}), "reason": reason}
+        if not hasattr(self, "rejected_parallel_graph"):
+            self.rejected_parallel_graph = nx.MultiDiGraph()
+        record_rejection(
+            self.rejected_parallel_graph,
+            _state_key(assembly),
+            [attrs for _, attrs in group],
+            reason,
+            self.last_parallel_check,
+        )
+        return None
 
     @staticmethod
     def _check_parallel_options(n_robots, collapse_screw_groups):
@@ -428,30 +560,43 @@ class DisassemblyGraphAgent:
         """
         targets = [attrs.get("target_part") for _, attrs in group]
         if len(targets) < 2 or None in targets or len(set(targets)) != len(targets):
-            return None
+            return self._reject_parallel_group(
+                assembly, group, "invalid_or_duplicate_targets"
+            )
         if any(assembly.get_part_by_name(name) is None for name in targets):
-            return None
+            return self._reject_parallel_group(assembly, group, "target_missing")
         accepted, self.last_parallel_check = check_parallel_geometry(
             assembly,
             [attrs for _, attrs in group],
             getattr(self, "parallel_geometry", ParallelGeometrySettings()),
         )
         if not accepted:
-            return None
-        next_assembly = copy.deepcopy(assembly)
+            return self._reject_parallel_group(
+                assembly,
+                group,
+                self.last_parallel_check.get("reason") or "geometry_rejected",
+                self.last_parallel_check,
+            )
         try:
+            next_assembly = copy.deepcopy(assembly)
             for name in targets:
                 next_assembly.remove_part(next_assembly.get_part_by_name(name))
             if set(_state_key(next_assembly)) != set(_state_key(assembly)) - set(
                 targets
             ):
-                return None
+                return self._reject_parallel_group(
+                    assembly, group, "inconsistent_remaining_parts"
+                )
             if any(
                 next_assembly.get_connections_by_part_name(name) for name in targets
             ):
-                return None
-        except Exception:
-            return None
+                return self._reject_parallel_group(
+                    assembly, group, "dangling_connections"
+                )
+        except Exception as error:
+            return self._reject_parallel_group(
+                assembly, group, "mutation_failed", {"error": str(error)}
+            )
         return next_assembly, {
             "operations": [copy.deepcopy(attrs) for _, attrs in group],
             "target_parts": targets,
@@ -558,6 +703,7 @@ class DisassemblyGraphAgent:
         extraction_depth: str = DISASSEMBLED_STATES,
         parallel: bool = False,
         n_robots: int = 2,
+        collapse_parallel_screws: bool = True,
     ) -> nx.MultiDiGraph:
         """
         BFS over reachable assembly states. Returns and stores `self.graph`.
@@ -567,8 +713,12 @@ class DisassemblyGraphAgent:
         Raises `ScrewGroupError` if a collapsed group's screws are not all removable at a visited state, or if
         another step comes between them (the graph's screws of a group must be one contiguous block).
         `parallel` enables simultaneous removals in groups up to `n_robots`.
+        `collapse_parallel_screws` replaces a fully compatible screw set with one
+        robot-limited staged macro-edge. This prunes partial-screw interleavings;
+        disable it for exhaustive parallel combinations. Rejected attempts are in
+        `self.rejected_parallel_graph`, separate from reachable states.
         Parallel groups pass conservative straight-pull geometry screening and cannot
-        be combined with screw collapsing. Configure thresholds via `parallel_geometry`
+        be combined with the older sequential screw-collapse option. Configure thresholds via `parallel_geometry`
         on the agent; this is not robot motion planning.
         `progress(expanded, discovered)` is called after each expanded state.
         `extraction_depth`: `DISASSEMBLED_STATES` does not expand a disassembled state (all target parts
@@ -579,6 +729,7 @@ class DisassemblyGraphAgent:
             self._check_parallel_options(n_robots, collapse_screw_groups)
         check_extraction_depth(extraction_depth)
         self.collapsed_screw_groups = set()
+        self.rejected_parallel_graph = nx.MultiDiGraph()
         with self._deterministic():
             G = nx.MultiDiGraph()
             self.skip_counts = {}
@@ -610,7 +761,10 @@ class DisassemblyGraphAgent:
 
                 steps = (
                     self.available_parallel_steps(
-                        assembly, n_robots, collapse_screw_groups
+                        assembly,
+                        n_robots,
+                        collapse_screw_groups,
+                        collapse_parallel_screws,
                     )
                     if parallel
                     else self.available_steps(assembly, collapse_screw_groups)
@@ -650,7 +804,10 @@ class DisassemblyGraphAgent:
             G.graph["extraction_depth"] = extraction_depth
             if parallel:
                 G.graph.update(
-                    parallel=True, n_robots=n_robots, feasibility="geometry_screened"
+                    parallel=True,
+                    n_robots=n_robots,
+                    feasibility="geometry_screened",
+                    collapse_parallel_screws=collapse_parallel_screws,
                 )
             if collapse_screw_groups:
                 groups = self.collapsed_screw_groups
@@ -789,6 +946,9 @@ def load_graph(path: str | Path) -> nx.MultiDiGraph:
     raise ValueError(f"load_graph currently only supports .pkl (got {path.suffix})")
 
 
+# Keep the existing sequential plotter unchanged.
+# fmt: off
+# isort: off
 def plot_graph(graph: nx.MultiDiGraph, path: Optional[str | Path] = None):
     """
     Plot a disassembly graph as a top-down hierarchical DAG.
@@ -981,6 +1141,10 @@ def plot_graph(graph: nx.MultiDiGraph, path: Optional[str | Path] = None):
     return fig
 
 
+# isort: on
+# fmt: on
+
+
 def plot_parallel_graph(graph: nx.MultiDiGraph, path: Optional[str | Path] = None):
     """Draw synchronized stages top-down, with a deterministic layered fallback."""
     import matplotlib.pyplot as plt
@@ -1029,7 +1193,12 @@ def plot_parallel_graph(graph: nx.MultiDiGraph, path: Optional[str | Path] = Non
             parallel = attrs.get("parallel", False)
             color = "#9b3a9e" if parallel else "#637383"
             text = (
-                "PARALLEL\n" + " + ".join(attrs["target_parts"])
+                (
+                    f"SCREW BATCH ({attrs['n_stages']} stages)\n"
+                    if attrs.get("screw_macro")
+                    else "PARALLEL\n"
+                )
+                + " + ".join(attrs["target_parts"])
                 if parallel
                 else "Remove " + attrs.get("target_part", "")
             )

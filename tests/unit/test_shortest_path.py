@@ -149,6 +149,7 @@ def test_example_exports_shortest_sequence_for_selected_product(tmp_path, monkey
     builder = Mock(return_value=object())
     agent = Mock()
     agent.build_graph.return_value = graph()
+    agent.rejected_parallel_graph = nx.MultiDiGraph()
     monkeypatch.setattr(example, "build_product_env", builder)
     monkeypatch.setattr(example, "DisassemblyGraphAgent", Mock(return_value=agent))
     monkeypatch.setattr(example, "plot_parallel_graph", Mock())
@@ -170,6 +171,9 @@ def test_example_exports_shortest_sequence_for_selected_product(tmp_path, monkey
     builder.assert_called_once_with(product)
     assert (output / "shortest_path.png").stat().st_size > 0
     assert (output / "shortest_path.json").is_file()
+    assert (output / "rejected_parallel_graph.json").is_file()
+    assert (output / "rejected_parallel_graph.png").is_file()
+    assert (output / "rejected_parallel_graph.svg").is_file()
     selected = load_graph(output / "shortest_path.pkl")
     assert selected.graph["total_action_time"] == 12
     import matplotlib.pyplot as plt

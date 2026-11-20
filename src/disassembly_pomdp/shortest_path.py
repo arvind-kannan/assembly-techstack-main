@@ -76,7 +76,17 @@ def plot_shortest_path(graph: nx.MultiDiGraph, path: str | Path | None = None):
 
     selected = shortest_path_graph(graph)
     nodes = list(selected.nodes)
-    fig, ax = plt.subplots(figsize=(14, max(5, 2.8 * len(nodes))))
+    gaps = []
+    for u, v in zip(nodes, nodes[1:]):
+        edge = next(iter(selected[u][v].values()))
+        line_count = (
+            len(edge.get("operations", [edge])) + len(edge.get("stages", [])) + 2
+        )
+        gaps.append(max(3.0, 0.45 * line_count))
+    positions = [0.0]
+    for gap in gaps:
+        positions.append(positions[-1] - gap)
+    fig, ax = plt.subplots(figsize=(14, max(5, 0.9 * sum(gaps) + 2)))
     for i, node in enumerate(nodes):
         attrs = selected.nodes[node]
         remaining = attrs.get("n_parts_present", len(node))
@@ -85,7 +95,7 @@ def plot_shortest_path(graph: nx.MultiDiGraph, path: str | Path | None = None):
             prefix = "START / GOAL"
         ax.text(
             0,
-            -i * 3,
+            positions[i],
             f"{prefix}\n{remaining} parts remaining",
             ha="center",
             va="center",
@@ -100,22 +110,29 @@ def plot_shortest_path(graph: nx.MultiDiGraph, path: str | Path | None = None):
         attrs = next(iter(selected[node][nodes[i + 1]].values()))
         parallel = attrs.get("parallel", False)
         color = "#9b3a9e" if parallel else "#526778"
-        operations = attrs.get("operations", [attrs])
-        lines = [f"Stage {i + 1}" + (" — PARALLEL" if parallel else "")]
-        for operation in operations:
-            name = operation.get("target_part", operation.get("label", "Removal"))
-            tool = operation.get("tool")
-            lines.append(f"Remove {name}" + (f" [{tool}]" if tool else ""))
+        stages = attrs.get("stages", [attrs])
+        lines = [
+            f"Step {i + 1} — SCREW BATCH"
+            if attrs.get("screw_macro")
+            else f"Stage {i + 1}" + (" — PARALLEL" if parallel else "")
+        ]
+        for stage_index, stage in enumerate(stages, 1):
+            if attrs.get("screw_macro"):
+                lines.append(f"  Stage {stage_index}: {stage['action_time']:.2f} s")
+            for operation in stage.get("operations", [stage]):
+                name = operation.get("target_part", operation.get("label", "Removal"))
+                tool = operation.get("tool")
+                lines.append(f"Remove {name}" + (f" [{tool}]" if tool else ""))
         lines.append(f"Duration: {attrs['action_time']:.2f} s")
         ax.annotate(
             "",
-            xy=(0, -(i + 1) * 3 + 0.45),
-            xytext=(0, -i * 3 - 0.45),
+            xy=(0, positions[i + 1] + 0.45),
+            xytext=(0, positions[i] - 0.45),
             arrowprops=dict(arrowstyle="-|>", color=color, lw=2),
         )
         ax.text(
             0.2,
-            -i * 3 - 1.5,
+            (positions[i] + positions[i + 1]) / 2,
             "\n".join(lines),
             ha="left",
             va="center",
@@ -123,7 +140,7 @@ def plot_shortest_path(graph: nx.MultiDiGraph, path: str | Path | None = None):
             fontsize=9,
         )
     ax.set_xlim(-1.2, 3.5)
-    ax.set_ylim(-(len(nodes) - 1) * 3 - 1, 1)
+    ax.set_ylim(positions[-1] - 1, 1)
     ax.set_title(
         f"Shortest disassembly sequence\nTotal synchronized-stage time: {selected.graph['total_action_time']:.2f} s"
     )

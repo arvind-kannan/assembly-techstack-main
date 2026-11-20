@@ -68,3 +68,45 @@ invalid edge durations produce an explanatory message instead of a misleading
 plot. The full `graph.*` exports remain available alongside the path exports.
 For an already-exported graph, use `plot_shortest_path(load_graph(path), output)`
 from `disassembly_pomdp.shortest_path` and `disassembly_pomdp.graph_extraction`.
+
+## Compatible screw set reduction
+
+In parallel mode the generator identifies currently feasible unscrewing actions
+using their process and screw connections. It tries full-set choices (one action
+per screw) against the geometry screen. If a complete set passes, it groups the
+chosen operations into stages of at most `n_robots`, checking each stage against
+its updated assembly. Stages are ordered by descending action duration, with
+part name as a deterministic tie-breaker. Each stage costs its maximum duration;
+the macro-edge costs the sum. Four screws with two robots therefore require two
+stages, not four simultaneous robot operations. Individual operation metadata,
+stage metadata and the full-set geometry certificate are retained on the edge.
+
+Only a complete passing screw set is collapsed: failure of the whole set or any
+stage restores the existing singleton and combination generation. No smaller
+compatible screw subset is silently collapsed. Non-screw alternatives stay
+available. Single-removal and sequential extraction behavior is unchanged.
+
+This reduction intentionally removes partial-screw states and mixed interleavings
+of part removals with those screws. Geometric compatibility alone does not prove
+those interleavings can never improve makespan or reveal new actions, so the
+shortest sequence is optimal only within the reduced graph. Use
+`--no-collapse-parallel-screws` (or `collapse_parallel_screws=False` on
+`build_graph`) for exhaustive combinations and comparisons. This mode is separate
+from the older sequential `--collapse-screws` option.
+
+## Rejected attempts
+
+Parallel CLI runs also save `rejected_parallel_graph.png`,
+`rejected_parallel_graph.svg`, `rejected_parallel_graph.json` and
+`rejected_parallel_graph.pkl`. Each failed `_try_parallel_actions()` call has its
+own rejected-attempt leaf branching from the evaluated source state. Leaves
+include the attempted operations, reason, and available collision diagnostics.
+They are not added to the valid sequence graph or its shortest-path search.
+Full-set certification failures and failed internal macro stages are included.
+Ordinary individually infeasible actions rejected before parallel grouping are
+not parallel attempts and are not included.
+
+The PNG is an overview with bounded image dimensions; use the vector SVG and
+JSON for large reports. The diagnostic graph is reset on each `build_graph()`;
+inspect it directly via `agent.rejected_parallel_graph`. `last_parallel_check`
+also records invalid-target and assembly-mutation rejection reasons now.
