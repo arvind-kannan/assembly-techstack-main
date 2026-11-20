@@ -2,8 +2,8 @@
 sequence graph, the current product state with the path that led there, and the recorded sequence.
 
 All logic lives here; the server only maps requests onto it and the browser only renders the view.
-The sequence graph comes from `build_env` and `DisassemblyGraphAgent` with interchangeable screws
-collapsed (#134); next steps are its edges. Rejection reasons are checked live for one picked part.
+The sequence graph comes from `build_env` and `DisassemblyGraphAgent`: sequential with interchangeable
+screws collapsed by default, or optional parallel analysis with robot-limited stages; next steps are its edges. Rejection reasons are checked live for one picked part.
 
 Edits to the product model (#240) all go through `_apply_edit`: it keeps a memento of the product model and
 product setup before the edit, so undo and redo swap whole states. Any edit, undo or redo makes the sequence
@@ -61,11 +61,13 @@ from disassembly_pomdp.graph_extraction import (
     check_extraction_depth,
 )
 from disassembly_pomdp.graph_reversal import complete_by_reversal
+from disassembly_pomdp.parallel_geometry import ParallelGeometrySettings
 from disassembly_pomdp.product_model import ProductModel
 from disassembly_pomdp.rendering import _PALETTE, HIGHLIGHT_COLOR
 from disassembly_pomdp.screwing_capability import ScrewingCapability
 from mrtamp.cell_file import load_cell_file
 from mrtamp.screw_groups import groups_naming_unknown_parts, parts_without_position
+from product_explorer.graph_analysis import analysis_view, export_analysis
 from product_explorer.mesh_import import (
     ImportCancelled,
     check_request,
@@ -171,6 +173,7 @@ class _Graph:
     nodes: dict = field(default_factory=dict)  # "s<i>" -> product state
     edges: dict = field(default_factory=dict)  # "e<i>" -> (u, v, key)
     root: str = "s0"
+    analysis: dict = field(default_factory=dict)
 
     @property
     def extraction_depth(self) -> str | None:
@@ -891,7 +894,11 @@ class ExplorerSession:
         return (
             []
             if g is None
-            else [g.graph.edges[g.edges[e]]["target_part"] for e in self.path]
+            else [
+                name
+                for e in self.path
+                for name in _step_targets(g.graph.edges[g.edges[e]])
+            ]
         )
 
     def _recheck(self) -> None:
@@ -926,12 +933,21 @@ class ExplorerSession:
             )
 
     # ------------------------------------------------------------ sequence graph
-    def generate(self, extraction_depth: str = DISASSEMBLED_STATES) -> threading.Thread:
+    def generate(
+        self,
+        extraction_depth: str = DISASSEMBLED_STATES,
+        parallel: bool = False,
+        n_robots: int = 2,
+        collapse_parallel_screws: bool = True,
+        min_separation: float = 50.0,
+    ) -> threading.Thread:
         """Start Rebuild (Generate graph) in a background thread; progress goes to `self.job`.
         `extraction_depth`: down to the disassembled states (default) or a full teardown."""
         self._need_product()
         try:
             check_extraction_depth(extraction_depth)
+            DisassemblyGraphAgent._check_parallel_options(n_robots, False)
+            ParallelGeometrySettings(min_separation=min_separation)
         except ValueError as e:
             raise ExplorerError(str(e)) from e
         with self.lock:
@@ -942,7 +958,18 @@ class ExplorerSession:
             serial, cell = self._serial, self.cell_choice
         thread = threading.Thread(
             target=self._generate,
-            args=(self._product_id, assembly, setup, serial, cell, extraction_depth),
+            args=(
+                self._product_id,
+                assembly,
+                setup,
+                serial,
+                cell,
+                extraction_depth,
+                parallel,
+                n_robots,
+                collapse_parallel_screws,
+                min_separation,
+            ),
             daemon=True,
         )
         thread.start()
@@ -956,20 +983,32 @@ class ExplorerSession:
         serial: int,
         cell: CellChoice | None,
         extraction_depth: str,
+        parallel: bool = False,
+        n_robots: int = 2,
+        collapse_parallel_screws: bool = True,
+        min_separation: float = 50.0,
     ) -> None:
         job = self.job
         try:
             agent = _agent_for(assembly, setup, cell)
+            agent.parallel_geometry = ParallelGeometrySettings(
+                min_separation=min_separation
+            )
 
             def progress(expanded: int, discovered: int) -> None:
                 job.expanded, job.discovered = expanded, discovered
 
             graph = agent.build_graph(
                 verbose=False,
-                collapse_screw_groups=True,
+                collapse_screw_groups=not parallel,
+                parallel=parallel,
+                n_robots=n_robots,
+                collapse_parallel_screws=collapse_parallel_screws,
                 progress=progress,
                 extraction_depth=extraction_depth,
             )
+            if parallel:
+                graph.graph["min_separation"] = min_separation
             with self.lock:
                 if product_id != self._product_id:
                     return  # another product was loaded meanwhile
@@ -978,6 +1017,7 @@ class ExplorerSession:
                     g.node_ids[state], g.nodes[f"s{i}"] = f"s{i}", state
                 for i, edge in enumerate(graph.edges(keys=True)):
                     g.edges[f"e{i}"] = edge
+                g.analysis = analysis_view(graph, agent, g.node_ids, g.edges)
                 g.root = g.node_ids[
                     next(n for n, d in graph.nodes(data=True) if d.get("depth") == 0)
                 ]
@@ -1093,7 +1133,7 @@ class ExplorerSession:
             text = f"{part} can be removed ({', '.join(sorted({r['capability'] for r in accepted}))})"
             group = next((grp for grp in self._collapsed_groups() if part in grp), None)
             if group and not any(
-                g.graph.edges[g.edges[e]]["target_part"] == part
+                part in _step_targets(g.graph.edges[g.edges[e]])
                 for e in self.next_steps()
             ):
                 text += (
@@ -1142,7 +1182,10 @@ class ExplorerSession:
     def set_recording(self, on: bool) -> None:
         with self.lock:
             if on and not self.recording:
-                self._need_graph()
+                if self._need_graph().graph.graph.get("parallel"):
+                    raise ExplorerError(
+                        "Parallel analysis supports graph export, not robot-planner recording"
+                    )
                 self.recorded = []
             self.recording = on
 
@@ -1166,6 +1209,10 @@ class ExplorerSession:
 
     def export(self, out_dir: str | Path) -> Path:
         """The sequence graph file and the per-part URDFs (+ manifest.json) into `out_dir` (#77)."""
+        if self._need_graph().graph.graph.get("parallel"):
+            raise ExplorerError(
+                "Use analysis graph export for parallel graphs; planner export supports sequential graphs only"
+            )
         g = self._need_exportable()
         out = Path(out_dir)
         provenance = self._provenance(out)
@@ -1186,6 +1233,20 @@ class ExplorerSession:
             json.dumps(manifest, indent=2), encoding="utf-8"
         )
         return out
+
+    def export_analysis(self, out_dir: str | Path) -> Path:
+        """Full graph, shortest sequence and rejection plots of the current analysis."""
+        self._need_idle()
+        g = self._need_graph()
+        out = Path(out_dir).resolve()
+        if (
+            self.folder is not None and out.is_relative_to(self.folder.resolve())
+        ) or files_repository_root(out) is not None:
+            raise ExplorerError(
+                "Choose an analysis output folder outside the product source folder"
+            )
+        with self.lock:
+            return export_analysis(g.graph, g.agent, out)
 
     def _need_saved_graph(self) -> _Graph:
         g = self._need_graph()
@@ -1264,6 +1325,7 @@ class ExplorerSession:
             graph = None
             if g is not None:
                 graph = {
+                    **g.analysis,
                     "root": g.root,
                     "stale": self.stale(),
                     "cell_fingerprint": g.cell_fingerprint,
@@ -1597,6 +1659,16 @@ def _edge_view(g: _Graph, e: str) -> dict:
                 "target_part",
                 "action_time",
                 "direction",
+                "target_parts",
+                "operations",
+                "stages",
+                "parallel",
+                "screw_macro",
+                "n_stages",
             )
         },
     }
+
+
+def _step_targets(step):
+    return step.get("target_parts") or [step["target_part"]]

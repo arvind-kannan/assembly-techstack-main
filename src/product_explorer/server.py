@@ -12,7 +12,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, WebSocket
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from disassembly_pomdp.graph_extraction import DISASSEMBLED_STATES
 from product_explorer.session import Conflict, ExplorerError, ExplorerSession
@@ -124,6 +124,10 @@ class OutDir(BaseModel):
 
 class Generate(BaseModel):
     extraction_depth: str = DISASSEMBLED_STATES
+    parallel: bool = False
+    n_robots: int = Field(default=2, ge=1, strict=True)
+    collapse_parallel_screws: bool = True
+    min_separation: float = Field(default=50.0, ge=0, allow_inf_nan=False)
 
 
 def create_app(
@@ -253,7 +257,15 @@ def create_app(
 
     @app.post("/api/generate", status_code=202)
     def generate(body: Generate | None = None):
-        return run(session.generate, (body or Generate()).extraction_depth)
+        options = body or Generate()
+        return run(
+            session.generate,
+            options.extraction_depth,
+            options.parallel,
+            options.n_robots,
+            options.collapse_parallel_screws,
+            options.min_separation,
+        )
 
     @app.post("/api/step")
     def step(body: Edge):
@@ -282,6 +294,10 @@ def create_app(
     @app.post("/api/rec/save")
     def rec_save(body: OutPath):
         return {"path": str(_guarded(session.save_recording, body.path))}
+
+    @app.post("/api/export-analysis")
+    def export_analysis(body: OutDir):
+        return {"out_dir": str(_guarded(session.export_analysis, body.out_dir))}
 
     @app.post("/api/export")
     def export(body: OutDir):

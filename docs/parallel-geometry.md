@@ -110,3 +110,32 @@ The PNG is an overview with bounded image dimensions; use the vector SVG and
 JSON for large reports. The diagnostic graph is reset on each `build_graph()`;
 inspect it directly via `agent.rejected_parallel_graph`. `last_parallel_check`
 also records invalid-target and assembly-mutation rejection reasons now.
+
+## Product explorer UI
+
+From the repository root, run:
+
+```bash
+uv run python examples/run_product_explorer.py --product cases/angle_grinder/model
+```
+
+The browser opens at `http://127.0.0.1:8765/`. For the battery, substitute
+`cases/battery_replacement/model`; omit `--product` to choose a folder with Load.
+Use `--port 8766` if the default port is occupied, or `--no-browser` to open the
+printed address yourself.
+
+The generation controls include Parallel, robot count, minimum surface gap in
+millimetres (default 50), compatible screw collapsing, and extraction depth.
+The default is still sequential generation. Select Parallel and Generate graph
+for the new analysis. The graph selector switches between all transitions,
+the minimum-time path with screw sub-stages, and rejected parallel attempts
+with reasons. Hover a valid transition for its operation names and timing.
+Grouped next steps remove all affected parts together; their 3D state update
+is atomic rather than a robot motion animation.
+
+Export → Analysis graphs and plots saves `graph.*`, `shortest_path.*` and
+`rejected_parallel_graph.*` to the chosen output directory. Stale graphs must
+be rebuilt before export. Analysis export does not reverse parallel batches
+into robot-planner instructions. The existing sequence-graph/URDF and recorded
+sequence exports remain available for sequential graphs; recording and planner
+export are disabled for parallel analysis until those consumers support batches.

@@ -6,7 +6,7 @@ let V = null;          // the server's view
 let MESH_VERSION = null;   // mesh_version of the product the meshes were loaded for
 let MESH = null;       // part meshes + framing of the loaded product
 let VIEW = null;       // 3D viewport
-const UI = { hovered: null, picked: null, xray: false, busy: false };
+const UI = { hovered: null, picked: null, xray: false, busy: false, graphView: 'all' };
 
 const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -32,6 +32,10 @@ const graph = () => V.graph;
 const edge = (id) => graph().edges[id];
 const node = (id) => graph().nodes[id];
 const stale = () => !!(graph() && graph().stale);
+const stepTargets = e => e.target_parts || (e.target_part ? [e.target_part] : []);
+const stepLabel = e => stepTargets(e).join(' + ');
+const stepDisplay = e => { const names = stepTargets(e); return names.slice(0, 3).join(' + ') + (names.length > 3 ? ` + ${names.length - 3} more` : ''); };
+const stepSummary = e => e.screw_macro ? `Screw batch · ${stepTargets(e).length} screws · ${e.n_stages} stages` : e.parallel ? 'Parallel removal' : `${(e.capability || '').replace('Capability', '')} · ${e.tool || ''}`;
 const partColor = (n) => { const c = (MESH && MESH.parts[n] || {}).color || [.6, .6, .6]; return `rgb(${c.map(v => Math.round(v * 255)).join(',')})`; };
 
 // ============================================================ 3D viewport (three.js)
@@ -100,12 +104,12 @@ function createViewport(host) {
     if (renderer.domElement.width !== Math.round(w * renderer.getPixelRatio())) { renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
     const present = new Set(V ? V.parts_present : []);
     for (const [name, m] of Object.entries(meshes)) {
-      const special = name === UI.picked || (UI.hovered && name === UI.hovered.target_part) || (anim.on && name === anim.m.name);
+      const special = name === UI.picked || (UI.hovered && stepTargets(UI.hovered).includes(name)) || (anim.on && name === anim.m.name);
       m.visible = present.has(name);
-      m.material.color.copy(name === UI.picked ? new THREE.Color(1, .65, .1) : UI.hovered && name === UI.hovered.target_part ? new THREE.Color(...MESH.highlight_color) : m.userData.color);
+      m.material.color.copy(name === UI.picked ? new THREE.Color(1, .65, .1) : UI.hovered && stepTargets(UI.hovered).includes(name) ? new THREE.Color(...MESH.highlight_color) : m.userData.color);
       m.material.transparent = UI.xray && !special; m.material.opacity = m.material.transparent ? .18 : 1; m.material.depthWrite = !m.material.transparent;
       if (!(anim.on && m === anim.m)) {
-        if (UI.hovered && name === UI.hovered.target_part) place(m, UI.hovered, (Math.sin(performance.now() / 1000 * 3.2) + 1) * .04);
+        if (UI.hovered && stepTargets(UI.hovered).includes(name)) place(m, UI.hovered, (Math.sin(performance.now() / 1000 * 3.2) + 1) * .04);
         else { m.position.set(0, 0, 0); m.quaternion.identity(); }
       }
     }
@@ -152,7 +156,13 @@ function watchJob() {   // progress of the running job until it is done
 }
 async function generate() {
   if (!V.product) return;
-  await command('/api/generate', { extraction_depth: document.getElementById('depth').value });
+  await command('/api/generate', {
+    extraction_depth: document.getElementById('depth').value,
+    parallel: document.getElementById('parallel').checked,
+    n_robots: Number(document.getElementById('robots').value),
+    collapse_parallel_screws: document.getElementById('collapse-parallel').checked,
+    min_separation: Number(document.getElementById('min-separation').value)
+  });
   watchJob();
 }
 async function updateMeshes(body) {
@@ -166,6 +176,9 @@ async function importFolder(body) {
 function play(id) {
   if (VIEW.busy() || stale()) return;
   UI.hovered = null; UI.picked = null;
+  // Grouped steps update the complete assembly state atomically. They are
+  // not animated as one part or presented as robot motion trajectories.
+  if (edge(id).parallel) return command('/api/step', { edge: id });
   VIEW.play(edge(id), () => command('/api/step', { edge: id }));
 }
 // Connection authoring (#242): "Add…" and "Re-detect…" in the Connections menu collect two picked parts, then run.
@@ -354,11 +367,15 @@ function buildRight() {
   bExp.onclick = (e) => {
     e.stopPropagation(); if (!V.product) return; const box = el('div');
     const item = (label, fn) => { const b = el('button', 'item', label); b.onclick = () => { closeMenu(); fn(); }; box.append(b); };
-    item('Sequence graph + URDFs…', async () => {
+    item('Analysis graphs and plots…', async () => {
+      const out = prompt('Output folder (full graph, shortest path and rejected attempts):', defaultOut()); if (!out) return;
+      const r = await api('POST', '/api/export-analysis', { out_dir: out.trim() }); toast(`Exported to ${r.out_dir}`);
+    });
+    if (!graph()?.parallel) item('Sequence graph + URDFs…', async () => {
       const out = prompt('Output folder (sequence_graph.json, urdf/, mesh/, manifest.json):', defaultOut()); if (!out) return;
       const r = await api('POST', '/api/export', { out_dir: out.trim() }); toast(`Exported to ${r.out_dir}`);
     });
-    item('Recorded sequence…', async () => {
+    if (!graph()?.parallel) item('Recorded sequence…', async () => {
       const out = prompt('Sequence file (a sequence graph export of the recorded path):', `${defaultOut()}/recorded_sequence.json`); if (!out) return;
       const r = await api('POST', '/api/rec/save', { path: out.trim() }); toast(`Saved ${r.path}`);
     });
@@ -372,6 +389,14 @@ function buildRight() {
     });
     showMenu(bExp, bar, box);
   };
+  const options = el('div', 'bar graph-options');
+  options.innerHTML = '<label><input id="parallel" type="checkbox"> Parallel</label>'
+    + '<label>Robots <input id="robots" type="number" min="1" step="1" value="2"></label>'
+    + '<label>Minimum gap (mm) <input id="min-separation" type="number" min="0" step="1" value="50"></label>'
+    + '<label><input id="collapse-parallel" type="checkbox" checked> Collapse compatible screws</label>';
+  const views = el('select', 'btn', '<option value="all">All transitions</option><option value="shortest">Shortest path</option><option value="rejected">Rejected parallel attempts</option>');
+  views.id = 'graph-view'; views.onchange = () => { UI.graphView = views.value; renderGraph(); };
+  options.append(views); right.append(options);
   const g = el('div'); g.id = 'graph'; right.append(g);
   const steps = el('div', 'steps'); steps.id = 'steps'; right.append(steps);
   const log = el('div', 'steps'); log.id = 'log'; right.append(log);
@@ -380,28 +405,63 @@ function buildRight() {
 function renderGraph() {
   const g = document.getElementById('graph'); g.classList.remove('stale');
   if (!graph()) { g.innerHTML = `<div class="stalemsg"><span class="pill">${V.product ? 'Generate graph to explore' : 'No product loaded'}</span></div>`; return; }
+  if (UI.graphView === 'rejected') return renderRejectedGraph(g);
+  const shortest = graph().shortest || {edges: [], error: 'Generate graph to compute a shortest path'};
+  if (UI.graphView === 'shortest' && shortest.error) { g.textContent = shortest.error; return; }
+  const visibleEdges = Object.entries(graph().edges).filter(([id]) => UI.graphView !== 'shortest' || shortest.edges.includes(id));
+  const visibleNodes = UI.graphView === 'shortest' ? new Set([graph().root, ...visibleEdges.flatMap(([,e]) => [e.source, e.target])]) : new Set(Object.keys(graph().nodes));
   const layers = {};
-  for (const id of Object.keys(graph().nodes)) (layers[node(id).depth] ||= []).push(id);
+  for (const id of visibleNodes) (layers[node(id).depth] ||= []).push(id);
   const GX = 80, GY = 38, nl = Object.keys(layers).length, maxRows = Math.max(...Object.values(layers).map(l => l.length));
   const W = 110 + (nl - 1) * GX, H = 50 + (maxRows - 1) * GY, pos = {};
   for (const [d, ids] of Object.entries(layers)) ids.forEach((id, i) => { pos[id] = [55 + d * GX, 28 + (maxRows - ids.length) * GY / 2 + i * GY]; });
   const onPath = new Set([graph().root, ...V.path.map(e => edge(e).target)]), hot = new Set(V.path);
   let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
-  for (const [id, e] of Object.entries(graph().edges)) { const a = pos[e.source], b = pos[e.target], h = hot.has(id);
-    svg += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${h ? 'var(--accent)' : 'var(--border)'}" stroke-width="${h ? 3 : 1}"/>`; }
+  for (const [id, e] of visibleEdges) { const a = pos[e.source], b = pos[e.target], h = hot.has(id) || UI.graphView === 'shortest';
+    svg += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${h ? 'var(--accent)' : e.parallel ? '#9b3a9e' : 'var(--border)'}" stroke-width="${h ? 3 : e.parallel ? 2 : 1}"><title>${esc(stepLabel(e))} · ${esc(stepSummary(e))} · ${e.action_time.toFixed(2)} s</title></line>`; }
   for (const [id, [x, y]] of Object.entries(pos)) { const n = node(id), cur = id === V.current, ps = onPath.has(id);
     svg += `<g data-id="${id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${cur ? 12 : 9}" fill="${n.is_goal ? 'var(--goal)' : cur ? 'var(--accent)' : ps ? 'var(--accent-soft)' : 'var(--card)'}" stroke="${ps || cur ? 'var(--accent)' : 'var(--muted)'}" stroke-width="1.5"/><title>${n.parts_present.length} parts left · removed: ${esc(n.parts_removed.join(', ') || 'none')}</title></g>`; }
-  const c = pos[V.current]; svg += `<text x="${c[0]}" y="${c[1] - 17}" text-anchor="middle" fill="var(--accent)" font-weight="700">you are here</text></svg>`;
-  g.innerHTML = svg; g.classList.toggle('stale', stale());
+  const c = pos[V.current]; if (c) svg += `<text x="${c[0]}" y="${c[1] - 17}" text-anchor="middle" fill="var(--accent)" font-weight="700">you are here</text>`; svg += '</svg>';
+  g.innerHTML = svg;
+  if (UI.graphView === 'shortest') {
+    const details = el('div', 'analysis-details');
+    details.append(el('b', null, `Shortest synchronized-stage time: ${shortest.total_time.toFixed(2)} s`));
+    shortest.edges.forEach((id, index) => {
+      const e = edge(id), item = el('div', 'analysis-stage');
+      item.textContent = `${index+1}. ${stepSummary(e)}: ${stepDisplay(e)} — ${e.action_time.toFixed(2)} s`;
+      (e.stages || []).forEach((stage, i) => item.append(el('div', 'muted', `Stage ${i+1}: ${esc(stepLabel(stage))} — ${stage.action_time.toFixed(2)} s`)));
+      details.append(item);
+    });
+    if (!stale()) { const jump = el('button', 'btn', 'Go to shortest-path goal'); jump.onclick = () => command('/api/jump', {node: shortest.edges.length ? edge(shortest.edges.at(-1)).target : graph().root}); details.append(jump); }
+    g.append(details);
+  }
+  g.classList.toggle('stale', stale());
   if (stale()) g.append(el('div', 'stalemsg', '<span class="pill warn">setup or product model changed: Generate graph</span>'));
   else g.querySelectorAll('g[data-id]').forEach(n => { n.onclick = () => { if (!VIEW.busy()) command('/api/jump', { node: n.dataset.id }); }; });
+}
+
+function renderRejectedGraph(container) {
+  const attempts = graph().rejected_attempts || [];
+  container.innerHTML = '';
+  container.append(el('p', 'status', `${attempts.length} failed attempts. Red dashed arrows are rejections, not valid transitions.`));
+  if (stale()) container.append(el('p', 'pill warn', 'Graph is stale: rebuild to refresh rejections.'));
+  attempts.forEach(attempt => {
+    const row = el('div', 'rejected-row');
+    const state = el('button', 'btn'); state.textContent = `${attempt.parts_present.length} parts remaining`;
+    state.title = attempt.parts_present.join(', '); state.disabled = !attempt.source || stale();
+    state.onclick = () => command('/api/jump', {node: attempt.source});
+    const arrow = el('span', 'rejected-arrow', '⇢');
+    const detail = el('div'); detail.textContent = `${attempt.target_parts.join(' + ')} — ${attempt.reason}`;
+    detail.title = JSON.stringify(attempt.details || {}, null, 2);
+    row.append(state, arrow, detail); container.append(row);
+  });
 }
 
 function renderSteps() {
   const box = document.getElementById('steps'); box.innerHTML = '';
   const head = el('div', 'row'); head.append(el('span', 'cap grow', 'Next steps'));
   const bBack = el('button', 'btn', '← Back'), bRe = el('button', 'btn', '↻ Restart'), bRec = el('button', 'btn rec' + (V.recording ? ' live' : ''), 'Rec');
-  bBack.disabled = !V.path.length || stale(); bRe.disabled = bRec.disabled = !graph() || stale();
+  bBack.disabled = !V.path.length || stale(); bRe.disabled = !graph() || stale(); bRec.disabled = !graph() || stale() || graph().parallel;
   bBack.onclick = () => { if (!VIEW.busy()) command('/api/back'); };
   bRe.onclick = () => { if (!VIEW.busy()) command('/api/restart'); };
   bRec.onclick = () => command('/api/rec', { on: !V.recording });
@@ -409,8 +469,9 @@ function renderSteps() {
   const list = el('div', 'list');
   V.next_steps.forEach((id, i) => {
     const e = edge(id), r = el('div', 'action');
-    r.append(el('span', 'num', i < 9 ? i + 1 : '•'), el('span', 'sw'), el('b', null, esc(e.target_part)), el('span', 'muted grow', esc(`${e.capability.replace('Capability', '')} · ${e.tool}`)), el('span', 'pill', e.action_time.toFixed(1) + ' s'));
-    r.children[1].style.background = partColor(e.target_part);
+    r.append(el('span', 'num', i < 9 ? i + 1 : '•'), el('span', 'sw'), el('b', null, esc(stepDisplay(e))), el('span', 'muted grow', esc(stepSummary(e))), el('span', 'pill', e.action_time.toFixed(1) + ' s'));
+    r.children[1].style.background = partColor(stepTargets(e)[0]);
+    r.title = (e.stages || [e]).map((stage, i) => `Stage ${i+1}: ${stepLabel(stage)} (${stage.action_time.toFixed(2)} s)`).join('\n');
     r.onclick = () => play(id); r.onmouseenter = () => { UI.hovered = e; }; r.onmouseleave = () => { UI.hovered = null; };
     list.append(r);
   });
@@ -434,8 +495,8 @@ function renderSteps() {
   const rh = el('div', 'row'); rh.append(el('span', 'cap grow', `Recorded · ${V.recorded.length} step${V.recorded.length === 1 ? '' : 's'}`));
   box.append(rh);
   const chips = el('div', 'chips');
-  if (!V.recorded.length) chips.append(el('span', 'muted', V.recording ? 'Recording: click next steps.' : 'Press Rec, then click steps; save via Export ▸ Recorded sequence.'));
-  V.recorded.forEach((id, i) => chips.append(el('span', 'chip', `<span class="sw" style="background:${partColor(edge(id).target_part)}"></span>${i + 1}. ${esc(edge(id).target_part)}`)));
+  if (!V.recorded.length) chips.append(el('span', 'muted', V.recording ? 'Recording: click next steps.' : 'Press Rec for sequential steps; use Export ▸ Analysis graphs for parallel results.'));
+  V.recorded.forEach((id, i) => chips.append(el('span', 'chip', `<span class="sw" style="background:${partColor(stepTargets(edge(id))[0])}"></span>${i + 1}. ${esc(stepLabel(edge(id)))}`)));
   box.append(chips);
 }
 
@@ -444,7 +505,7 @@ function renderStatus() {
   st.textContent = j.running && j.kind === 'import' ? `detecting contacts… ${j.expanded} of ${j.discovered} part pairs`
     : j.running && j.kind === 'update' ? `updating meshes… ${j.expanded} of ${j.discovered} part pairs`
     : j.running ? `generating… ${j.expanded} states expanded, ${j.discovered} found` : !g ? 'no graph' : stale() ? 'graph is stale'
-    : `${Object.keys(g.nodes).length} states · ${Object.keys(g.edges).length} steps · ${DEPTHS[g.extraction_depth] || 'depth unknown'} · up to date`;
+    : `${Object.keys(g.nodes).length} states · ${Object.keys(g.edges).length} steps · ${g.parallel ? `${g.n_robots} robots · gap > ${g.min_separation} mm · ` : ''}${DEPTHS[g.extraction_depth] || 'depth unknown'} · up to date`;
   st.className = 'pill ' + (j.running || stale() ? 'warn' : g ? 'ok' : '');
 }
 
