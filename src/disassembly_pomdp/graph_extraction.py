@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import copy
 import json
+import math
 from collections import deque
 from contextlib import contextmanager
 from itertools import combinations, product
@@ -546,6 +547,47 @@ class DisassemblyGraphAgent:
         return None
 
     @staticmethod
+    def _single_removal_steps(steps):
+        """One minimum-time single-removal edge per successor state.
+
+        Called only after parallel candidates are generated: tool/direction
+        alternatives remain available to the geometry checks. Retain original
+        action metadata for auditing when several alternatives are merged.
+        """
+        result, indices, alternatives = [], {}, {}
+
+        def cost(attrs):
+            try:
+                value = float(attrs["action_time"])
+            except (KeyError, TypeError, ValueError):
+                return float("inf")
+            return value if math.isfinite(value) and value >= 0 else float("inf")
+
+        for successor, attrs in steps:
+            if attrs.get("parallel") or attrs.get("n_operations", 1) != 1:
+                result.append((successor, attrs))
+                continue
+            key = _state_key(successor)
+            if key not in indices:
+                indices[key] = len(result)
+                alternatives[key] = [attrs]
+                result.append((successor, attrs))
+                continue
+            alternatives[key].append(attrs)
+            index = indices[key]
+            if cost(attrs) < cost(result[index][1]):
+                result[index] = (successor, attrs)
+        for key, actions in alternatives.items():
+            if len(actions) > 1:
+                index = indices[key]
+                successor, attrs = result[index]
+                result[index] = (
+                    successor,
+                    {**attrs, "alternative_actions": copy.deepcopy(actions)},
+                )
+        return result
+
+    @staticmethod
     def _check_parallel_options(n_robots, collapse_screw_groups):
         if isinstance(n_robots, bool) or not isinstance(n_robots, int) or n_robots < 1:
             raise ValueError("n_robots must be a positive integer")
@@ -769,7 +811,7 @@ class DisassemblyGraphAgent:
                     if parallel
                     else self.available_steps(assembly, collapse_screw_groups)
                 )
-                for next_assembly, edge_attrs in steps:
+                for next_assembly, edge_attrs in self._single_removal_steps(steps):
                     next_key = _state_key(next_assembly)
                     if next_key == key:
                         continue

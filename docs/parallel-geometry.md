@@ -139,3 +139,16 @@ be rebuilt before export. Analysis export does not reverse parallel batches
 into robot-planner instructions. The existing sequence-graph/URDF and recorded
 sequence exports remain available for sequential graphs; recording and planner
 export are disabled for parallel analysis until those consumers support batches.
+
+## Single removal alternatives
+
+Each source/destination pair now has one single-removal edge: the feasible
+alternative with the lowest finite nonnegative `action_time`. This prevents
+different tools or capabilities from drawing duplicate lines for the same part
+removal. Equal-time choices use the original deterministic enumeration order.
+The edge retains the original choices under `alternative_actions` for auditing.
+
+Deduplication happens after parallel candidates are generated. Geometry screening
+therefore still considers all tool and direction choices, and distinct grouped
+parallel transitions are retained. Existing exported graphs must be regenerated
+to show the reduced single-removal edges.
