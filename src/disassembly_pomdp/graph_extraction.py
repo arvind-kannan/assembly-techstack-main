@@ -413,7 +413,7 @@ class DisassemblyGraphAgent:
         if collapse_parallel_screws:
             macro = self._parallel_screw_macro(assembly, steps, n_robots)
             if macro is not None:
-                screw_names = set(macro[1]["target_parts"])
+                screw_names = set(macro[1]["certified_screw_parts"])
                 # Keep non-screw alternatives, but do not enumerate permutations
                 # or mixed partial-screw stages of this certified full set.
                 other = [
@@ -442,6 +442,7 @@ class DisassemblyGraphAgent:
 
         Full-set compatibility is certified first, independently of robot count.
         Each deterministic stage is then checked against its current assembly.
+        Stop and expose the prefix if it unlocks a non-screw removal choice.
         An unsuccessful macro leaves the ordinary search completely available.
         """
         choices = {}
@@ -458,6 +459,7 @@ class DisassemblyGraphAgent:
             choices.setdefault(name, []).append(step)
         if len(choices) < 2:
             return None
+        original_non_screws = self._non_screw_actions(assembly, steps)
         for group in product(*(choices[name] for name in sorted(choices))):
             full = self._try_parallel_actions(assembly, group)
             if full is None:
@@ -520,18 +522,75 @@ class DisassemblyGraphAgent:
                     # Preserve stop-at-goal semantics instead of hiding needless
                     # screw removals inside a macro that has already finished.
                     break
+                if start + n_robots < len(group):
+                    # Re-evaluate on the updated assembly, never by merely
+                    # checking whether a connection disappeared. A newly valid
+                    # part/capability/tool choice must be exposed to BFS.
+                    now = self.available_steps(current)
+                    unlocked = (
+                        self._non_screw_actions(current, now) - original_non_screws
+                    )
+                    if unlocked:
+                        return current, self._screw_macro_attrs(
+                            full[1],
+                            stages,
+                            n_robots,
+                            choices,
+                            unlocked_parts=sorted({action[0] for action in unlocked}),
+                        )
             else:
-                attrs = copy.deepcopy(full[1])
-                attrs.update(
-                    screw_macro=True,
-                    n_stages=len(stages),
-                    n_robots=n_robots,
-                    stages=stages,
-                    action_time=sum(s["action_time"] for s in stages),
-                    label="Unscrew " + " + ".join(sorted(choices)),
+                return current, self._screw_macro_attrs(
+                    full[1], stages, n_robots, choices
                 )
-                return current, attrs
         return None
+
+    @staticmethod
+    def _non_screw_actions(assembly, steps):
+        """Semantic removal choices, excluding screw parts even when grippable."""
+        screw_parts = {
+            connection.part_name1
+            for connection in assembly.connections
+            if getattr(connection, "connection_type", None) == "screw"
+        }
+        return {
+            (
+                attrs["target_part"],
+                attrs.get("process"),
+                attrs.get("capability"),
+                attrs.get("tool"),
+            )
+            for _, attrs in steps
+            if attrs.get("process") != Process.UNSCREWING.value
+            and attrs["target_part"] not in screw_parts
+        }
+
+    @staticmethod
+    def _screw_macro_attrs(certificate, stages, n_robots, choices, unlocked_parts=None):
+        """Describe only executed stages; never include unexecuted suffix screws."""
+        operations = [
+            copy.deepcopy(operation)
+            for stage in stages
+            for operation in stage.get("operations", [stage])
+        ]
+        targets = [operation["target_part"] for operation in operations]
+        attrs = copy.deepcopy(certificate)
+        attrs.update(
+            screw_macro=True,
+            n_stages=len(stages),
+            n_robots=n_robots,
+            stages=copy.deepcopy(stages),
+            operations=operations,
+            target_parts=targets,
+            n_operations=len(operations),
+            certified_screw_parts=sorted(choices),
+            action_time=sum(stage["action_time"] for stage in stages),
+            label="Unscrew " + " + ".join(targets),
+            batch_stop_reason="non_screw_unlocked"
+            if unlocked_parts
+            else "screw_set_removed",
+            unlocked_parts=list(unlocked_parts or []),
+        )
+        return attrs
 
     def _reject_parallel_group(self, assembly, group, reason, details=None):
         self.last_parallel_check = {**(details or {}), "reason": reason}
