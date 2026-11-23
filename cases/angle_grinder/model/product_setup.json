@@ -1,4 +1,6 @@
 {
-  "base_parts": ["BG_Gehauese_p", "BG_Rotor_p", "Getriebegehaeuse_400_V1_02p", "Kegelrad_V1_01p", "Magnet_Hall_Sensor_700_02p", "Mutter_M6_780_CT"],
-  "target_parts": ["BG_Tellerrad_V1p"]
+  "base_parts": [
+    "BG_Gehauese_p"
+  ],
+  "target_parts": []
 }
