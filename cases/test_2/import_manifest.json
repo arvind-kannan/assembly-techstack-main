@@ -1,0 +1,110 @@
+{
+  "source": "18 user-supplied Assemble-Them-All OBJ files",
+  "scale_factor": 10.0,
+  "units": "mm",
+  "contact_tolerance_mm": 0.5,
+  "contact_dot_product_threshold": -0.99,
+  "connections": "Geometric contacts only; no screw, fixed or feature relationships inferred",
+  "base_selection": "Part 8 is the largest body by enclosed mesh volume; selected as the stationary base",
+  "original_sha256": {
+    "0.obj": "e8105021c5bbe2aaa7e55a6941f9bcbde6fadcbb4be84e9643b8420a60861cc4",
+    "1.obj": "5190a42a27282458503f385736c4d2579a01de70524d7d078fc9d3b150e34a2f",
+    "10.obj": "82e74e32a0b66cd04e11923bdebecd7b770033901662aef71b3437dfa2f35bb3",
+    "11.obj": "5fca78db9a4ce373fd505b1452683bac0811969278483d919fa849dd9df82844",
+    "12.obj": "769796a210b02c2b25401ce1c23017ddc8f662aecb0114ad0e763c4492f1be14",
+    "13.obj": "9aacc8a39a2c97b771dddd06c294c3e77a83ead958b0a43971b39a651466a0d8",
+    "14.obj": "d57e4cca97bf8a5373b5963d7c5ce9a1f285adc528a4d4082b5a6f8c3af938c2",
+    "15.obj": "3d9bb7004ae65e778eb2af067fe3b4dbd2de217a807fe1e0ce8037d97d3d45ae",
+    "16.obj": "c3d1b53892ae8add1364e622143d6469edd1dc3fb47e750237397741da0c41a9",
+    "17.obj": "12b8e6904c98847fe8acd0612cbe2f94a5e5bdd0390b969136207c891e280583",
+    "2.obj": "c87dd26128d2d69c00c53b699d81532703e16272d89b66eb445ab5395de57d43",
+    "3.obj": "aa7b9f6bbcc5cb4a11949f0d02de21a6b3895665a8b9cfd827667fcd1e9ff3e3",
+    "4.obj": "958b3ef02e91e67361693994df709fed6d3946b7888846b8bee6b3079780be3a",
+    "5.obj": "c9ba4b8204939d2ccc7acbdb1129962d6530524feb1af4452df0f46d7699eb5e",
+    "6.obj": "9c85f3da3996446aad521ca85d791e4c7d6c96bbdc0dc413bfed403efada9a44",
+    "7.obj": "73be2c78025eb1116fa91b418f7ece3f27c1df5c046367a49290d924feadaa64",
+    "8.obj": "87940ed3ec46365f941c59fc84ce23f3c45e258ecaa46c9e988859e919ded480",
+    "9.obj": "7d668bcb3aee49326a77fb7d8e4edf47569c2523ed94f6d220e677bedc618402"
+  },
+  "contact_detection_subdivision_max_edge_mm": 3.0,
+  "contact_detection_meshes_only": true,
+  "prepared_meshes": "Scaled original triangulation, without contact-detection subdivision",
+  "contact_pairs": [
+    [
+      "0",
+      "8"
+    ],
+    [
+      "1",
+      "8"
+    ],
+    [
+      "2",
+      "8"
+    ],
+    [
+      "3",
+      "8"
+    ],
+    [
+      "4",
+      "8"
+    ],
+    [
+      "5",
+      "8"
+    ],
+    [
+      "6",
+      "8"
+    ],
+    [
+      "7",
+      "8"
+    ],
+    [
+      "8",
+      "9"
+    ],
+    [
+      "9",
+      "10"
+    ],
+    [
+      "9",
+      "11"
+    ],
+    [
+      "9",
+      "12"
+    ],
+    [
+      "9",
+      "13"
+    ],
+    [
+      "9",
+      "14"
+    ],
+    [
+      "9",
+      "15"
+    ],
+    [
+      "9",
+      "17"
+    ]
+  ],
+  "warnings": [
+    "Parts with no contacts: 16"
+  ],
+  "contact_refinement": {
+    "parts": [
+      "9",
+      "16"
+    ],
+    "max_edge_mm": 1.0,
+    "contact_tolerance_mm": 0.5,
+    "dot_product_threshold": -0.99
+  }
+}
