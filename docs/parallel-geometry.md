@@ -81,18 +81,37 @@ the macro-edge costs the sum. Four screws with two robots therefore require two
 stages, not four simultaneous robot operations. Individual operation metadata,
 stage metadata and the full-set geometry certificate are retained on the edge.
 
-Only a complete passing screw set is collapsed: failure of the whole set or any
-stage restores the existing singleton and combination generation. No smaller
-compatible screw subset is silently collapsed. Non-screw alternatives stay
-available. Single-removal and sequential extraction behavior is unchanged.
+The complete set is still certified before batching. After each internal stage
+with screws left to remove, the generator recalculates available actions on the
+updated assembly. If a new non-screw removal choice (part, process, capability
+or tool) becomes available, the macro stops there. That prefix is one graph edge;
+its successor state exposes both the freed-part removal and continuation with
+the remaining screws. Metadata (`unlocked_parts`, `batch_stop_reason`) describes
+why it stopped, and operations, target parts and time include only executed stages.
+The UI lists the newly unlocked parts in the batch tooltip and shortest-path view.
 
-This reduction intentionally removes partial-screw states and mixed interleavings
-of part removals with those screws. Geometric compatibility alone does not prove
-those interleavings can never improve makespan or reveal new actions, so the
-shortest sequence is optimal only within the reduced graph. Use
+For example, six compatible screws with three robots may stop after the first
+three if that frees a cover, leaving three screws in place. With two robots,
+checks happen after complete two-operation stages; a cover requiring three
+particular screws may therefore be exposed after four screw removals rather
+than splitting a simultaneous stage. Non-unscrewing actions on parts recorded
+as screws do not count as newly unlocked non-screw removals. A non-screw action
+already available at the start does not itself force a split; it remains an
+alternative edge. Newly available tool choices for that part do force a split.
+
+Failure of full-set certification or an executed stage keeps the existing
+singleton and combination generation. No smaller incompatible subset is silently
+collapsed. Sequential extraction and the existing stop-at-goal behavior remain
+unchanged.
+
+This reduction still prunes screw permutations, intermediate states inside a
+stage, and some mixed screw/part combinations. It preserves newly unlocked part
+branches at the chosen stage boundaries, not every possible schedule. Use
 `--no-collapse-parallel-screws` (or `collapse_parallel_screws=False` on
-`build_graph`) for exhaustive combinations and comparisons. This mode is separate
-from the older sequential `--collapse-screws` option.
+`build_graph`) for exhaustive comparisons. It remains separate from the older
+sequential `--collapse-screws` option. Intermediate availability rechecks add
+work compared with unconditional batching, while avoiding exhaustive screw-order
+enumeration when no part becomes newly removable.
 
 ## Rejected attempts
 

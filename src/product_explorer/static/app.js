@@ -430,6 +430,7 @@ function renderGraph() {
       const e = edge(id), item = el('div', 'analysis-stage');
       item.textContent = `${index+1}. ${stepSummary(e)}: ${stepDisplay(e)} — ${e.action_time.toFixed(2)} s`;
       (e.stages || []).forEach((stage, i) => item.append(el('div', 'muted', `Stage ${i+1}: ${esc(stepLabel(stage))} — ${stage.action_time.toFixed(2)} s`)));
+      if (e.unlocked_parts?.length) item.append(el('div', 'status', `Unlocks: ${esc(e.unlocked_parts.join(', '))}`));
       details.append(item);
     });
     if (!stale()) { const jump = el('button', 'btn', 'Go to shortest-path goal'); jump.onclick = () => command('/api/jump', {node: shortest.edges.length ? edge(shortest.edges.at(-1)).target : graph().root}); details.append(jump); }
@@ -472,6 +473,7 @@ function renderSteps() {
     r.append(el('span', 'num', i < 9 ? i + 1 : '•'), el('span', 'sw'), el('b', null, esc(stepDisplay(e))), el('span', 'muted grow', esc(stepSummary(e))), el('span', 'pill', e.action_time.toFixed(1) + ' s'));
     r.children[1].style.background = partColor(stepTargets(e)[0]);
     r.title = (e.stages || [e]).map((stage, i) => `Stage ${i+1}: ${stepLabel(stage)} (${stage.action_time.toFixed(2)} s)`).join('\n');
+    if (e.unlocked_parts?.length) r.title += `\nUnlocks: ${e.unlocked_parts.join(', ')}`;
     r.onclick = () => play(id); r.onmouseenter = () => { UI.hovered = e; }; r.onmouseleave = () => { UI.hovered = null; };
     list.append(r);
   });

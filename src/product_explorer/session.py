@@ -1665,6 +1665,8 @@ def _edge_view(g: _Graph, e: str) -> dict:
                 "parallel",
                 "screw_macro",
                 "n_stages",
+                "unlocked_parts",
+                "batch_stop_reason",
             )
         },
     }
