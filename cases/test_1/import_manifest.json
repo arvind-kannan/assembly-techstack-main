@@ -1,0 +1,37 @@
+{
+  "source": "Five user-supplied Assemble-Them-All OBJ files",
+  "scale_factor": 10.0,
+  "units": "mm",
+  "assembly_height_mm": 100,
+  "contact_tolerance_mm": 0.5,
+  "contact_dot_product_threshold": -0.99,
+  "connections": "Geometric contacts only; no screw or fixed relationships inferred",
+  "original_sha256": {
+    "0.obj": "bc50682ca68728e6fb83b99cf91fa36b8491edf0b3fcc4df0df2f71c9bc8ea33",
+    "1.obj": "0d4eff4ed8be479a568cfcf50ecd25b708f4b3c5e0610cd211e008f4935b836b",
+    "2.obj": "92ee88fbc2616dab85964f71785590be6a812fabddb34b538d502474f1f25d1e",
+    "3.obj": "c668edbb32c3234c2eb21f14e9a8b8fcbb178094ea52303cec4a04218449ebf0",
+    "4.obj": "c4bd094ea06e1b4b4c2c9edd5f5e1951e4c2dba7eda86cc053d84dfccd407f56"
+  },
+  "contact_detection_subdivision_max_edge_mm": 3.0,
+  "contact_detection_meshes_only": true,
+  "prepared_meshes": "Scaled original triangulation, without contact-detection subdivision",
+  "contact_pairs": [
+    [
+      "0",
+      "1"
+    ],
+    [
+      "0",
+      "2"
+    ],
+    [
+      "0",
+      "3"
+    ],
+    [
+      "0",
+      "4"
+    ]
+  ]
+}

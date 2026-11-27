@@ -1,0 +1,11 @@
+<assembly name="test_1">
+	<part name="3" mesh_path="test_1/3.obj" density="8000.0" material="Generic" />
+	<part name="4" mesh_path="test_1/4.obj" density="8000.0" material="Generic" />
+	<part name="0" mesh_path="test_1/0.obj" density="8000.0" material="Generic" />
+	<part name="1" mesh_path="test_1/1.obj" density="8000.0" material="Generic" />
+	<part name="2" mesh_path="test_1/2.obj" density="8000.0" material="Generic" />
+	<connection type="geometric" part_name1="3" part_name2="0" points_filename="test_1_data/3_0_points.npy" normals_filename="test_1_data/3_0_normals.npy" distances_filename="test_1_data/3_0_distances.npy" />
+	<connection type="geometric" part_name1="4" part_name2="0" points_filename="test_1_data/4_0_points.npy" normals_filename="test_1_data/4_0_normals.npy" distances_filename="test_1_data/4_0_distances.npy" />
+	<connection type="geometric" part_name1="0" part_name2="1" points_filename="test_1_data/0_1_points.npy" normals_filename="test_1_data/0_1_normals.npy" distances_filename="test_1_data/0_1_distances.npy" />
+	<connection type="geometric" part_name1="0" part_name2="2" points_filename="test_1_data/0_2_points.npy" normals_filename="test_1_data/0_2_normals.npy" distances_filename="test_1_data/0_2_distances.npy" />
+</assembly>

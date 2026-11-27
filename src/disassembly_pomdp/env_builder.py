@@ -149,8 +149,8 @@ def build_env(
     `assembly`, if given, is the product model already loaded (by the Product explorer's adapter, #238);
     the folder is then not read and base and target parts are taken as given (none if not passed);
     the stuck-part rules are then none too (the EOL probabilities are zero here anyway).
-    Capabilities come from the cell's tools; they act with the cell's core robots. Env extras are fixed: uncertainty off, 50 steps,
-    initial tool = first tool of the cell.
+    Capabilities come from the cell's tools and product connections; they act with the cell's core robots. Env extras are fixed: uncertainty off, 50 steps,
+    initial tool = first tool of an enabled capability.
     """
     cell = cell or Cell()
     if assembly is None:
@@ -163,7 +163,7 @@ def build_env(
     target_parts = stored_target if target_parts is None else list(target_parts)
 
     capabilities = []
-    if cell.screwdrivers:
+    if cell.screwdrivers and ScrewingCapability.list_screw_connections(assembly):
         capabilities.append(
             ScrewingCapability(
                 available_screwdrivers=list(cell.screwdrivers),
@@ -201,5 +201,5 @@ def build_env(
         eol_op=PartEOLOperatorV2(freeze_updates=True),
         expose_eol_belief=False,
         belief_mode="fo",
-        initial_mounted_tool=(cell.screwdrivers or cell.grippers)[0],
+        initial_mounted_tool=capabilities[0].list_tools()[0],
     )
